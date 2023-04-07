@@ -1,5 +1,3 @@
-# Agent-Based Model (Functional Programming)
-
-Repository for the development of an Agent-Based Model using functional programming
+# Agent-Based Model for Opinion Formation
 
 by Carlos Andres Devia
