@@ -1,4 +1,5 @@
 from basiccreation import *
+import numpy as np
 
 
 def test_create_random_numbers():
