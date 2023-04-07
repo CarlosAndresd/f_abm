@@ -1,7 +1,6 @@
-from CreationModule import *
+from basiccreation import *
 
 
 def test_create_random_numbers():
 	random_numbers = create_random_numbers()
-	assert abs(temp_c - expected_result) < 1.0e-6
-
+	assert np.max(abs(random_numbers)) < 1.0
