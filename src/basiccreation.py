@@ -1,5 +1,5 @@
-import numpy as np
 import random
+from auxiliary_functions import *
 
 
 def create_random_numbers(num_agents=100, number_parameters=None, limits=(-1, 1)):
@@ -20,8 +20,6 @@ def create_random_numbers(num_agents=100, number_parameters=None, limits=(-1, 1)
     :param limits: a tuple of two numbers, the first is the lower bound and the second the upper bound
     :return: numpy array of 'num_agents' rows and 1 column (a list of lists) of opinions
     """
-
-    # print('f = create_random_numbers')
 
     rng = np.random.default_rng()  # this is for the random numbers creation
 
@@ -69,3 +67,45 @@ def create_random_numbers(num_agents=100, number_parameters=None, limits=(-1, 1)
     initial_opinions = np.maximum(np.minimum(initial_opinions, limits[1]), limits[0])
 
     return initial_opinions
+
+
+def a_random_initial_opinion_distribution(num_agents=10):
+    """
+    This function returns a random initial opinion distribution
+    :param num_agents: number of agents
+    :return: a random initial opinion distribution
+    """
+
+    rng = np.random.default_rng()  # this is for the random numbers creation
+
+    opinion_param_1 = [[0, -1.0, 1.0, 1]]
+    opinion_param_2 = [[0, 0.0, 1.0, 1]]
+    opinion_param_3 = [[0, -1.0, 0.0, 1]]
+    opinion_param_4 = [[1, 0.0, 1.0, 1]]
+    opinion_param_5 = [[1, -0.5, 0.5, 1], [1, 0.5, 0.5, 1]]
+    opinion_param_6 = [[0, -1.0, -0.5, 1], [0, 0.5, 1.0, 1]]
+    opinion_param_7 = [[0, -1.0, -0.7, 1], [1, 0.5, 0.5, 1]]
+    opinion_param_8 = [[1, -0.5, 0.5, 1], [0, 0.7, 1.0, 1]]
+    opinion_param_9 = [[0, -1.0, -0.7, 1], [0, -0.2, 0.2, 1], [0, 0.7, 1.0, 1]]
+    all_param = [opinion_param_1,
+                 opinion_param_2,
+                 opinion_param_3,
+                 opinion_param_4,
+                 opinion_param_5,
+                 opinion_param_6,
+                 opinion_param_7,
+                 opinion_param_8,
+                 opinion_param_9]
+
+    local_des_abs_mean = rng.random(1)[0]
+    local_des_mean = rng.random(1)[0]*local_des_abs_mean
+
+    initial_opinions = create_random_numbers(num_agents=num_agents, number_parameters=all_param[random.randint(0, 8)])
+
+    if rng.random(1)[0] > 0.5:
+        return modify_opinions_method_1(initial_opinions, des_mean=local_des_mean,
+                                        des_abs_mean=local_des_abs_mean, epsilon=0.02)
+
+    else:
+        return modify_opinions_method_2(initial_opinions, des_mean=local_des_mean,
+                                        des_abs_mean=local_des_abs_mean, epsilon=0.02)
