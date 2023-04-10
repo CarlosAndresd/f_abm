@@ -1,3 +1,12 @@
+"""
+
+    This is the module that takes care of all the plotting, whether it is for opinion distributions (histograms), or
+    digraphs, or whatever it is required.
+
+
+"""
+
+
 import numpy as np
 
 

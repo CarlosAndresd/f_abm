@@ -1,3 +1,17 @@
+"""
+
+    Description:
+
+        This module contains auxiliary functions.
+
+    Functions:
+
+        - modify_opinions_method_1
+        - modify_opinions_method_2
+
+
+"""
+
 import matplotlib.pyplot as plt
 import numpy as np
 from plot_functions import plot_histogram

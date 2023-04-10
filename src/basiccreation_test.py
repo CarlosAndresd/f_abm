@@ -1,3 +1,11 @@
+"""
+
+	This module contains all the testing functions for the basiccreation.py module
+
+
+"""
+
+
 from basiccreation import *
 import numpy as np
 
