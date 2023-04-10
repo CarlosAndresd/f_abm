@@ -109,3 +109,66 @@ def a_random_initial_opinion_distribution(num_agents=10):
     else:
         return modify_opinions_method_2(initial_opinions, des_mean=local_des_mean,
                                         des_abs_mean=local_des_abs_mean, epsilon=0.02)
+
+
+def create_many_opinions(num_agents=100, file_name='standard_initial_opinions', grid=None, show_result=False):
+    """ This function creates and saves many initial opinions to be used later
+
+    :param num_agents: the number of agents
+    :param file_name: name of the file created
+    :param grid: it is the reference grid to create the initial opinions
+    :param show_result: show the Agreement Plot of the resulting opinions. By default, it is false
+    :return:
+    """
+
+    if grid is None:
+        grid = np.array([[x, y] for x in np.linspace(0, 1, 41) for y in np.linspace(-1, 1, 41)  # 11 and 21
+                         if (((y-x) < 0.000001) and ((y+x) > -0.000001))]).round(decimals=3)
+
+    opinion_param_1 = [[0, -1.0, 1.0, 1]]
+    opinion_param_2 = [[0, 0.0, 1.0, 1]]
+    opinion_param_3 = [[0, -1.0, 0.0, 1]]
+    opinion_param_4 = [[1, 0.0, 1.0, 1]]
+    opinion_param_5 = [[1, -0.5, 0.5, 1], [1, 0.5, 0.5, 1]]
+    opinion_param_6 = [[0, -1.0, -0.5, 1], [0, 0.5, 1.0, 1]]
+    opinion_param_7 = [[0, -1.0, -0.7, 1], [1, 0.5, 0.5, 1]]
+    opinion_param_8 = [[1, -0.5, 0.5, 1], [0, 0.7, 1.0, 1]]
+    opinion_param_9 = [[0, -1.0, -0.7, 1], [0, -0.2, 0.2, 1], [0, 0.7, 1.0, 1]]
+    all_param = [opinion_param_1,
+                 opinion_param_2,
+                 opinion_param_3,
+                 opinion_param_4,
+                 opinion_param_5,
+                 opinion_param_6,
+                 opinion_param_7,
+                 opinion_param_8,
+                 opinion_param_9]
+
+    all_opinions = []
+    for local_des_abs_mean, local_des_mean in grid:
+        for oi_param in all_param:
+            initial_opinions = create_random_numbers(num_agents=num_agents, number_parameters=oi_param)
+            new_opinions = modify_opinions_method_1(initial_opinions, des_mean=local_des_mean,
+                                                    des_abs_mean=local_des_abs_mean, epsilon=0.02)
+            all_opinions.append(new_opinions)
+
+            new_opinions = modify_opinions_method_2(initial_opinions, des_mean=local_des_mean,
+                                                    des_abs_mean=local_des_abs_mean, epsilon=0.02)
+            all_opinions.append(new_opinions)
+
+    np.save(file_name, all_opinions)  # save the file as "file_name.npy"
+    # to recover, use
+    # all_opinions = np.load('file_name.npy')  # loads your saved array into variable all_opinions
+
+    if show_result:
+
+        fig = plt.figure(figsize=(10, 7))
+        ax = fig.add_subplot(111)
+        ax.plot([0, 1, 1, 0], [0, -1, 1, 0], linewidth=2, color=(0.2, 0.5, 0.8))
+        for opinion_distribution in all_opinions:
+            ax.plot(np.absolute(opinion_distribution).mean(), opinion_distribution.mean(), 'o', linewidth=1.5,
+                    markersize=2)
+        ax.grid()
+        plt.show()
+
+    return all_opinions
