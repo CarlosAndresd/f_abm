@@ -26,3 +26,4 @@ def plot_histogram(ax, opinions, num_bins=10, histogram_title='Opinions'):
     ax.set_ylim([0, opinions.shape[0]])
     ax.set_title(histogram_title)
     ax.set_axisbelow(True)
+
