@@ -1,16 +1,4 @@
 
-
-
-
-- Board are good in general for project management. Even if there is no software in the repository. 
-- add tests and examples. Teach how to use the tools.
-- Add the FAIR cards.
-- Start with conda, and if the system is too complex, or the dependencies are too difficult to capture in conda, then use a container. 
-- Reproducibility is more than dependencies. Conda can be used to capture the dependencies. 
-- Challenge: get someone to test my project.
-- How to make sure that the person can reproduce the code and the results. 
-
-
 # Agent-Based Model for Opinion Formation
 
 by Carlos Andres Devia
