@@ -12,6 +12,22 @@ by Carlos Andres Devia
 
 ### Installation instructions
 
+#### Installation instructions using conda (recommended)
+
+Before installing this code, make sure to have conda installed, you can use the command `conda --version` on the terminal. If you don't have conda, you can download Miniconda it from [here](https://docs.conda.io/en/latest/miniconda.html) (Miniconda will contain conda), and follow [these installation instructions](https://conda.io/projects/conda/en/latest/user-guide/install/index.html#regular-installation)
+
+1. Fork and clone this repository
+2. In a terminal, move to the directory containing the repository
+3. Run the following command:
+
+```
+conda env create --file environment.yml
+```
+
+4. Run the command`conda env list` you should see "f_abm" as one of the listed environments.
+
+#### Installation instructions using python
+
 1. Fork and clone this repository
 2. Create a virtual environtment and install the rependencies usign the following commands (if you face any problems, see the [official documentation](https://docs.python.org/3/library/venv.html)):
 
