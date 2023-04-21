@@ -1,0 +1,12 @@
+cff-version: 1.2.0
+message: If you use code from this repository, please cite it using these metadata.
+title: Agent-Based Opinion Formation Model - FP
+abstract: This is software to model and analyse agent-based models of opinion formation.
+authors:
+  - family-names: Devia Pinzon
+    given-names: Carlos Andres
+  - name: "Simulation and Analysis of Agent-Based Opinion Formation Models"
+version: 0.1.1
+date-released: "2023-04-21"
+license: GNU General Public License v3.0
+repository-code: "https://github.com/citation-file-format/my-research-software"

@@ -10,9 +10,7 @@ by Carlos Andres Devia
 
 ## How to use this code repository
 
-### Installation instructions
-
-#### Installation instructions using conda (recommended)
+### Installation instructions with Conda (recommended)
 
 Before installing this code, make sure to have conda installed, you can use the command `conda --version` on the terminal. If you don't have conda, you can download Miniconda it from [here](https://docs.conda.io/en/latest/miniconda.html) (Miniconda will contain conda), and follow [these installation instructions](https://conda.io/projects/conda/en/latest/user-guide/install/index.html#regular-installation)
 
@@ -38,7 +36,11 @@ You can verify that the environment was deleted by typing
 conda info --f_abm_env
 ```
 
-#### Installation instructions using python (venv)
+
+To activate the conda virtual environment type `conda activate f_abm`, to deactivate it type `conda deactivate`.
+
+
+### Installation instructions with pip and venv
 
 1. Fork and clone this repository
 2. Create a virtual environtment and install the rependencies usign the following commands (if you face any problems, see the [official documentation](https://docs.python.org/3/library/venv.html)):
@@ -57,23 +59,7 @@ If you wish to delete the environment you can type
 rm -r f_abm_env
 ```
 
-### Use of the virtual environments
-
-Now, before starting to work in with the code don't forget to activate the virtual environment typing
-
-```
-conda activate f_abm
-```
-
-if the virtual environment was created using conda. Or 
-
-```
-source ./f_abm_env/bin/activate
-```
-
-if the virtual environment was created using venv.
-
-To deactivate the virutal environments type `conda deactivate` if the virtual environment was created with coda. If the virtual environment was created with venv type `deactivate`
+To activate the venv virtual environment type `source ./f_abm_env/bin/activate`, to deactivate it type `deactivate`.
 
 
 ### Tests
