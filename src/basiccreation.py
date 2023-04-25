@@ -337,3 +337,115 @@ def random_digraph(num_agents=100, row_stochastic=False, positive_edge_ratio=1.0
         add_signs2matrix(adjacency_matrix, positive_edge_ratio)
 
     return adjacency_matrix
+
+
+def small_world_digraph(num_agents=100, topology_signature=None, row_stochastic=False, positive_edge_ratio=1.0,
+                        change_probability=0.0, reverse_probability=0.0, bidirectional_probability=0.0,
+                        num_random_edges_it=0):
+    """ This is a function that creates a digraph with small-world topology
+
+    :param num_agents: number of agents, by default 100
+    :param topology_signature: the topology signature of the underlying ring digraph
+    :param row_stochastic: whether the adjacency matrix is row-stochastic, by default False
+    :param positive_edge_ratio: the positive edge ratio, by default 1
+    :param change_probability: the probability of edges changing target, it accepts a number between 0.0 and 1.0 or a
+        list of 'num_agents' numbers between 0.0 and 1.0. Each element in the list corresponds to the change probability
+        of the corresponding vertex
+    :param reverse_probability: the probability of edges reversing target, it accepts a number between 0.0 and 1.0 or a
+        list of 'num_agents' numbers between 0.0 and 1.0. Each element in the list corresponds to the reverse
+        probability of the corresponding vertex
+    :param bidirectional_probability: the probability of edges being bidirectional, it accepts a number between 0.0 and
+        1.0 or a list of 'num_agents' numbers between 0.0 and 1.0. Each element in the list corresponds to the
+        probability of the corresponding vertex being bidirectional
+    :param num_random_edges_it: number of iterations to add random edges
+    :return: the adjacency matrix associated with the corresponding small-world digraph
+    """
+
+    # print('f = small_world_digraph')
+
+    # Preparation:
+    # If the 'change_probability', 'reverse_probability', or 'bidirectional_probability' parameters are single numbers,
+    # transform them into an array
+    if type(change_probability) is float:
+        change_probability = np.ones((1, num_agents))*change_probability
+        change_probability = change_probability.squeeze()
+
+    if type(reverse_probability) is float:
+        reverse_probability = np.ones((1, num_agents))*reverse_probability
+        reverse_probability = reverse_probability.squeeze()
+
+    if type(bidirectional_probability) is float:
+        bidirectional_probability = np.ones((1, num_agents))*bidirectional_probability
+        bidirectional_probability = bidirectional_probability.squeeze()
+
+    # First, create the corresponding Ring topology (at this moment we do not care about the signs or weights)
+    adjacency_matrix = ring_digraph(num_agents=num_agents, topology_signature=topology_signature,
+                                    num_random_edges_it=num_random_edges_it)
+
+    # Now, go edge by edge and with a certain probability move it to another vertex
+    # List all the non self-loop edges
+    edges = [[id_row, id_col] for id_row in range(num_agents) for id_col in range(num_agents)
+             if (id_row != id_col and adjacency_matrix[id_row, id_col] != 0)]
+
+    for edge in edges:
+        # Select the source vertex
+        source_vertex = edge[1]
+
+        # Select the old target vertex
+        target_vertex = edge[0]
+
+        # Only allow for an edge change if it is not the self-loop
+        if source_vertex != target_vertex:
+
+            local_change_probability = change_probability[source_vertex]
+            local_bidirectional_probability = bidirectional_probability[source_vertex]
+            local_reverse_probability = reverse_probability[source_vertex]
+
+            if np.random.uniform(low=0.0, high=1.0) < local_change_probability:
+                # Rewire that edge
+
+                # Get all the vertices that the source vertex does not influence
+                possible_vertices = (adjacency_matrix[:, source_vertex] == 0).nonzero()[0]
+
+                # Get a random vertex from these available vertices
+                array_length = len(possible_vertices) # :=
+                if array_length > 0:
+                    # If the list of possible new vertices is not empty
+                    # the new vertex is one of the possible vertices chosen at random
+                    new_vertex = possible_vertices[random.randint(0, array_length-1)]
+                else:
+                    # If the list of possible new vertices is empty, do not change
+                    new_vertex = target_vertex
+
+                # Now, modify the adjacency matrix
+                # Erase the previous vertex from the adjacency matrix
+                adjacency_matrix[target_vertex, source_vertex] = 0.0
+
+                if np.random.uniform(low=0.0, high=1.0) < local_bidirectional_probability:
+                    # The edge is bidirectional
+                    # Add the new vertices
+                    adjacency_matrix[source_vertex, new_vertex] = 1.0
+                    adjacency_matrix[new_vertex, source_vertex] = 1.0
+
+                else:
+                    # The edge is not bidirectional
+                    if np.random.uniform(low=0.0, high=1.0) < local_reverse_probability:
+                        # The edge is reversed, reverse the edge
+                        # Add the new vertex
+                        adjacency_matrix[source_vertex, new_vertex] = 1.0
+                    else:
+                        # The edge is not reversed
+                        # Add the new vertex
+                        adjacency_matrix[new_vertex, source_vertex] = 1.0
+
+    # Now that the topology is ready, add the signs and weights if necessary
+
+    # If the digraph is row-stochastic, add the weights
+    if row_stochastic:
+        add_rs_weights2matrix(adjacency_matrix)
+
+    # If the matrix is signed, add the negative edges
+    if positive_edge_ratio < 1:
+        add_signs2matrix(adjacency_matrix, positive_edge_ratio)
+
+    return adjacency_matrix
