@@ -187,9 +187,6 @@ def modify_opinions_method_2(opinions, des_mean, des_abs_mean, epsilon=0.05, max
     return opinions
 
 
-
-
-
 def add_random_edges(adjacency_matrix=None, num_iterations=10, default_type=0):
     """
     Function to add random edges to the adjacency matrix 'adjacency_matrix', the edges have no weight or sign.
@@ -246,7 +243,6 @@ def add_signs2matrix(adjacency_matrix, positive_edge_ratio):
     # Change the sign of the edge
     for id_row, id_col in edges:
         adjacency_matrix[id_row, id_col] *= -1
-
 
 
 def add_rs_weights2matrix(adjacency_matrix):

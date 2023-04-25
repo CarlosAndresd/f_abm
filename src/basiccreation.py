@@ -275,3 +275,65 @@ def default_digraph(default_type=0, num_agents=10):
         return digraph
 
 
+def random_digraph(num_agents=100, row_stochastic=False, positive_edge_ratio=1.0, edge_probability=0.5):
+    """
+    This function creates a digraph with random topology. Note that not all the edges are random. The resulting
+    adjacency matrix always has non-zero elements in the diagonal, indicating the self-loop
+
+    :param num_agents: number of agents of the digraph, by default 100
+    :param row_stochastic: boolean indicating if the adjacency matrix is row-stochastic
+    :param positive_edge_ratio: the positive edge ratio
+    :param edge_probability: the probability that an edge will exist
+    :return: the adjacency matrix
+    """
+
+    # print('f = random_digraph')
+
+    # First, create the topology
+    # Initialise an identity matrix
+    adjacency_matrix = np.eye(num_agents)
+
+    num_possible_edges = num_agents*(num_agents-1)  # *0.5  # The number of possible edges, excluding self-loops
+    num_edges = int(np.floor(edge_probability * num_possible_edges))  # Number of requested edges
+    num_edges = np.maximum(0, num_edges-num_agents)  # Subtract the number of self-loops, and it cannot be less than 0
+
+    # There are two methods to allocate the random edges, one is better for low probabilities
+    if edge_probability < 0.4:
+        # Randomly sample the adjacency matrix, if the sampled edge does not exist, make create it
+        while num_edges > 0:
+
+            # Select a random edge
+            id_row = random.randint(0, num_agents - 1)
+            id_col = random.randint(0, num_agents - 1)
+
+            if adjacency_matrix[id_row][id_col] == 0.0:
+                adjacency_matrix[id_row][id_col] = 1.0
+                num_edges -= 1
+
+    else:
+        # List all possible edges, shuffle them and select the first 'num_edges'
+        edges = [[id_row, id_col] for id_row in range(num_agents) for id_col in range(num_agents)
+                 if adjacency_matrix[id_row][id_col] == 0]
+
+        # Sort the edges randomly
+        rng = np.random.default_rng()
+        rng.shuffle(edges)
+
+        # Take the first 'num_edges' ones
+        edges = np.array(edges)[:num_edges, :]
+
+        # Change add the edge to the adjacency matrix
+        for id_row, id_col in edges:
+            adjacency_matrix[id_row, id_col] = 1
+
+    # Now if necessary add the weights and the signs
+
+    # If it is row-stochastic, add the weights
+    if row_stochastic:
+        add_rs_weights2matrix(adjacency_matrix)
+
+    # If the matrix is signed, add the negative edges
+    if positive_edge_ratio < 1:
+        add_signs2matrix(adjacency_matrix, positive_edge_ratio)
+
+    return adjacency_matrix
