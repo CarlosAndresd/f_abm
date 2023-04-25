@@ -187,43 +187,7 @@ def modify_opinions_method_2(opinions, des_mean, des_abs_mean, epsilon=0.05, max
     return opinions
 
 
-def default_digraph(default_type=0, num_agents=10):
-    """
-    This function returns pre-made digraphs to be used primarily as default for functions. The pre-made digraph that
-    will be called for default will always be the one with default_type=0
-    :param default_type: ID of the default digraph
-    :param num_agents: number of agents
-    :return: the corresponding adjacency matrix
-    """
 
-    # print('f = default_digraph')
-
-    if default_type == 1:
-        # Random digraph
-        digraph = random_digraph(num_agents=num_agents, row_stochastic=True, positive_edge_ratio=1.0,
-                                 edge_probability=0.8)
-
-        return digraph
-    elif default_type == 2:
-        # Ring digraph
-        digraph = ring_digraph(num_agents=num_agents, row_stochastic=True, positive_edge_ratio=1.0)
-
-        return digraph
-    elif default_type == 0:
-        # Small-world
-        random_parameters = [[0, -1.0, -0.7, 1], [0, -0.2, 0.2, 1], [0, 0.7, 1.0, 1]]
-        random_numbers = create_random_numbers(num_agents=num_agents, number_parameters=random_parameters,
-                                               limits=(0, 1))
-        digraph = small_world_digraph(num_agents=num_agents, topology_signature=[0, 1, 3, -5],
-                                      change_probability=random_numbers,
-                                      positive_edge_ratio=0.5)
-
-        return digraph
-
-    else:
-        digraph = ring_digraph()
-
-        return digraph
 
 
 def add_random_edges(adjacency_matrix=None, num_iterations=10, default_type=0):
