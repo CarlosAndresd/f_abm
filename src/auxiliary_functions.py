@@ -187,7 +187,7 @@ def modify_opinions_method_2(opinions, des_mean, des_abs_mean, epsilon=0.05, max
     return opinions
 
 
-def add_random_edges(adjacency_matrix=None, num_iterations=10, default_type=0):
+def add_random_edges(adjacency_matrix, num_iterations=10, default_type=0):
     """
     Function to add random edges to the adjacency matrix 'adjacency_matrix', the edges have no weight or sign.
     The function does not guarantee that these are new edges, it randomly selects cells of the adjacency matrix and
@@ -198,9 +198,6 @@ def add_random_edges(adjacency_matrix=None, num_iterations=10, default_type=0):
     :param default_type: the ID of the default digraph
     :return:
     """
-
-    if adjacency_matrix is None:
-        adjacency_matrix = default_digraph(default_type=default_type)
 
     # Get the number of agents
     num_agents = adjacency_matrix.shape[0]
