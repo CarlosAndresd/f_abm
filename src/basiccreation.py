@@ -180,3 +180,59 @@ def create_many_opinions(num_agents=100, file_name='standard_initial_opinions', 
         plt.show()
 
     return all_opinions
+
+
+def ring_digraph(num_agents=100, topology_signature=None, row_stochastic=False, positive_edge_ratio=1.0,
+                 num_random_edges_it=0):
+    """ This is a function that returns a ring digraph
+
+    :param num_agents: Is the number of agents (and therefore vertices) of the digraph. By default, it is 100
+    :param topology_signature: Is a list with the relative indices of the
+                               vertices that influence each agent. By default, it is [0, 1]
+    :param row_stochastic: A boolean that determines if the returned digraph must
+                                have a row-stochastic matrix. By default, this is False
+    :param positive_edge_ratio: A floating number between 0 and 1 that determines
+                                the ratio of positive edges in the digraph. By default, it is 1
+    :param num_random_edges_it: number of iterations to add random edges
+    :return: The adjacency matrix of the corresponding generalised ring digraph
+
+    """
+
+    # print('f = ring_digraph')
+
+    # First, create the topology
+    # Initialise an array of zeros
+    adjacency_matrix = np.zeros((num_agents, num_agents))
+
+    # If the topology_signature is None then it is a simple ring digraph
+    if topology_signature is None:
+        topology_signature = [0, 1]
+
+    # All the vertices have a self-loop, if it is not included in the
+    # signature, include it
+    if 0 not in topology_signature:
+        topology_signature = np.concatenate((topology_signature, np.array([0])))
+
+    # Go row by row applying the topology_signature
+    for id_row in range(0, num_agents):
+        for relative_neighbour in topology_signature:
+            absolute_neighbour = (id_row + relative_neighbour)
+            if num_agents <= absolute_neighbour:
+                absolute_neighbour = absolute_neighbour - num_agents
+            adjacency_matrix[id_row, absolute_neighbour] = 1
+
+    # If necessary, add random edges
+    if num_random_edges_it > 0:
+        add_random_edges(adjacency_matrix=adjacency_matrix, num_iterations=num_random_edges_it)
+
+    # Now, if it is row-stochastic, add the weights
+    if row_stochastic:
+        add_rs_weights2matrix(adjacency_matrix)
+
+    # If the matrix is signed, add the negative edges
+    if positive_edge_ratio < 1:
+        add_signs2matrix(adjacency_matrix, positive_edge_ratio)
+
+    return adjacency_matrix
+
+

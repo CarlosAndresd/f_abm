@@ -15,6 +15,7 @@
 import matplotlib.pyplot as plt
 import numpy as np
 from plot_functions import plot_histogram
+import random
 
 
 def modify_opinions_method_1(opinions, des_mean, des_abs_mean, epsilon=0.05, max_counter=100, show_process=False,
@@ -184,3 +185,137 @@ def modify_opinions_method_2(opinions, des_mean, des_abs_mean, epsilon=0.05, max
         mean_abs_difference = np.absolute(opinion_abs_mean - des_abs_mean)
 
     return opinions
+
+
+def default_digraph(default_type=0, num_agents=10):
+    """
+    This function returns pre-made digraphs to be used primarily as default for functions. The pre-made digraph that
+    will be called for default will always be the one with default_type=0
+    :param default_type: ID of the default digraph
+    :param num_agents: number of agents
+    :return: the corresponding adjacency matrix
+    """
+
+    # print('f = default_digraph')
+
+    if default_type == 1:
+        # Random digraph
+        digraph = random_digraph(num_agents=num_agents, row_stochastic=True, positive_edge_ratio=1.0,
+                                 edge_probability=0.8)
+
+        return digraph
+    elif default_type == 2:
+        # Ring digraph
+        digraph = ring_digraph(num_agents=num_agents, row_stochastic=True, positive_edge_ratio=1.0)
+
+        return digraph
+    elif default_type == 0:
+        # Small-world
+        random_parameters = [[0, -1.0, -0.7, 1], [0, -0.2, 0.2, 1], [0, 0.7, 1.0, 1]]
+        random_numbers = create_random_numbers(num_agents=num_agents, number_parameters=random_parameters,
+                                               limits=(0, 1))
+        digraph = small_world_digraph(num_agents=num_agents, topology_signature=[0, 1, 3, -5],
+                                      change_probability=random_numbers,
+                                      positive_edge_ratio=0.5)
+
+        return digraph
+
+    else:
+        digraph = ring_digraph()
+
+        return digraph
+
+
+def add_random_edges(adjacency_matrix=None, num_iterations=10, default_type=0):
+    """
+    Function to add random edges to the adjacency matrix 'adjacency_matrix', the edges have no weight or sign.
+    The function does not guarantee that these are new edges, it randomly selects cells of the adjacency matrix and
+    adds edges
+
+    :param adjacency_matrix: the adjacency matrix to be modified
+    :param num_iterations: the number of iterations
+    :param default_type: the ID of the default digraph
+    :return:
+    """
+
+    if adjacency_matrix is None:
+        adjacency_matrix = default_digraph(default_type=default_type)
+
+    # Get the number of agents
+    num_agents = adjacency_matrix.shape[0]
+
+    for _ in range(0,num_iterations):
+        randon_row = random.randint(0, num_agents-1)
+        randon_col = random.randint(0, num_agents-1)
+
+        adjacency_matrix[randon_row][randon_col] = 1.0
+
+
+def add_signs2matrix(adjacency_matrix, positive_edge_ratio):
+    """ Function that adds the signs to the adjacency matrix of a signed digraph
+
+    :param adjacency_matrix: current adjacency matrix, presumably with only non-negative weights
+    :param positive_edge_ratio: ratio of positive edges
+    :return: There is no need to return anything, since the function modifies the adjacency matrix as desired
+    """
+
+    # print('f = add_signs2matrix')
+
+    # Get the number of agents
+    num_agents = adjacency_matrix.shape[0]
+
+    # Total number of edges (excluding self-loops)
+    num_edges = (adjacency_matrix != 0).sum() - num_agents
+
+    # Approximate the number of negative edges
+    neg_edges = int(np.floor(positive_edge_ratio * num_edges))
+
+    # List all the non self-loop edges
+    edges = [[id_row, id_col] for id_row in range(num_agents) for id_col in range(num_agents)
+             if (id_row != id_col and adjacency_matrix[id_row, id_col] != 0)]
+
+    # Sort them randomly
+    rng = np.random.default_rng()
+    rng.shuffle(edges)
+    edges = np.array(edges)[:neg_edges, :]
+
+    # Change the sign of the edge
+    for id_row, id_col in edges:
+        adjacency_matrix[id_row, id_col] *= -1
+
+
+
+def add_rs_weights2matrix(adjacency_matrix):
+    """ Function that adds the stochastic weights to an adjacency matrix
+
+    :param adjacency_matrix: original adjacency matrix
+    :return: there is no need to return anything, as the adjacency matrix is transformed in the function
+    """
+
+    # print('f = add_rs_weights2matrix')
+
+    # Get the number of agents
+    num_agents = adjacency_matrix.shape[0]
+
+    # Multiply the adjacency matrix by random numbers
+
+    for id_row in range(0, adjacency_matrix.shape[0]):
+        adjacency_matrix[id_row, :] = adjacency_matrix[id_row, :] * np.random.uniform(low=0.0, high=1.0, size=(1, num_agents))
+
+    # Make the matrix row-stochastic
+    make_row_stochastic(adjacency_matrix)
+
+
+def make_row_stochastic(matrix):
+
+    # print('f = make_row_stochastic')
+
+    # Function that takes a matrix and makes it row-stochastic
+    for id_row in range(0, matrix.shape[0]):
+        denominator = matrix[id_row, :].sum()
+        if denominator == 0:
+            # If the denominator is zero, then amke every element in the row have the same weight
+            matrix[id_row, :] = np.ones(matrix.shape[1])*(1/matrix.shape[1])
+        else:
+            matrix[id_row, :] = matrix[id_row, :] * (1 / denominator)
+
