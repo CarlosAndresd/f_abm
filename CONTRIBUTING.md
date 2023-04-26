@@ -13,9 +13,11 @@ There are many ways to contribute,
 
 ## You have a question, suggestion, or something is not clear to you (and possibly others!)
 
-Great! You are helping us create a more clear and improved repository. Simply raise a corresponding issue 
+Great! You are helping us create a more clear and improved repository. Simply raise a [corresponding issue](https://github.com/CarlosAndresd/f_abm/issues/new?assignees=&labels=question&template=questions-or-suggestions.md&title=Question_Suggestion)
 
 ## You have found a bug
+
+
 
 ## You want to write or improve some code
 
