@@ -1,7 +1,7 @@
 ---
 name: Questions or suggestions
 about: This is an issue to ask general questions or provide suggestions
-title: Question_Suggestion
+title: Question or Suggestion
 labels: question
 assignees: ''
 
