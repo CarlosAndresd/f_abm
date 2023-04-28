@@ -10,6 +10,9 @@
         - modify_opinions_method_2
         - add_random_edges
         - add_signs2matrix
+        - add_rs_weights2matrix
+        - make_row_stochastic
+        - create_random_numbers
 
 
 """

@@ -1,15 +1,25 @@
 """
 
-    This module contains all the basic creation functions. It is primarily aimed at creating opinion distributions and
-    agent parameters, since for digraph creation there is a separate module
+    Description:
+
+        This module contains all the basic creation functions. It is primarily aimed at creating opinion distributions
+        and agent parameters, since for digraph creation there is a separate module
+
+    Functions:
+
+        - a_random_initial_opinion_distribution
+        - create_many_opinions
+        - ring_digraph
+        - default_digraph
+        - default_digraph
+        - random_digraph
+        - small_world_digraph
 
 
 """
 
 import random
 from auxiliary_functions import *
-
-
 
 
 
