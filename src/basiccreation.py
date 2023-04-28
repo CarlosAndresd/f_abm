@@ -7,20 +7,28 @@
 
     Functions:
 
-        - a_random_initial_opinion_distribution
-        - create_many_opinions
-        - ring_digraph
-        - default_digraph
-        - default_digraph
-        - random_digraph
-        - small_world_digraph
+        - Related to initial opinions:
+            - a_random_initial_opinion_distribution
+            - create_many_opinions
+
+        - Related to digraphs:
+            - default_digraph
+            - ring_digraph
+            - random_digraph
+            - small_world_digraph
+
+        - Related to agent parameters:
+
+
+
+
+
 
 
 """
 
 import random
 from auxiliary_functions import *
-
 
 
 def a_random_initial_opinion_distribution(num_agents=10):

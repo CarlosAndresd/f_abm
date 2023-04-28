@@ -13,6 +13,9 @@
         - add_rs_weights2matrix
         - make_row_stochastic
         - create_random_numbers
+        - modify_mean
+        - matrix_exp
+        - matrix2digraph
 
 
 """
@@ -21,6 +24,8 @@ import matplotlib.pyplot as plt
 import numpy as np
 from plot_functions import plot_histogram
 import random
+from math import factorial
+import igraph as ig
 
 
 def modify_opinions_method_1(opinions, des_mean, des_abs_mean, epsilon=0.05, max_counter=100, show_process=False,
@@ -347,4 +352,68 @@ def create_random_numbers(num_agents=100, number_parameters=None, limits=(-1, 1)
     initial_opinions = np.maximum(np.minimum(initial_opinions, limits[1]), limits[0])
 
     return initial_opinions
+
+
+def modify_mean(weights, des_mean, epsilon=0.05, max_counter=100, limits=(0, 1)):
+
+    # print('f = modify_mean')
+
+    weights_mean = weights.mean()
+    mean_difference = np.absolute(weights_mean - des_mean)
+    counter = 0
+    while (mean_difference > epsilon) and (counter < max_counter):
+        counter += 1
+
+        m1 = (des_mean + 1) / (weights_mean + 1)
+        m2 = (des_mean - 1) / (weights_mean - 1)
+        for count, old_weight in enumerate(weights):
+            if old_weight <= weights_mean:
+                weights[count] = ((old_weight + 1) * m1) - 1
+            else:
+                weights[count] = ((old_weight - 1) * m2) + 1
+
+        # Truncate the weight values
+        weights = np.maximum(np.minimum(weights, limits[1]), limits[0])
+        weights_mean = weights.mean()
+        mean_difference = np.absolute(weights_mean - des_mean)
+
+    return weights
+
+
+def matrix_exp(matrix, order=10):
+    """
+    This is a function to approximate a matrix exponential to the order 'order'
+
+    :param matrix: matrix to calculate the exponential
+    :param order: the order of the approximation, by default it is 10
+    :return: returns the approximation of the matrix exponential
+    """
+
+    # print('f = matrix_exp')
+
+    matrix_exp_approx = np.eye(np.shape(matrix)[0]) + matrix  # matrix_power(matrix, 0)
+    matrix_product = matrix
+
+    for local_order in range(2, order):
+        matrix_product = np.matmul(matrix_product, matrix)
+        matrix_exp_approx += matrix_product*(1/factorial(local_order))
+
+    return matrix_exp_approx
+
+
+def matrix2digraph(adjacency_matrix=None, default_type=0):
+    """ Function that converts from an adjacency matrix to a digraph object
+        it is mainly used to plot
+
+    :param adjacency_matrix: the adjacency matrix, by default it is a simple ring digraph
+    :param default_type: ID of the default digraph
+    :return: the digraph object
+    """
+
+    # print('f = matrix2digraph')
+
+    # if adjacency_matrix is None:
+    #     adjacency_matrix = default_digraph(default_type=default_type)
+
+    return ig.Graph.Weighted_Adjacency(adjacency_matrix)
 
