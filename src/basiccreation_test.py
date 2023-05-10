@@ -6,7 +6,7 @@
 """
 
 
-from basiccreation import *
+from auxiliary_functions import create_random_numbers
 import numpy as np
 
 
