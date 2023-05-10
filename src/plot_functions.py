@@ -16,7 +16,20 @@
 import numpy as np
 import matplotlib.pyplot as plt
 import igraph as ig
-from auxiliary_functions import (opinion2color, histogram_classification)
+from auxiliary_functions import histogram_classification
+
+
+def opinion2color(opinion_model, agent_parameter):
+
+    # print('f = opinion2color')
+
+    if opinion_model == 'CB':
+        b_value = agent_parameter[0]  # Conformist trait
+        r_value = agent_parameter[1]  # Radical trait
+        g_value = 1 - (b_value + r_value)  # Stubborn trait
+
+        # Return the value rounded
+        return r_value.round(7), g_value.round(7), b_value.round(7)
 
 
 def plot_histogram(ax, opinions, num_bins=10, histogram_title='Opinions'):
