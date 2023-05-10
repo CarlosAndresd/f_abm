@@ -16,7 +16,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
 import igraph as ig
-from auxiliary_functions import histogram_classification
+# from auxiliary_functions import histogram_classification
 
 
 def opinion2color(opinion_model, agent_parameter):
@@ -104,38 +104,3 @@ def plot_opinions(opinion_evolution, agent_parameters, opinion_model, axes=None)
         plt.show()
     else:
         ax.grid()
-
-
-def plot_all_opinions(file_name='standard_initial_opinions.npy', color_by_type=False):
-    all_opinions = np.load(file_name)  # loads your saved array into variable all_opinions
-    if color_by_type:
-        point_colors = [(0.16862745, 0.34901961, 0.76470588),
-                        (0.32941176, 0.54901961, 0.18431373),
-                        (0.82745098, 0.39607843, 0.50980392),
-                        (0.94509804, 0.56078431, 0.00392157),
-                        (0.39607843, 0.05098039, 0.10588235)]
-
-    else:
-        point_colors = [(0.16862745, 0.54901961, 0.10588235),
-                        (0.16862745, 0.54901961, 0.10588235),
-                        (0.16862745, 0.54901961, 0.10588235),
-                        (0.16862745, 0.54901961, 0.10588235),
-                        (0.16862745, 0.54901961, 0.10588235)]
-
-    fig = plt.figure(figsize=(10, 7))
-    ax = fig.add_subplot(111)
-    ax.plot([0, 1, 1, 0], [0, -1, 1, 0], linewidth=2, color=(0.2, 0.5, 0.8))
-    counters = np.zeros((5, 1))
-    for opinion_distribution in all_opinions:
-        classification = histogram_classification(opinion_distribution)
-        counters[classification] += 1
-        ax.plot(np.absolute(opinion_distribution).mean(), opinion_distribution.mean(), 'o', linewidth=1.5,
-                markersize=3, color=point_colors[classification])
-    ax.grid()
-    plt.show()
-
-    print(f'number PC = {counters[0]}')
-    print(f'number Co = {counters[1]}')
-    print(f'number Po = {counters[2]}')
-    print(f'number Cl = {counters[3]}')
-    print(f'number Di = {counters[4]}')
