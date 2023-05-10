@@ -59,3 +59,4 @@ def plot_digraph(digraph, file_name=None, visual_style=None):
     ig.plot(digraph, target=ax, **visual_style, layout="circle")
     plt.show()
 
+

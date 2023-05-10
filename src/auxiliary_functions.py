@@ -417,3 +417,16 @@ def matrix2digraph(adjacency_matrix=None, default_type=0):
 
     return ig.Graph.Weighted_Adjacency(adjacency_matrix)
 
+
+def opinion2color(opinion_model, agent_parameter):
+
+    # print('f = opinion2color')
+
+    if opinion_model == 'CB':
+        b_value = agent_parameter[0]  # Conformist trait
+        r_value = agent_parameter[1]  # Radical trait
+        g_value = 1 - (b_value + r_value)  # Stubborn trait
+
+        # Return the value rounded
+        return r_value.round(7), g_value.round(7), b_value.round(7)
+
