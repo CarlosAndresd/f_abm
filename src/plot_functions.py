@@ -3,6 +3,12 @@
     This is the module that takes care of all the plotting, whether it is for opinion distributions (histograms), or
     digraphs, or whatever it is required.
 
+    Functions:
+
+    - plot_histogram
+    - plot_digraph
+    - plot_opinions
+
 
 """
 
@@ -10,6 +16,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
 import igraph as ig
+from auxiliary_functions import opinion2color
 
 
 def plot_histogram(ax, opinions, num_bins=10, histogram_title='Opinions'):
@@ -60,3 +67,27 @@ def plot_digraph(digraph, file_name=None, visual_style=None):
     plt.show()
 
 
+def plot_opinions(opinion_evolution, agent_parameters, opinion_model, axes=None):
+
+    # print('f = plot_opinions')
+
+    # Get the number of agents
+    num_agents = opinion_evolution.shape[0]
+    num_steps = opinion_evolution.shape[1]
+    if axes is None:
+        fig = plt.figure()
+        ax = fig.add_subplot(1, 1, 1)
+    else:
+        ax = axes
+    for id_agent in range(num_agents):
+        ax.plot(opinion_evolution[id_agent], color=opinion2color(opinion_model, agent_parameters[id_agent]))
+    ax.set_xlim([0, num_steps])
+    ax.set_ylim([-1.1, 1.1])
+    ax.set_title('Opinion evolution')
+
+    if axes is None:
+        plt.grid()
+        # display the plot
+        plt.show()
+    else:
+        ax.grid()
