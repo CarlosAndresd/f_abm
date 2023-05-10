@@ -430,3 +430,100 @@ def opinion2color(opinion_model, agent_parameter):
         # Return the value rounded
         return r_value.round(7), g_value.round(7), b_value.round(7)
 
+
+def histogram_classification(opinion_distribution, classification_parameters=(10, 3, 4, 6, 50, 12, 40)):
+
+    # print('f = histogram_classification')
+
+    # Get each of the parameter values
+    m_value, b_value, k_value, u_value, t1_value, t2_value, t3_value = classification_parameters
+
+    # First, get the histogram  counts
+    hist_counts = np.histogram(opinion_distribution, bins=np.linspace(-1.0, 1.0, m_value+1))
+
+    # Normalize the bins, so they add up to 100
+    hist_counts = hist_counts[0]*(100/hist_counts[0].sum())
+
+    # If the histogram contains only two non-empty bins with at least U_value empty bins in between and each of these
+    # two non-empty bins has normalised group count larger than T3_value
+
+    non_empty_bins = [count for count, value in enumerate(hist_counts) if value > 0]
+    if len(non_empty_bins) == 2:
+        if ((non_empty_bins[1] - non_empty_bins[0]) > u_value) and (hist_counts[non_empty_bins[0]] > t3_value) \
+                and (hist_counts[non_empty_bins[1]] > t3_value):
+            return 2  # Returns polarisation
+
+    # If the height of one element is greater than t1_value, then it is perfect consensus
+    if hist_counts.max() > t1_value:
+        return 0  # Returns perfect consensus
+
+    # Otherwise, we have to do more computations
+    normalised_group_count = []
+    number_of_bins = []
+    group_distance = []
+
+    local_group_count = 0
+    local_bin_count = 0
+    local_group_distance = 0
+    count_group_distance = False
+
+    for bin_value in hist_counts:
+        # go bin by bin
+        if bin_value > t2_value:
+            # A new group starts, or continues, i.e. green or red bins
+            local_group_count += bin_value  # increase the count of the group
+            local_bin_count += 1  # increase the number of bins contained in that group
+
+            if count_group_distance and (local_group_distance > 0):
+                # Ie we are in a group, but the previous group distance was not stored, store that information
+                # and initialize the group distance to zero
+                group_distance.append(local_group_distance)
+                local_group_distance = 0
+        else:
+            # if this is a blue bin
+            if local_group_count > 0:
+                # means that a group is closed behind, so information needs to be stored about that group
+                normalised_group_count.append(local_group_count)
+                number_of_bins.append(local_bin_count)
+
+                # also, it means that it is necessary to start counting group distance
+                count_group_distance = True  # start counting bin distance
+                local_group_distance = 0  # initialize at zero
+
+            if count_group_distance:
+                local_group_distance += 1  # increase the group distance by one
+
+            # reset the group and bin count
+            local_group_count = 0
+            local_bin_count = 0
+
+    # if there was a final group, it is necessary to add it
+    if local_group_count > 0:
+        normalised_group_count.append(local_group_count)
+        number_of_bins.append(local_bin_count)
+        # group_distance.append(local_group_distance) # no distance needs to be added
+
+    # Now, with this new information, we can further classify the histogram
+    if (len(normalised_group_count) == 1) and (number_of_bins[0] <= b_value) and (normalised_group_count[0] > 50):
+        return 1  # Consensus
+
+    if (len(normalised_group_count) == 2) and (number_of_bins[0] <= b_value) and (number_of_bins[1] <= b_value) \
+            and (group_distance[0] >= k_value) and ((normalised_group_count[0] + normalised_group_count[1]) > 50):
+        return 2  # Polarisation
+
+    normalised_group_count = np.array(normalised_group_count)
+    number_of_bins = np.array(number_of_bins)
+    if number_of_bins.shape[0] == 0:
+        max_bin_count = 0
+    else:
+        max_bin_count = number_of_bins.max()
+
+    if (len(normalised_group_count) >= 2) and (max_bin_count <= b_value) and (normalised_group_count.sum() > 50):
+        # fig = plt.figure(figsize=(10, 7))
+        # ax = fig.add_subplot(111)
+        # plot_histogram(ax, opinion_distribution, num_bins=10)
+        # ax.plot([-1, 1], [12, 12], color=(1, 0, 0))
+        return 3  # Clustering
+
+    return 4  # Dissensus
+
