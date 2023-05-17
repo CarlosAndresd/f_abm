@@ -1,34 +1,113 @@
 """
 
-    Description:
+==============================================================
+Basic Creation, (:mod:`f_abm.src.basic_creation`)
+==============================================================
 
-        This module contains all the basic creation functions. It is primarily aimed at creating opinion distributions
-        and agent parameters, since for digraph creation there is a separate module
+Description
+-----------
 
-    Functions:
+    This module contains all the basic creation functions. It is primarily aimed at creating opinion distributions
+    and agent parameters, since for digraph creation there is a separate module
 
-        - Related to initial opinions:
-            - a_random_initial_opinion_distribution
-            - create_many_opinions
+Functions
+---------
 
-        - Related to digraphs:
-            - default_digraph
-            - ring_digraph
-            - random_digraph
-            - small_world_digraph
+    - Related to initial opinions:
+        - a_random_initial_opinion_distribution
+        - create_many_opinions
 
-        - Related to agent parameters:
+    - Related to digraphs:
+        - default_digraph
+        - ring_digraph
+        - random_digraph
+        - small_world_digraph
 
-
-
-
-
-
+    - Related to agent parameters:
 
 """
 
+
 import random
 from auxiliary_functions import *
+
+
+def a_random_digraph(num_agents=10):
+    """
+    This function returns a random digraph, NOT a digraph with random topology, but a random digraph
+    :param num_agents: number of agents
+    :return: a random digraph
+    """
+
+    # print('f = a_random_digraph')
+
+    opinion_param_1 = [[0, -1.0, 1.0, 1]]
+    opinion_param_2 = [[0, 0.0, 1.0, 1]]
+    opinion_param_3 = [[0, -1.0, 0.0, 1]]
+    opinion_param_4 = [[1, 0.0, 1.0, 1]]
+    opinion_param_5 = [[1, -0.5, 0.5, 1], [1, 0.5, 0.5, 1]]
+    opinion_param_6 = [[0, -1.0, -0.5, 1], [0, 0.5, 1.0, 1]]
+    opinion_param_7 = [[0, -1.0, -0.7, 1], [1, 0.5, 0.5, 1]]
+    opinion_param_8 = [[1, -0.5, 0.5, 1], [0, 0.7, 1.0, 1]]
+    opinion_param_9 = [[0, -1.0, -0.7, 1], [0, -0.2, 0.2, 1], [0, 0.7, 1.0, 1]]
+    all_param = [opinion_param_1,
+                 opinion_param_2,
+                 opinion_param_3,
+                 opinion_param_4,
+                 opinion_param_5,
+                 opinion_param_6,
+                 opinion_param_7,
+                 opinion_param_8,
+                 opinion_param_9]
+
+    rng = np.random.default_rng()  # this is for the random numbers creation
+
+    # Topology signature
+    all_signatures = [[0, 1, 3, -5],
+                      [0, 5, 10, 20],
+                      [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+                      [0, 2, 4, 6, 8, 10, 12, 14, -2, -4, -6, -8, -10, -12, -14],
+                      [0, 5, 10, 15, 20, 25, -5, -10, -15, -20, -25],
+                      [0, 1, 2, 3, 4, 5, -5, -10, -15, -20, -25]
+                      ]
+
+    if rng.random(1)[0] < 0.5:
+        topology_sig = np.array(all_signatures[random.randint(0, len(all_signatures)-1)]) + random.randint(-10, 10)
+    else:
+        topology_sig = -1*np.array(all_signatures[random.randint(0, len(all_signatures) - 1)]) + random.randint(-10, 10)
+
+    # Change probability
+    if rng.random(1)[0] < 0.4:
+        change_prob = float(rng.random(1)[0])
+    else:
+        random_param = all_param[random.randint(0, 8)]
+        change_prob = create_random_numbers(num_agents=num_agents, number_parameters=random_param, limits=(0, 1))
+
+    # Reverse probability
+    if rng.random(1)[0] < 0.4:
+        reverse_prob = float(rng.random(1)[0])
+    else:
+        random_param = all_param[random.randint(0, 8)]
+        reverse_prob = create_random_numbers(num_agents=num_agents, number_parameters=random_param, limits=(0, 1))
+
+    # Bidirectional probability
+    if rng.random(1)[0] < 0.4:
+        bidirectional_prob = float(rng.random(1)[0])
+    else:
+        random_param = all_param[random.randint(0, 8)]
+        bidirectional_prob = create_random_numbers(num_agents=num_agents, number_parameters=random_param, limits=(0, 1))
+
+    # Number random edges iterations
+
+    digraph = small_world_digraph(num_agents=num_agents,
+                                  topology_signature=topology_sig,
+                                  positive_edge_ratio=0.5+(0.5*rng.random(1)[0]),
+                                  change_probability=change_prob,
+                                  reverse_probability=reverse_prob,
+                                  bidirectional_probability=bidirectional_prob,
+                                  num_random_edges_it=random.randint(0, int(np.round(0.4*num_agents*num_agents))))
+
+    return digraph
 
 
 def a_random_initial_opinion_distribution(num_agents=10):
@@ -37,6 +116,8 @@ def a_random_initial_opinion_distribution(num_agents=10):
     :param num_agents: number of agents
     :return: a random initial opinion distribution
     """
+
+    # print('f = a_random_initial_opinion_distribution')
 
     rng = np.random.default_rng()  # this is for the random numbers creation
 
@@ -73,19 +154,16 @@ def a_random_initial_opinion_distribution(num_agents=10):
                                         des_abs_mean=local_des_abs_mean, epsilon=0.02)
 
 
-def create_many_opinions(num_agents=100, file_name='standard_initial_opinions', grid=None, show_result=False):
-    """ This function creates and saves many initial opinions to be used later
-
-    :param num_agents: the number of agents
-    :param file_name: name of the file created
-    :param grid: it is the reference grid to create the initial opinions
-    :param show_result: show the Agreement Plot of the resulting opinions. By default, it is false
-    :return:
+def a_random_inner_trait_assignation(num_agents=10):
+    """
+    This function returns a random inner trait assignation
+    :param num_agents: number of agents
+    :return: inner trait assignation
     """
 
-    if grid is None:
-        grid = np.array([[x, y] for x in np.linspace(0, 1, 41) for y in np.linspace(-1, 1, 41)  # 11 and 21
-                         if (((y-x) < 0.000001) and ((y+x) > -0.000001))]).round(decimals=3)
+    # print('f = a_random_inner_trait_assignation')
+
+    rng = np.random.default_rng()  # this is for the random numbers creation
 
     opinion_param_1 = [[0, -1.0, 1.0, 1]]
     opinion_param_2 = [[0, 0.0, 1.0, 1]]
@@ -104,36 +182,135 @@ def create_many_opinions(num_agents=100, file_name='standard_initial_opinions', 
                  opinion_param_6,
                  opinion_param_7,
                  opinion_param_8,
-                 opinion_param_9]
+                 opinion_param_9]  # All parameters for the creation of the inner traits
 
-    all_opinions = []
-    for local_des_abs_mean, local_des_mean in grid:
-        for oi_param in all_param:
-            initial_opinions = create_random_numbers(num_agents=num_agents, number_parameters=oi_param)
-            new_opinions = modify_opinions_method_1(initial_opinions, des_mean=local_des_mean,
-                                                    des_abs_mean=local_des_abs_mean, epsilon=0.02)
-            all_opinions.append(new_opinions)
+    # Create and modify three sets of numbers which will correspond to the three types of weights
+    weights_1 = create_random_numbers(num_agents=num_agents, number_parameters=all_param[random.randint(0, 8)],
+                                      limits=(0, 1))
+    weights_1 = modify_mean(weights_1, rng.random(1)[0], max_counter=10, epsilon=0.05, limits=(0, 1))
 
-            new_opinions = modify_opinions_method_2(initial_opinions, des_mean=local_des_mean,
-                                                    des_abs_mean=local_des_abs_mean, epsilon=0.02)
-            all_opinions.append(new_opinions)
+    weights_2 = create_random_numbers(num_agents=num_agents, number_parameters=all_param[random.randint(0, 8)],
+                                      limits=(0, 1))
+    weights_2 = modify_mean(weights_2, rng.random(1)[0], max_counter=10, epsilon=0.05, limits=(0, 1))
 
-    np.save(file_name, all_opinions)  # save the file as "file_name.npy"
-    # to recover, use
-    # all_opinions = np.load('file_name.npy')  # loads your saved array into variable all_opinions
+    weights_3 = create_random_numbers(num_agents=num_agents, number_parameters=all_param[random.randint(0, 8)],
+                                      limits=(0, 1))
+    weights_3 = modify_mean(weights_3, rng.random(1)[0], max_counter=10, epsilon=0.05, limits=(0, 1))
 
-    if show_result:
+    random_choice = random.randint(0, 5)
 
-        fig = plt.figure(figsize=(10, 7))
-        ax = fig.add_subplot(111)
-        ax.plot([0, 1, 1, 0], [0, -1, 1, 0], linewidth=2, color=(0.2, 0.5, 0.8))
-        for opinion_distribution in all_opinions:
-            ax.plot(np.absolute(opinion_distribution).mean(), opinion_distribution.mean(), 'o', linewidth=1.5,
-                    markersize=2)
-        ax.grid()
-        plt.show()
+    # Combine the three weights in all possible configurations and make them row-stochastic, then append only
+    # the first two columns, as a reminder, the first column is the conformist weight, and the second column is
+    # the radical weight. The truncation is added to make sure that the numbers are indeed between 0 and 1
+    if random_choice == 0:
 
-    return all_opinions
+        inner_traits = np.concatenate((weights_1, weights_2, weights_3), axis=1)
+        make_row_stochastic(inner_traits)
+        inner_traits = np.maximum(np.minimum(inner_traits, 1), 0)
+        return inner_traits[:, 0:2]
+
+    elif random_choice == 1:
+
+        inner_traits = np.concatenate((weights_1, weights_3, weights_2), axis=1)
+        make_row_stochastic(inner_traits)
+        inner_traits = np.maximum(np.minimum(inner_traits, 1), 0)
+        return inner_traits[:, 0:2]
+
+    elif random_choice == 2:
+
+        inner_traits = np.concatenate((weights_2, weights_1, weights_3), axis=1)
+        make_row_stochastic(inner_traits)
+        inner_traits = np.maximum(np.minimum(inner_traits, 1), 0)
+        return inner_traits[:, 0:2]
+
+    elif random_choice == 3:
+
+        inner_traits = np.concatenate((weights_2, weights_3, weights_1), axis=1)
+        make_row_stochastic(inner_traits)
+        inner_traits = np.maximum(np.minimum(inner_traits, 1), 0)
+        return inner_traits[:, 0:2]
+
+    elif random_choice == 4:
+
+        inner_traits = np.concatenate((weights_3, weights_1, weights_2), axis=1)
+        make_row_stochastic(inner_traits)
+        inner_traits = np.maximum(np.minimum(inner_traits, 1), 0)
+        return inner_traits[:, 0:2]
+
+    elif random_choice == 5:
+
+        inner_traits = np.concatenate((weights_3, weights_2, weights_1), axis=1)
+        make_row_stochastic(inner_traits)
+        inner_traits = np.maximum(np.minimum(inner_traits, 1), 0)
+        return inner_traits[:, 0:2]
+
+
+def default_digraph(default_type=0, num_agents=10):
+    """
+    This function returns pre-made digraphs to be used primarily as default for functions. The pre-made digraph that
+    will be called for default will always be the one with default_type=0
+    :param default_type: ID of the default digraph
+    :param num_agents: number of agents
+    :return: the corresponding adjacency matrix
+    """
+
+    # print('f = default_digraph')
+
+    if default_type == 1:
+        # Random digraph
+        digraph = random_digraph(num_agents=num_agents, row_stochastic=True, positive_edge_ratio=1.0,
+                                 edge_probability=0.8)
+
+        return digraph
+    elif default_type == 2:
+        # Ring digraph
+        digraph = ring_digraph(num_agents=num_agents, row_stochastic=True, positive_edge_ratio=1.0)
+
+        return digraph
+    elif default_type == 0:
+        # Small-world
+        random_parameters = [[0, -1.0, -0.7, 1], [0, -0.2, 0.2, 1], [0, 0.7, 1.0, 1]]
+        random_numbers = create_random_numbers(num_agents=num_agents, number_parameters=random_parameters,
+                                               limits=(0, 1))
+        digraph = small_world_digraph(num_agents=num_agents, topology_signature=[0, 1, 3, -5],
+                                      change_probability=random_numbers,
+                                      positive_edge_ratio=0.5)
+
+        return digraph
+
+    else:
+        digraph = ring_digraph()
+
+        return digraph
+
+
+def complete_digraph(num_agents=100, row_stochastic=False, positive_edge_ratio=1.0):
+    """ This is a function that returns a complete digraph
+
+    :param num_agents: Is the number of agents (and therefore vertices) of the digraph. By default, it is 100
+    :param row_stochastic: A boolean that determines if the returned digraph must
+                                have a row-stochastic matrix. By default, this is False
+    :param positive_edge_ratio: A floating number between 0 and 1 that determines
+                                the ratio of positive edges in the digraph. By default, it is 1
+    :return: The adjacency matrix of the corresponding generalised ring digraph
+
+    """
+
+    # print('f = complete_digraph')
+
+    # First, create the topology
+    # Initialise an array of zeros
+    adjacency_matrix = np.ones((num_agents, num_agents))
+
+    # Now, if it is row-stochastic, add the weights
+    if row_stochastic:
+        add_rs_weights2matrix(adjacency_matrix)
+
+    # If the matrix is signed, add the negative edges
+    if positive_edge_ratio < 1:
+        add_signs2matrix(adjacency_matrix, positive_edge_ratio)
+
+    return adjacency_matrix
 
 
 def ring_digraph(num_agents=100, topology_signature=None, row_stochastic=False, positive_edge_ratio=1.0,
@@ -180,109 +357,6 @@ def ring_digraph(num_agents=100, topology_signature=None, row_stochastic=False, 
         add_random_edges(adjacency_matrix=adjacency_matrix, num_iterations=num_random_edges_it)
 
     # Now, if it is row-stochastic, add the weights
-    if row_stochastic:
-        add_rs_weights2matrix(adjacency_matrix)
-
-    # If the matrix is signed, add the negative edges
-    if positive_edge_ratio < 1:
-        add_signs2matrix(adjacency_matrix, positive_edge_ratio)
-
-    return adjacency_matrix
-
-
-def default_digraph(default_type=0, num_agents=10):
-    """
-    This function returns pre-made digraphs to be used primarily as default for functions. The pre-made digraph that
-    will be called for default will always be the one with default_type=0
-    :param default_type: ID of the default digraph
-    :param num_agents: number of agents
-    :return: the corresponding adjacency matrix
-    """
-
-    # print('f = default_digraph')
-
-    if default_type == 1:
-        # Random digraph
-        digraph = random_digraph(num_agents=num_agents, row_stochastic=True, positive_edge_ratio=1.0,
-                                 edge_probability=0.8)
-
-        return digraph
-    elif default_type == 2:
-        # Ring digraph
-        digraph = ring_digraph(num_agents=num_agents, row_stochastic=True, positive_edge_ratio=1.0)
-
-        return digraph
-    elif default_type == 0:
-        # Small-world
-        random_parameters = [[0, -1.0, -0.7, 1], [0, -0.2, 0.2, 1], [0, 0.7, 1.0, 1]]
-        random_numbers = create_random_numbers(num_agents=num_agents, number_parameters=random_parameters,
-                                               limits=(0, 1))
-        digraph = small_world_digraph(num_agents=num_agents, topology_signature=[0, 1, 3, -5],
-                                      change_probability=random_numbers,
-                                      positive_edge_ratio=0.5)
-
-        return digraph
-
-    else:
-        digraph = ring_digraph()
-
-        return digraph
-
-
-def random_digraph(num_agents=100, row_stochastic=False, positive_edge_ratio=1.0, edge_probability=0.5):
-    """
-    This function creates a digraph with random topology. Note that not all the edges are random. The resulting
-    adjacency matrix always has non-zero elements in the diagonal, indicating the self-loop
-
-    :param num_agents: number of agents of the digraph, by default 100
-    :param row_stochastic: boolean indicating if the adjacency matrix is row-stochastic
-    :param positive_edge_ratio: the positive edge ratio
-    :param edge_probability: the probability that an edge will exist
-    :return: the adjacency matrix
-    """
-
-    # print('f = random_digraph')
-
-    # First, create the topology
-    # Initialise an identity matrix
-    adjacency_matrix = np.eye(num_agents)
-
-    num_possible_edges = num_agents*(num_agents-1)  # *0.5  # The number of possible edges, excluding self-loops
-    num_edges = int(np.floor(edge_probability * num_possible_edges))  # Number of requested edges
-    num_edges = np.maximum(0, num_edges-num_agents)  # Subtract the number of self-loops, and it cannot be less than 0
-
-    # There are two methods to allocate the random edges, one is better for low probabilities
-    if edge_probability < 0.4:
-        # Randomly sample the adjacency matrix, if the sampled edge does not exist, make create it
-        while num_edges > 0:
-
-            # Select a random edge
-            id_row = random.randint(0, num_agents - 1)
-            id_col = random.randint(0, num_agents - 1)
-
-            if adjacency_matrix[id_row][id_col] == 0.0:
-                adjacency_matrix[id_row][id_col] = 1.0
-                num_edges -= 1
-
-    else:
-        # List all possible edges, shuffle them and select the first 'num_edges'
-        edges = [[id_row, id_col] for id_row in range(num_agents) for id_col in range(num_agents)
-                 if adjacency_matrix[id_row][id_col] == 0]
-
-        # Sort the edges randomly
-        rng = np.random.default_rng()
-        rng.shuffle(edges)
-
-        # Take the first 'num_edges' ones
-        edges = np.array(edges)[:num_edges, :]
-
-        # Change add the edge to the adjacency matrix
-        for id_row, id_col in edges:
-            adjacency_matrix[id_row, id_col] = 1
-
-    # Now if necessary add the weights and the signs
-
-    # If it is row-stochastic, add the weights
     if row_stochastic:
         add_rs_weights2matrix(adjacency_matrix)
 
@@ -403,3 +477,274 @@ def small_world_digraph(num_agents=100, topology_signature=None, row_stochastic=
         add_signs2matrix(adjacency_matrix, positive_edge_ratio)
 
     return adjacency_matrix
+
+
+def random_digraph(num_agents=100, row_stochastic=False, positive_edge_ratio=1.0, edge_probability=0.5):
+    """
+    This function creates a digraph with random topology. Note that not all the edges are random. The resulting
+    adjacency matrix always has non-zero elements in the diagonal, indicating the self-loop
+
+    :param num_agents: number of agents of the digraph, by default 100
+    :param row_stochastic: boolean indicating if the adjacency matrix is row-stochastic
+    :param positive_edge_ratio: the positive edge ratio
+    :param edge_probability: the probability that an edge will exist
+    :return: the adjacency matrix
+    """
+
+    # print('f = random_digraph')
+
+    # First, create the topology
+    # Initialise an identity matrix
+    adjacency_matrix = np.eye(num_agents)
+
+    num_possible_edges = num_agents*(num_agents-1)  # *0.5  # The number of possible edges, excluding self-loops
+    num_edges = int(np.floor(edge_probability * num_possible_edges))  # Number of requested edges
+    num_edges = np.maximum(0, num_edges-num_agents)  # Subtract the number of self-loops, and it cannot be less than 0
+
+    # There are two methods to allocate the random edges, one is better for low probabilities
+    if edge_probability < 0.4:
+        # Randomly sample the adjacency matrix, if the sampled edge does not exist, make create it
+        while num_edges > 0:
+
+            # Select a random edge
+            id_row = random.randint(0, num_agents - 1)
+            id_col = random.randint(0, num_agents - 1)
+
+            if adjacency_matrix[id_row][id_col] == 0.0:
+                adjacency_matrix[id_row][id_col] = 1.0
+                num_edges -= 1
+
+    else:
+        # List all possible edges, shuffle them and select the first 'num_edges'
+        edges = [[id_row, id_col] for id_row in range(num_agents) for id_col in range(num_agents)
+                 if adjacency_matrix[id_row][id_col] == 0]
+
+        # Sort the edges randomly
+        rng = np.random.default_rng()
+        rng.shuffle(edges)
+
+        # Take the first 'num_edges' ones
+        edges = np.array(edges)[:num_edges, :]
+
+        # Change add the edge to the adjacency matrix
+        for id_row, id_col in edges:
+            adjacency_matrix[id_row, id_col] = 1
+
+    # Now if necessary add the weights and the signs
+
+    # If it is row-stochastic, add the weights
+    if row_stochastic:
+        add_rs_weights2matrix(adjacency_matrix)
+
+    # If the matrix is signed, add the negative edges
+    if positive_edge_ratio < 1:
+        add_signs2matrix(adjacency_matrix, positive_edge_ratio)
+
+    return adjacency_matrix
+
+
+def create_inner_traits_local(num_agents=100):
+    """ Function to create randomly inner trait assignations, these are the agent parameters of the Classification-based
+        model
+
+    :param num_agents: number of agents
+    :return: inner traits, it is a list of lists, the first element is alpha, the second is beta (the weights of the
+        conformist and radical trait, respectively)
+    """
+
+    # print('f = create_inner_traits_local')
+
+    inner_traits = np.zeros((num_agents, 2))
+    rng = np.random.default_rng()
+
+    for id_agent in range(0, num_agents):
+        alpha = rng.random()
+        beta = rng.random()
+        gamma = rng.random()
+
+        total = alpha + beta + gamma
+
+        alpha = alpha/total
+        beta = beta / total
+
+        inner_traits[id_agent][0] = alpha
+        inner_traits[id_agent][1] = beta
+
+    return inner_traits
+
+
+def create_many_opinions(num_agents=100, file_name='standard_initial_opinions', grid=None, show_result=False):
+    """ This function creates and saves many initial opinions to be used later
+
+    :param num_agents: the number of agents
+    :param file_name: name of the file created
+    :param grid: it is the reference grid to create the initial opinions
+    :param show_result: show the Agreement Plot of the resulting opinions. By default, it is false
+    :return:
+    """
+
+    # print('f = create_many_opinions')
+
+    if grid is None:
+        grid = np.array([[x, y] for x in np.linspace(0, 1, 41) for y in np.linspace(-1, 1, 41)  # 11 and 21
+                         if (((y-x) < 0.000001) and ((y+x) > -0.000001))]).round(decimals=3)
+
+    # opinion_param_1 = [[0, -0.5, 0.0, 1], [1, 0.9, 0.5, 2], [1, -0.5, 0.2, 10]]
+    # opinion_param_2 = [[0, -0.5, 0.0, 1]]
+    # opinion_param_3 = [[0, -0.5, 0.0, 1], [1, -0.9, 0.5, 10]]
+    opinion_param_1 = [[0, -1.0, 1.0, 1]]
+    opinion_param_2 = [[0, 0.0, 1.0, 1]]
+    opinion_param_3 = [[0, -1.0, 0.0, 1]]
+    opinion_param_4 = [[1, 0.0, 1.0, 1]]
+    opinion_param_5 = [[1, -0.5, 0.5, 1], [1, 0.5, 0.5, 1]]
+    opinion_param_6 = [[0, -1.0, -0.5, 1], [0, 0.5, 1.0, 1]]
+    opinion_param_7 = [[0, -1.0, -0.7, 1], [1, 0.5, 0.5, 1]]
+    opinion_param_8 = [[1, -0.5, 0.5, 1], [0, 0.7, 1.0, 1]]
+    opinion_param_9 = [[0, -1.0, -0.7, 1], [0, -0.2, 0.2, 1], [0, 0.7, 1.0, 1]]
+    all_param = [opinion_param_1,
+                 opinion_param_2,
+                 opinion_param_3,
+                 opinion_param_4,
+                 opinion_param_5,
+                 opinion_param_6,
+                 opinion_param_7,
+                 opinion_param_8,
+                 opinion_param_9]
+
+    all_opinions = []
+    for local_des_abs_mean, local_des_mean in grid:
+        for oi_param in all_param:
+            initial_opinions = create_random_numbers(num_agents=num_agents, number_parameters=oi_param)
+            new_opinions = modify_opinions_method_1(initial_opinions, des_mean=local_des_mean,
+                                                    des_abs_mean=local_des_abs_mean, epsilon=0.02)
+            all_opinions.append(new_opinions)
+
+            new_opinions = modify_opinions_method_2(initial_opinions, des_mean=local_des_mean,
+                                                    des_abs_mean=local_des_abs_mean, epsilon=0.02)
+            all_opinions.append(new_opinions)
+
+    np.save(file_name, all_opinions)  # save the file as "file_name.npy"
+    # to recover, use
+    # all_opinions = np.load('file_name.npy')  # loads your saved array into variable all_opinions
+    # https://stackoverflow.com/questions/37996295/how-to-save-numpy-array-into-computer-for-later-use-in-python
+
+    if show_result:
+
+        point_colors = [(0.16862745, 0.34901961, 0.76470588),
+                        (0.32941176, 0.54901961, 0.18431373),
+                        (0.82745098, 0.39607843, 0.50980392),
+                        (0.94509804, 0.56078431, 0.00392157),
+                        (0.39607843, 0.05098039, 0.10588235)]
+
+        fig = plt.figure(figsize=(10, 7))
+        ax = fig.add_subplot(111)
+        ax.plot([0, 1, 1, 0], [0, -1, 1, 0], linewidth=2, color=(0.2, 0.5, 0.8))
+        for opinion_distribution in all_opinions:
+            classification = histogram_classification(opinion_distribution)
+            ax.plot(np.absolute(opinion_distribution).mean(), opinion_distribution.mean(), 'o', linewidth=1.5,
+                    markersize=2, color=point_colors[classification])
+        # for local_des_abs_mean, local_des_mean in grid:
+        #     ax.plot(local_des_abs_mean, local_des_mean, 's',
+        #             color=(0.9, 0.1, 0.3))
+        ax.grid()
+        plt.show()
+
+    return all_opinions
+
+
+def create_many_inner_traits(num_agents=100, file_name='standard_inner_traits', grid=None, show_result=False):
+    """ This function creates and saves many inner traits to be used later
+
+    :param num_agents: the number of agents
+    :param file_name: name of the file created
+    :param grid: it is the reference grid to create the inner traits
+    :param show_result: a boolean determining of the resulting inner traits are shown
+    :return: a list of numpy arrays with 'num_agents' rows and 2 columns
+    """
+
+    # print('f = create_many_inner_traits')
+
+    all_inner_traits = []
+    if grid is None:
+        # Create the standard grid
+        grid = np.array([[x, y] for x in np.linspace(0, 1, 41) for y in np.linspace(0, 1, 41)
+                         if ((y+x) < 1.000001)]).round(decimals=3)
+
+    opinion_param_1 = [[0, -1.0, 1.0, 1]]
+    opinion_param_2 = [[0, 0.0, 1.0, 1]]
+    opinion_param_3 = [[0, -1.0, 0.0, 1]]
+    opinion_param_4 = [[1, 0.0, 1.0, 1]]
+    opinion_param_5 = [[1, -0.5, 0.5, 1], [1, 0.5, 0.5, 1]]
+    opinion_param_6 = [[0, -1.0, -0.5, 1], [0, 0.5, 1.0, 1]]
+    opinion_param_7 = [[0, -1.0, -0.7, 1], [1, 0.5, 0.5, 1]]
+    opinion_param_8 = [[1, -0.5, 0.5, 1], [0, 0.7, 1.0, 1]]
+    opinion_param_9 = [[0, -1.0, -0.7, 1], [0, -0.2, 0.2, 1], [0, 0.7, 1.0, 1]]
+    all_param = [opinion_param_1,
+                 opinion_param_2,
+                 opinion_param_3,
+                 opinion_param_4,
+                 opinion_param_5,
+                 opinion_param_6,
+                 opinion_param_7,
+                 opinion_param_8,
+                 opinion_param_9]  # All parameters for the creation of the inner traits
+
+    for w1_des, w2_des in grid:  # For all the weights in the grid
+        w3_des = 1 - (w1_des + w2_des)
+        for oi_param in all_param:  # for all the parameters
+
+            # Create and modify three sets of numbers which will correspond to the three types of weights
+            weights_1 = create_random_numbers(num_agents=num_agents, number_parameters=oi_param, limits=(0, 1))
+            weights_1 = modify_mean(weights_1, w1_des, max_counter=10, epsilon=0.05, limits=(0, 1))
+
+            weights_2 = create_random_numbers(num_agents=num_agents, number_parameters=oi_param, limits=(0, 1))
+            weights_2 = modify_mean(weights_2, w2_des, max_counter=10, epsilon=0.05, limits=(0, 1))
+
+            weights_3 = create_random_numbers(num_agents=num_agents, number_parameters=oi_param, limits=(0, 1))
+            weights_3 = modify_mean(weights_3, w3_des, max_counter=10, epsilon=0.05, limits=(0, 1))
+
+            # Combine the three weights in all possible configurations and make them row-stochastic, then append only
+            # the first two columns, as a reminder, the first column is the conformist weight, and the second column is
+            # the radical weight. The truncation is added to make sure that the numbers are indeed between 0 and 1
+            inner_traits = np.concatenate((weights_1, weights_2, weights_3), axis=1)
+            make_row_stochastic(inner_traits)
+            inner_traits = np.maximum(np.minimum(inner_traits, 1), 0)
+            all_inner_traits.append(inner_traits[:, 0:2])
+
+            inner_traits = np.concatenate((weights_1, weights_3, weights_2), axis=1)
+            make_row_stochastic(inner_traits)
+            inner_traits = np.maximum(np.minimum(inner_traits, 1), 0)
+            all_inner_traits.append(inner_traits[:, 0:2])
+
+            inner_traits = np.concatenate((weights_2, weights_1, weights_3), axis=1)
+            make_row_stochastic(inner_traits)
+            inner_traits = np.maximum(np.minimum(inner_traits, 1), 0)
+            all_inner_traits.append(inner_traits[:, 0:2])
+
+            inner_traits = np.concatenate((weights_2, weights_3, weights_1), axis=1)
+            make_row_stochastic(inner_traits)
+            inner_traits = np.maximum(np.minimum(inner_traits, 1), 0)
+            all_inner_traits.append(inner_traits[:, 0:2])
+
+            inner_traits = np.concatenate((weights_3, weights_1, weights_2), axis=1)
+            make_row_stochastic(inner_traits)
+            inner_traits = np.maximum(np.minimum(inner_traits, 1), 0)
+            all_inner_traits.append(inner_traits[:, 0:2])
+
+            inner_traits = np.concatenate((weights_3, weights_2, weights_1), axis=1)
+            make_row_stochastic(inner_traits)
+            inner_traits = np.maximum(np.minimum(inner_traits, 1), 0)
+            all_inner_traits.append(inner_traits[:, 0:2])
+
+    np.save(file_name, all_inner_traits)  # save the file as "file_name.npy"
+    # to recover, use
+    # all_opinions = np.load('file_name.npy')  # loads your saved array into variable all_opinions
+    # https://stackoverflow.com/questions/37996295/how-to-save-numpy-array-into-computer-for-later-use-in-python
+
+    if show_result:
+        plot_inner_traits(file_name=file_name + '.npy')
+
+    return all_inner_traits
+
+
+

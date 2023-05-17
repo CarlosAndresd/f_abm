@@ -6,6 +6,7 @@
 
     Functions:
 
+        - opinion2color
         - modify_opinions_method_1
         - modify_opinions_method_2
         - add_random_edges
@@ -28,6 +29,230 @@ from math import factorial
 import igraph as ig
 
 
+def matrix_exp(matrix, order=10):
+    """
+    This is a function to approximate a matrix exponential to the order 'order'
+
+    :param matrix: matrix to calculate the exponential
+    :param order: the order of the approximation, by default it is 10
+    :return: returns the approximation of the matrix exponential
+    """
+
+    # print('f = matrix_exp')
+
+    matrix_exp_approx = np.eye(np.shape(matrix)[0]) + matrix  # matrix_power(matrix, 0)
+    matrix_product = matrix
+
+    for local_order in range(2, order):
+        matrix_product = np.matmul(matrix_product, matrix)
+        matrix_exp_approx += matrix_product*(1/factorial(local_order))
+
+    return matrix_exp_approx
+
+
+def digraph2topology(adjacency_matrix=None, default_type=0):
+    """
+    Function to convert from any adjacency matrix to the corresponding topology (that is, the associated adjacency
+    matrix without signs or weights
+    :param adjacency_matrix: the adjacency matrix
+    :param default_type: ID of the default digraph
+    :return: a matrix of the same size as 'adjacency_matrix' but with only 0 or 1 corresponding to the topology.
+    """
+
+    # print('f = digraph2topology')
+
+    if adjacency_matrix is None:
+        adjacency_matrix = default_digraph(default_type=default_type)
+
+    num_agents = adjacency_matrix.shape[0]
+    adjacency_matrix = adjacency_matrix != 0
+    topology = np.zeros((num_agents, num_agents))
+    local_dictionary = {True: 1, False: 0}
+    for id_row in range(0, num_agents):
+        for id_col in range(0, num_agents):
+            topology[id_row][id_col] = local_dictionary[adjacency_matrix[id_row][id_col]]
+
+    return topology
+
+
+def add_random_edges(adjacency_matrix=None, num_iterations=10, default_type=0):
+    """
+    Function to add random edges to the adjacency matrix 'adjacency_matrix', the edges have no weight or sign.
+    The function does not guarantee that these are new edges, it randomly selects cells of the adjacency matrix and
+    adds edges
+
+    :param adjacency_matrix: the adjacency matrix to be modified
+    :param num_iterations: the number of iterations
+    :param default_type: the ID of the default digraph
+    :return:
+    """
+
+    if adjacency_matrix is None:
+        adjacency_matrix = default_digraph(default_type=default_type)
+
+    # Get the number of agents
+    num_agents = adjacency_matrix.shape[0]
+
+    for _ in range(0,num_iterations):
+        randon_row = random.randint(0, num_agents-1)
+        randon_col = random.randint(0, num_agents-1)
+
+        adjacency_matrix[randon_row][randon_col] = 1.0
+
+
+def add_rs_weights2matrix(adjacency_matrix):
+    """ Function that adds the stochastic weights to an adjacency matrix
+
+    :param adjacency_matrix: original adjacency matrix
+    :return: there is no need to return anything, as the adjacency matrix is transformed in the function
+    """
+
+    # print('f = add_rs_weights2matrix')
+
+    # Get the number of agents
+    num_agents = adjacency_matrix.shape[0]
+
+    # Multiply the adjacency matrix by random numbers
+
+    for id_row in range(0, adjacency_matrix.shape[0]):
+        adjacency_matrix[id_row, :] = adjacency_matrix[id_row, :] * np.random.uniform(low=0.0, high=1.0, size=(1, num_agents))
+
+    # Make the matrix row-stochastic
+    make_row_stochastic(adjacency_matrix)
+
+
+def add_signs2matrix(adjacency_matrix, positive_edge_ratio):
+    """ Function that adds the signs to the adjacency matrix of a signed digraph
+
+    :param adjacency_matrix: current adjacency matrix, presumably with only non-negative weights
+    :param positive_edge_ratio: ratio of positive edges
+    :return: There is no need to return anything, since the function modifies the adjacency matrix as desired
+    """
+
+    # print('f = add_signs2matrix')
+
+    # Get the number of agents
+    num_agents = adjacency_matrix.shape[0]
+
+    # Total number of edges (excluding self-loops)
+    num_edges = (adjacency_matrix != 0).sum() - num_agents
+
+    # Approximate the number of negative edges
+    neg_edges = int(np.floor(positive_edge_ratio * num_edges))
+
+    # List all the non self-loop edges
+    edges = [[id_row, id_col] for id_row in range(num_agents) for id_col in range(num_agents)
+             if (id_row != id_col and adjacency_matrix[id_row, id_col] != 0)]
+
+    # Sort them randomly
+    rng = np.random.default_rng()
+    rng.shuffle(edges)
+    edges = np.array(edges)[:neg_edges, :]
+
+    # Change the sign of the edge
+    for id_row, id_col in edges:
+        adjacency_matrix[id_row, id_col] *= -1
+
+
+def matrix2digraph(adjacency_matrix=None, default_type=0):
+    """ Function that converts from an adjacency matrix to a digraph object
+        it is mainly used to plot
+
+    :param adjacency_matrix: the adjacency matrix, by default it is a simple ring digraph
+    :param default_type: ID of the default digraph
+    :return: the digraph object
+    """
+
+    # print('f = matrix2digraph')
+
+    if adjacency_matrix is None:
+        adjacency_matrix = default_digraph(default_type=default_type)
+
+    return ig.Graph.Weighted_Adjacency(adjacency_matrix)
+
+
+def create_random_numbers(num_agents=100, number_parameters=None, limits=(-1, 1)):
+    """ This function creates and returns a list of random 'num_agents' numbers. This function is used to create initial
+        opinions and also to create agent parameters. Its default use is to create initial opinions
+
+    :param num_agents: number of opinions that are returned, by default 100
+    :param number_parameters: a lists of lists, every element corresponds to a different set of initial opinions to be
+        created. Each element of this list contains 4 elements:
+            [0] -> signals the type of distribution to create.  '0' is a uniform distribution
+                                                                'any non 0' is a normal distribution
+            [1] -> if the distribution is uniform, this is the minimum value. If the distribution is normal, this is the
+                    mean
+            [2] -> if the distribution is uniform, this is the maximum value. If the distribution is normal, this is the
+                    variance
+            [3] -> the fraction of all the agents. The sum does not have to add to one, as it will be normalized
+
+    :param limits: a tuple of two numbers, the first is the lower bound and the second the upper bound
+    :return: numpy array of 'num_agents' rows and 1 column (a list of lists) of opinions
+    """
+
+    # print('f = create_random_numbers')
+
+    rng = np.random.default_rng()  # this is for the random numbers creation
+
+    if number_parameters is None:
+        number_parameters = [[0, -1.0, 1.0, 1]]
+
+    # for ease, transform the list of lists to a numpy 2d array
+    number_parameters = np.array(number_parameters)
+
+    # the first thing to do is to compute the number of agents each sub-distribution will have, start by normalizing the
+    # fractions
+    fractions = number_parameters[:, 3]
+    fractions = fractions/fractions.sum()
+    sub_num_agents = np.floor(fractions*num_agents)  # compute the number of agents this assignation corresponds to
+    missing_agents = num_agents-sub_num_agents.sum()  # number of agents that are left to assign
+    while missing_agents > 0:
+        # randomly assign one agent to one subgroup
+        random_index = random.randint(0, (len(sub_num_agents)-1))
+        sub_num_agents[random_index] += 1
+        missing_agents = num_agents - sub_num_agents.sum()  # number of agents that are left to assign
+
+    # replace the fraction, for the actual number of agents
+    number_parameters[:, 3] = sub_num_agents
+
+    initial_opinions = None
+    for subgroup_info in number_parameters:
+        if subgroup_info[0] == 0:
+            # create a uniform distribution
+            min_op = subgroup_info[1]
+            max_op = subgroup_info[2]
+            local_opinions = (max_op - min_op) * rng.random((int(subgroup_info[3]), 1)) + min_op
+
+        else:
+            # create a normal distribution
+            dist_mean = subgroup_info[1]
+            dist_variance = subgroup_info[2]
+            local_opinions = rng.normal(dist_mean, dist_variance, (int(subgroup_info[3]), 1))
+
+        if initial_opinions is None:
+            initial_opinions = local_opinions
+        else:
+            initial_opinions = np.concatenate((initial_opinions, local_opinions))
+
+    # Truncate the opinion values
+    initial_opinions = np.maximum(np.minimum(initial_opinions, limits[1]), limits[0])
+
+    return initial_opinions
+
+
+def opinion2color(opinion_model, agent_parameter):
+
+    # print('f = opinion2color')
+
+    if opinion_model == 'CB':
+        b_value = agent_parameter[0]  # Conformist trait
+        r_value = agent_parameter[1]  # Radical trait
+        g_value = 1 - (b_value + r_value)  # Stubborn trait
+
+        # Return the value rounded
+        return r_value.round(7), g_value.round(7), b_value.round(7)
+
+
 def modify_opinions_method_1(opinions, des_mean, des_abs_mean, epsilon=0.05, max_counter=100, show_process=False,
                              limits=(-1, 1)):
     """ This function modifies a given opinion distribution to create an opinion distribution with the desired mean
@@ -42,6 +267,8 @@ def modify_opinions_method_1(opinions, des_mean, des_abs_mean, epsilon=0.05, max
     :param limits: a tuple with the upper and lower limits of the opinions
     :return: the new, modified opinions
     """
+
+    # print('f = modify_opinions_method_1')
 
     if show_process:
         fig = plt.figure(figsize=(10, 7))
@@ -124,6 +351,8 @@ def modify_opinions_method_2(opinions, des_mean, des_abs_mean, epsilon=0.05, max
     :return: the new, modified opinions
     """
 
+    # print('f = modify_opinions_method_2')
+
     if show_process:
         fig = plt.figure(figsize=(10, 7))
         ax1 = fig.add_subplot(121)
@@ -195,227 +424,6 @@ def modify_opinions_method_2(opinions, des_mean, des_abs_mean, epsilon=0.05, max
         mean_abs_difference = np.absolute(opinion_abs_mean - des_abs_mean)
 
     return opinions
-
-
-def add_random_edges(adjacency_matrix, num_iterations=10, default_type=0):
-    """
-    Function to add random edges to the adjacency matrix 'adjacency_matrix', the edges have no weight or sign.
-    The function does not guarantee that these are new edges, it randomly selects cells of the adjacency matrix and
-    adds edges
-
-    :param adjacency_matrix: the adjacency matrix to be modified
-    :param num_iterations: the number of iterations
-    :param default_type: the ID of the default digraph
-    :return:
-    """
-
-    # Get the number of agents
-    num_agents = adjacency_matrix.shape[0]
-
-    for _ in range(0,num_iterations):
-        randon_row = random.randint(0, num_agents-1)
-        randon_col = random.randint(0, num_agents-1)
-
-        adjacency_matrix[randon_row][randon_col] = 1.0
-
-
-def add_signs2matrix(adjacency_matrix, positive_edge_ratio):
-    """ Function that adds the signs to the adjacency matrix of a signed digraph
-
-    :param adjacency_matrix: current adjacency matrix, presumably with only non-negative weights
-    :param positive_edge_ratio: ratio of positive edges
-    :return: There is no need to return anything, since the function modifies the adjacency matrix as desired
-    """
-
-    # print('f = add_signs2matrix')
-
-    # Get the number of agents
-    num_agents = adjacency_matrix.shape[0]
-
-    # Total number of edges (excluding self-loops)
-    num_edges = (adjacency_matrix != 0).sum() - num_agents
-
-    # Approximate the number of negative edges
-    neg_edges = int(np.floor(positive_edge_ratio * num_edges))
-
-    # List all the non self-loop edges
-    edges = [[id_row, id_col] for id_row in range(num_agents) for id_col in range(num_agents)
-             if (id_row != id_col and adjacency_matrix[id_row, id_col] != 0)]
-
-    # Sort them randomly
-    rng = np.random.default_rng()
-    rng.shuffle(edges)
-    edges = np.array(edges)[:neg_edges, :]
-
-    # Change the sign of the edge
-    for id_row, id_col in edges:
-        adjacency_matrix[id_row, id_col] *= -1
-
-
-def add_rs_weights2matrix(adjacency_matrix):
-    """ Function that adds the stochastic weights to an adjacency matrix
-
-    :param adjacency_matrix: original adjacency matrix
-    :return: there is no need to return anything, as the adjacency matrix is transformed in the function
-    """
-
-    # print('f = add_rs_weights2matrix')
-
-    # Get the number of agents
-    num_agents = adjacency_matrix.shape[0]
-
-    # Multiply the adjacency matrix by random numbers
-
-    for id_row in range(0, adjacency_matrix.shape[0]):
-        adjacency_matrix[id_row, :] = adjacency_matrix[id_row, :] * np.random.uniform(low=0.0, high=1.0, size=(1, num_agents))
-
-    # Make the matrix row-stochastic
-    make_row_stochastic(adjacency_matrix)
-
-
-def make_row_stochastic(matrix):
-
-    # print('f = make_row_stochastic')
-
-    # Function that takes a matrix and makes it row-stochastic
-    for id_row in range(0, matrix.shape[0]):
-        denominator = matrix[id_row, :].sum()
-        if denominator == 0:
-            # If the denominator is zero, then amke every element in the row have the same weight
-            matrix[id_row, :] = np.ones(matrix.shape[1])*(1/matrix.shape[1])
-        else:
-            matrix[id_row, :] = matrix[id_row, :] * (1 / denominator)
-
-
-def create_random_numbers(num_agents=100, number_parameters=None, limits=(-1, 1)):
-    """ This function creates and returns a list of random 'num_agents' numbers. This function is used to create initial
-        opinions and also to create agent parameters. Its default use is to create initial opinions
-
-    :param num_agents: number of opinions that are returned, by default 100
-    :param number_parameters: a lists of lists, every element corresponds to a different set of initial opinions to be
-        created. Each element of this list contains 4 elements:
-            [0] -> signals the type of distribution to create.  '0' is a uniform distribution
-                                                                'any non 0' is a normal distribution
-            [1] -> if the distribution is uniform, this is the minimum value. If the distribution is normal, this is the
-                    mean
-            [2] -> if the distribution is uniform, this is the maximum value. If the distribution is normal, this is the
-                    variance
-            [3] -> the fraction of all the agents. The sum does not have to add to one, as it will be normalized
-
-    :param limits: a tuple of two numbers, the first is the lower bound and the second the upper bound
-    :return: numpy array of 'num_agents' rows and 1 column (a list of lists) of opinions
-    """
-
-    rng = np.random.default_rng()  # this is for the random numbers creation
-
-    if number_parameters is None:
-        number_parameters = [[0, -1.0, 1.0, 1]]
-
-    # for ease, transform the list of lists to a numpy 2d array
-    number_parameters = np.array(number_parameters)
-
-    # the first thing to do is to compute the number of agents each sub-distribution will have, start by normalizing the
-    # fractions
-    fractions = number_parameters[:, 3]
-    fractions = fractions/fractions.sum()
-    sub_num_agents = np.floor(fractions*num_agents)  # compute the number of agents this assignation corresponds to
-    missing_agents = num_agents-sub_num_agents.sum()  # number of agents that are left to assign
-    while missing_agents > 0:
-        # randomly assign one agent to one subgroup
-        random_index = random.randint(0, (len(sub_num_agents)-1))
-        sub_num_agents[random_index] += 1
-        missing_agents = num_agents - sub_num_agents.sum()  # number of agents that are left to assign
-
-    # replace the fraction, for the actual number of agents
-    number_parameters[:, 3] = sub_num_agents
-
-    initial_opinions = None
-    for subgroup_info in number_parameters:
-        if subgroup_info[0] == 0:
-            # create a uniform distribution
-            min_op = subgroup_info[1]
-            max_op = subgroup_info[2]
-            local_opinions = (max_op - min_op) * rng.random((int(subgroup_info[3]), 1)) + min_op
-
-        else:
-            # create a normal distribution
-            dist_mean = subgroup_info[1]
-            dist_variance = subgroup_info[2]
-            local_opinions = rng.normal(dist_mean, dist_variance, (int(subgroup_info[3]), 1))
-
-        if initial_opinions is None:
-            initial_opinions = local_opinions
-        else:
-            initial_opinions = np.concatenate((initial_opinions, local_opinions))
-
-    # Truncate the opinion values
-    initial_opinions = np.maximum(np.minimum(initial_opinions, limits[1]), limits[0])
-
-    return initial_opinions
-
-
-def modify_mean(weights, des_mean, epsilon=0.05, max_counter=100, limits=(0, 1)):
-
-    # print('f = modify_mean')
-
-    weights_mean = weights.mean()
-    mean_difference = np.absolute(weights_mean - des_mean)
-    counter = 0
-    while (mean_difference > epsilon) and (counter < max_counter):
-        counter += 1
-
-        m1 = (des_mean + 1) / (weights_mean + 1)
-        m2 = (des_mean - 1) / (weights_mean - 1)
-        for count, old_weight in enumerate(weights):
-            if old_weight <= weights_mean:
-                weights[count] = ((old_weight + 1) * m1) - 1
-            else:
-                weights[count] = ((old_weight - 1) * m2) + 1
-
-        # Truncate the weight values
-        weights = np.maximum(np.minimum(weights, limits[1]), limits[0])
-        weights_mean = weights.mean()
-        mean_difference = np.absolute(weights_mean - des_mean)
-
-    return weights
-
-
-def matrix_exp(matrix, order=10):
-    """
-    This is a function to approximate a matrix exponential to the order 'order'
-
-    :param matrix: matrix to calculate the exponential
-    :param order: the order of the approximation, by default it is 10
-    :return: returns the approximation of the matrix exponential
-    """
-
-    # print('f = matrix_exp')
-
-    matrix_exp_approx = np.eye(np.shape(matrix)[0]) + matrix  # matrix_power(matrix, 0)
-    matrix_product = matrix
-
-    for local_order in range(2, order):
-        matrix_product = np.matmul(matrix_product, matrix)
-        matrix_exp_approx += matrix_product*(1/factorial(local_order))
-
-    return matrix_exp_approx
-
-
-def matrix2digraph(adjacency_matrix=None, default_type=0):
-    """ Function that converts from an adjacency matrix to a digraph object
-        it is mainly used to plot
-
-    :param adjacency_matrix: the adjacency matrix, by default it is a simple ring digraph
-    :param default_type: ID of the default digraph
-    :return: the digraph object
-    """
-
-    # print('f = matrix2digraph')
-
-    # if adjacency_matrix is None:
-    #     adjacency_matrix = default_digraph(default_type=default_type)
-
-    return ig.Graph.Weighted_Adjacency(adjacency_matrix)
 
 
 def histogram_classification(opinion_distribution, classification_parameters=(10, 3, 4, 6, 50, 12, 40)):
@@ -513,4 +521,45 @@ def histogram_classification(opinion_distribution, classification_parameters=(10
         return 3  # Clustering
 
     return 4  # Dissensus
+
+
+def modify_mean(weights, des_mean, epsilon=0.05, max_counter=100, limits=(0, 1)):
+
+    # print('f = modify_mean')
+
+    weights_mean = weights.mean()
+    mean_difference = np.absolute(weights_mean - des_mean)
+    counter = 0
+    while (mean_difference > epsilon) and (counter < max_counter):
+        counter += 1
+
+        m1 = (des_mean + 1) / (weights_mean + 1)
+        m2 = (des_mean - 1) / (weights_mean - 1)
+        for count, old_weight in enumerate(weights):
+            if old_weight <= weights_mean:
+                weights[count] = ((old_weight + 1) * m1) - 1
+            else:
+                weights[count] = ((old_weight - 1) * m2) + 1
+
+        # Truncate the weight values
+        weights = np.maximum(np.minimum(weights, limits[1]), limits[0])
+        weights_mean = weights.mean()
+        mean_difference = np.absolute(weights_mean - des_mean)
+
+    return weights
+
+
+def make_row_stochastic(matrix):
+
+    # print('f = make_row_stochastic')
+
+    # Function that takes a matrix and makes it row-stochastic
+    for id_row in range(0, matrix.shape[0]):
+        denominator = matrix[id_row, :].sum()
+        if denominator == 0:
+            # If the denominator is zero, then amke every element in the row have the same weight
+            matrix[id_row, :] = np.ones(matrix.shape[1])*(1/matrix.shape[1])
+        else:
+            matrix[id_row, :] = matrix[id_row, :] * (1 / denominator)
+
 

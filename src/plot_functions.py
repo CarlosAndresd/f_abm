@@ -19,41 +19,10 @@ import igraph as ig
 # from auxiliary_functions import histogram_classification
 
 
-def opinion2color(opinion_model, agent_parameter):
-
-    # print('f = opinion2color')
-
-    if opinion_model == 'CB':
-        b_value = agent_parameter[0]  # Conformist trait
-        r_value = agent_parameter[1]  # Radical trait
-        g_value = 1 - (b_value + r_value)  # Stubborn trait
-
-        # Return the value rounded
-        return r_value.round(7), g_value.round(7), b_value.round(7)
-
-
-def plot_histogram(ax, opinions, num_bins=10, histogram_title='Opinions'):
-    """ This function creates and plots the histogram for a set of opinions
-
-    :param ax: the axis where the histogram is plotted
-    :param opinions: the set of opinions
-    :param num_bins: the number of bins of the histogram, by default it is 10
-    :param histogram_title: title of the histogram
-    :return:
-    """
-
-    ax.grid()
-    ax.hist(opinions, bins=np.linspace(-1.0, 1.0, num_bins+1), edgecolor='black')
-    ax.set_xlim([-1.1, 1.1])
-    ax.set_ylim([0, opinions.shape[0]])
-    ax.set_title(histogram_title)
-    ax.set_axisbelow(True)
-
-
-def plot_digraph(digraph, file_name=None, visual_style=None):
+def plot_digraph(digraph=None, file_name=None, visual_style=None):
     """ Function to plot the digraph
 
-    :param digraph: Digraph to be plotted
+    :param digraph: Digraph to be plotted, by default it is a simple ring digraph
     :param file_name: string that is the name of the file to be plotted
     :param visual_style: optional visual style
 
@@ -62,8 +31,8 @@ def plot_digraph(digraph, file_name=None, visual_style=None):
 
     # print('f = plot_digraph')
 
-    # if digraph is None:
-    #     digraph = matrix2digraph()
+    if digraph is None:
+        digraph = matrix2digraph()
 
     if visual_style is None:
         # Get the edge weights
@@ -104,3 +73,86 @@ def plot_opinions(opinion_evolution, agent_parameters, opinion_model, axes=None)
         plt.show()
     else:
         ax.grid()
+
+
+def plot_histogram(ax, opinions, num_bins=10, histogram_title='Opinions'):
+    """ This function creates and plots the histogram for a set of opinions
+
+    :param ax: the axis where the histogram is plotted
+    :param opinions: the set of opinions
+    :param num_bins: the number of bins of the histogram, by default it is 10
+    :param histogram_title: title of the histogram
+    :return:
+    """
+
+    # print('f = plot_histogram')
+
+    ax.grid()
+    ax.hist(opinions, bins=np.linspace(-1.0, 1.0, num_bins+1), edgecolor='black')
+    ax.set_xlim([-1.1, 1.1])
+    ax.set_ylim([0, opinions.shape[0]])
+    ax.set_title(histogram_title)
+    ax.set_axisbelow(True)
+
+
+def plot_inner_traits(file_name='standard_inner_traits.npy'):
+
+    # print('f = plot_inner_traits')
+
+    all_inner_traits = np.load(file_name)  # loads your saved array into variable all_opinions
+    fig = plt.figure()
+    ax = fig.add_subplot(1, 1, 1)
+
+    for inner_traits in all_inner_traits:
+        av_con, av_rad = np.maximum(np.minimum(inner_traits.mean(axis=0), 1), 0)
+        # Truncation is necessary to avoid problems with negative averages that produce non-existent colours
+        # These negative averages may be produced by small numerical errors
+        av_stb = 1 - (av_con + av_rad)
+        ax.plot(av_con, av_stb, 'o', color=opinion2color(opinion_model='CB', agent_parameter=[av_con, av_rad]))
+
+    ax.set_xlim([-0.1, 1.1])
+    ax.set_ylim([-0.1, 1.1])
+    ax.set_title('All Inner Traits')
+    plt.grid()
+    # display the plot
+    plt.show()
+
+
+def plot_all_opinions(file_name='standard_initial_opinions.npy', color_by_type=False):
+    all_opinions = np.load(file_name)  # loads your saved array into variable all_opinions
+    if color_by_type:
+        point_colors = [(0.16862745, 0.34901961, 0.76470588),
+                        (0.32941176, 0.54901961, 0.18431373),
+                        (0.82745098, 0.39607843, 0.50980392),
+                        (0.94509804, 0.56078431, 0.00392157),
+                        (0.39607843, 0.05098039, 0.10588235)]
+
+    else:
+        point_colors = [(0.16862745, 0.54901961, 0.10588235),
+                        (0.16862745, 0.54901961, 0.10588235),
+                        (0.16862745, 0.54901961, 0.10588235),
+                        (0.16862745, 0.54901961, 0.10588235),
+                        (0.16862745, 0.54901961, 0.10588235)]
+
+    fig = plt.figure(figsize=(10, 7))
+    ax = fig.add_subplot(111)
+    ax.plot([0, 1, 1, 0], [0, -1, 1, 0], linewidth=2, color=(0.2, 0.5, 0.8))
+    counters = np.zeros((5, 1))
+    for opinion_distribution in all_opinions:
+        classification = histogram_classification(opinion_distribution)
+        counters[classification] += 1
+        ax.plot(np.absolute(opinion_distribution).mean(), opinion_distribution.mean(), 'o', linewidth=1.5,
+                markersize=3, color=point_colors[classification])
+    ax.grid()
+    plt.show()
+
+    print(f'number PC = {counters[0]}')
+    print(f'number Co = {counters[1]}')
+    print(f'number Po = {counters[2]}')
+    print(f'number Cl = {counters[3]}')
+    print(f'number Di = {counters[4]}')
+
+
+
+
+
