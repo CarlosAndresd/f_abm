@@ -19,6 +19,11 @@ _________
 """
 
 
+import numpy as np
+from src.basiccreation import (create_random_numbers, )
+from src.digraph_creation import (default_digraph, )
+
+
 def model_evolution(initial_opinions=None, adjacency_matrix=None, agent_parameters=None, model_parameters=None,
                     model_function=None, num_steps=50, default_type=0):
 
@@ -70,7 +75,7 @@ def model_evolution(initial_opinions=None, adjacency_matrix=None, agent_paramete
     return all_opinions
 
 
-def cb_model_step(initial_opinions, adjacency_matrix, agent_parameters, model_parameters):
+def cb_model_step(initial_opinions, adjacency_matrix, agent_parameters, model_parameters=(0.4, 2, 5)):
     """ This function takes a step with the Classification-based model
 
     :param initial_opinions: a list (or numpy array) of initial conditions

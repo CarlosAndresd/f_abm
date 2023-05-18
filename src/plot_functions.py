@@ -16,7 +16,8 @@
 import numpy as np
 import matplotlib.pyplot as plt
 import igraph as ig
-# from auxiliary_functions import histogram_classification
+from src.auxiliary_functions import (matrix2digraph, opinion2color, histogram_classification)
+from src.digraph_creation import default_digraph
 
 
 def plot_digraph(digraph=None, file_name=None, visual_style=None):
@@ -29,10 +30,8 @@ def plot_digraph(digraph=None, file_name=None, visual_style=None):
     :return:
     """
 
-    # print('f = plot_digraph')
-
     if digraph is None:
-        digraph = matrix2digraph()
+        digraph = matrix2digraph(default_digraph(default_type=0))
 
     if visual_style is None:
         # Get the edge weights
@@ -50,8 +49,6 @@ def plot_digraph(digraph=None, file_name=None, visual_style=None):
 
 
 def plot_opinions(opinion_evolution, agent_parameters, opinion_model, axes=None):
-
-    # print('f = plot_opinions')
 
     # Get the number of agents
     num_agents = opinion_evolution.shape[0]

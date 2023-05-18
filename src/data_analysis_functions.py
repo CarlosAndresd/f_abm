@@ -29,13 +29,25 @@ Functions
 """
 
 
-def gather_data():
-    _ = create_many_inner_traits(num_agents=1000, file_name='thousand_traits')
-    _ = create_many_opinions(num_agents=1000, file_name='thousand_opinions')
-    obtain_features(num_agents=1000, num_iterations=1000, file_name='thousand_thousand_data')
+import random
+import numpy as np
+import pandas as pd
+from src.basiccreation import (create_many_inner_traits, create_many_opinions, a_random_digraph,
+                                a_random_initial_opinion_distribution, a_random_inner_trait_assignation, )
+from src.model_functions import model_evolution
+from src.auxiliary_functions import (histogram_classification, matrix_exp, digraph2topology, )
+from src.digraph_creation import (default_digraph, )
 
 
-def obtain_features(num_agents=1000, num_iterations=100, file_name=None):
+def gather_data(num_agents=1000, num_iterations=1000, global_name='default_name'):
+    _ = create_many_inner_traits(num_agents=num_agents, file_name=global_name+'_traits')
+    _ = create_many_opinions(num_agents=num_agents, file_name=global_name+'_opinions')
+    obtain_features(num_agents=num_agents, num_iterations=num_iterations, file_name=global_name+'_data',
+                    traits_file_name=global_name+'_traits', opinions_file_name=global_name+'_opinions')
+
+
+def obtain_features(num_agents=1000, num_iterations=100, file_name=None, traits_file_name=None,
+                    opinions_file_name=None):
     """
     File to create the data for the training, validation, and testing
 
@@ -106,12 +118,18 @@ def obtain_features(num_agents=1000, num_iterations=100, file_name=None):
                     'mean_fin_op',  # mean final opinions
                     'mean_abs_fin_op']  # mean abs final opinions
 
+    if traits_file_name is None:
+        traits_file_name = 'default_name_traits'
+
+    if opinions_file_name is None:
+        opinions_file_name = 'default_name_opinions'
+
     # Load the set of possible initial opinions (100 agents)
-    all_opinions = np.load('thousand_opinions.npy')
+    all_opinions = np.load(opinions_file_name+'.npy')
     num_opinions = np.shape(all_opinions)[0]  # Number of possible initial opinions
 
     # Load the set of possible inner traits (100 agents)
-    all_inner_traits = np.load('thousand_traits.npy')
+    all_inner_traits = np.load(traits_file_name+'.npy')
     num_inner_traits = np.shape(all_inner_traits)[0]  # Number of possible inner traits
 
     results = np.expand_dims(
@@ -544,7 +562,7 @@ def compute_digraph_metrics(adjacency_matrix=None, default_type=0, print_informa
                ]
 
     return np.array(metrics)  # balance index, bidirectional coefficient, mean in-degree, in-degree variance, mean
-                              # out-degree, out-degree variance, mean cluster, variance cluster
+                                # out-degree, out-degree variance, mean cluster, variance cluster
 
 
 def compute_balance_index(adjacency_matrix=None, default_type=0, print_information=False):

@@ -6,27 +6,16 @@
 
     Functions:
 
-        - opinion2color
-        - modify_opinions_method_1
-        - modify_opinions_method_2
-        - add_random_edges
-        - add_signs2matrix
-        - add_rs_weights2matrix
-        - make_row_stochastic
-        - create_random_numbers
-        - modify_mean
-        - matrix_exp
-        - matrix2digraph
-
 
 """
 
 import matplotlib.pyplot as plt
 import numpy as np
-from plot_functions import plot_histogram
 import random
 from math import factorial
 import igraph as ig
+# COMMENTED TO FIX TEMPORARILY CIRCULAR DEPENDENCIES WITH THE plot_functions MODULE
+# from src.plot_functions import plot_histogram
 
 
 def matrix_exp(matrix, order=10):
@@ -59,10 +48,8 @@ def digraph2topology(adjacency_matrix=None, default_type=0):
     :return: a matrix of the same size as 'adjacency_matrix' but with only 0 or 1 corresponding to the topology.
     """
 
-    # print('f = digraph2topology')
-
-    if adjacency_matrix is None:
-        adjacency_matrix = default_digraph(default_type=default_type)
+    # if adjacency_matrix is None:
+    #     adjacency_matrix = default_digraph(default_type=default_type) CIRCULAR DEPENDENCY TO FIX
 
     num_agents = adjacency_matrix.shape[0]
     adjacency_matrix = adjacency_matrix != 0
@@ -87,8 +74,8 @@ def add_random_edges(adjacency_matrix=None, num_iterations=10, default_type=0):
     :return:
     """
 
-    if adjacency_matrix is None:
-        adjacency_matrix = default_digraph(default_type=default_type)
+    # if adjacency_matrix is None:
+    #     adjacency_matrix = default_digraph(default_type=default_type) CIRCULAR DEPENDENCY TO FIX
 
     # Get the number of agents
     num_agents = adjacency_matrix.shape[0]
@@ -165,8 +152,8 @@ def matrix2digraph(adjacency_matrix=None, default_type=0):
 
     # print('f = matrix2digraph')
 
-    if adjacency_matrix is None:
-        adjacency_matrix = default_digraph(default_type=default_type)
+    # if adjacency_matrix is None:
+    #     adjacency_matrix = default_digraph(default_type=default_type) CIRCULAR DEPENDENCY TO FIX
 
     return ig.Graph.Weighted_Adjacency(adjacency_matrix)
 
@@ -320,12 +307,13 @@ def modify_opinions_method_1(opinions, des_mean, des_abs_mean, epsilon=0.05, max
         # Truncate the opinion values
         opinions = np.maximum(np.minimum(opinions, limits[1]), limits[0])
 
-        if show_process:
-            ax1.clear()
-            plot_histogram(ax1, opinions)
-            ax2.plot(opinion_abs_mean, opinion_mean, 'o', linewidth=2, color=(0.2, 0.5, 0.1))
-            plt.gcf().canvas.draw()
-            plt.pause(0.01)
+        # COMMENTED TO FIX TEMPORARILY CIRCULAR DEPENDENCIES WITH THE plot_functions MODULE
+        # if show_process:
+        #     ax1.clear()
+        #     plot_histogram(ax1, opinions)
+        #     ax2.plot(opinion_abs_mean, opinion_mean, 'o', linewidth=2, color=(0.2, 0.5, 0.1))
+        #     plt.gcf().canvas.draw()
+        #     plt.pause(0.01)
 
         opinion_mean = opinions.mean()
         opinion_abs_mean = np.absolute(opinions).mean()
@@ -410,12 +398,13 @@ def modify_opinions_method_2(opinions, des_mean, des_abs_mean, epsilon=0.05, max
         # Truncate the opinion values
         opinions = np.maximum(np.minimum(opinions, limits[1]), limits[0])
 
-        if show_process:
-            ax1.clear()
-            plot_histogram(ax1, opinions)
-            ax2.plot(opinion_abs_mean, opinion_mean, 'o', linewidth=2, color=(0.2, 0.5, 0.1))
-            plt.gcf().canvas.draw()
-            plt.pause(0.01)
+        # COMMENTED TO FIX TEMPORARILY CIRCULAR DEPENDENCIES WITH THE plot_functions MODULE
+        # if show_process:
+        #     ax1.clear()
+        #     plot_histogram(ax1, opinions)
+        #     ax2.plot(opinion_abs_mean, opinion_mean, 'o', linewidth=2, color=(0.2, 0.5, 0.1))
+        #     plt.gcf().canvas.draw()
+        #     plt.pause(0.01)
 
         opinion_mean = opinions.mean()
         opinion_abs_mean = np.absolute(opinions).mean()
@@ -514,6 +503,7 @@ def histogram_classification(opinion_distribution, classification_parameters=(10
         max_bin_count = number_of_bins.max()
 
     if (len(normalised_group_count) >= 2) and (max_bin_count <= b_value) and (normalised_group_count.sum() > 50):
+        # COMMENTED (in part) TO FIX TEMPORARILY CIRCULAR DEPENDENCIES WITH THE plot_functions MODULE
         # fig = plt.figure(figsize=(10, 7))
         # ax = fig.add_subplot(111)
         # plot_histogram(ax, opinion_distribution, num_bins=10)

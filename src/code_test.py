@@ -1,17 +1,46 @@
-from basiccreation import *
-from plot_functions import *
+"""
+
+"""
+
+import matplotlib.pyplot as plt
+from src.basiccreation import a_random_initial_opinion_distribution, a_random_inner_trait_assignation, a_random_digraph
+from src.plot_functions import (plot_histogram, plot_opinions, plot_digraph)
+from src.model_functions import (model_evolution, cb_model_step)
+from src.data_analysis_functions import gather_data
 
 
-opinions = a_random_initial_opinion_distribution(num_agents=10)
+def example_1(num_agents=10):
 
-grid = np.array([[x, y] for x in np.linspace(0, 1, 5) for y in np.linspace(-1, 1, 5)  # 11 and 21
-				if (((y-x) < 0.000001) and ((y+x) > -0.000001))]).round(decimals=3)
+	opinions = a_random_initial_opinion_distribution(num_agents=num_agents)
+	fig = plt.figure(figsize=(10, 7))
+	ax1 = fig.add_subplot(111)
+	plot_histogram(ax1, opinions)
+	plt.gcf().canvas.draw()
+	plt.show()
 
-_ = create_many_opinions(num_agents=100, file_name='example_opinions', grid=grid, show_result=False)
 
-fig = plt.figure(figsize=(10, 7))
-ax1 = fig.add_subplot(111)
-plot_histogram(ax1, opinions)
-plt.gcf().canvas.draw()
-plt.show()
+def example_2(num_agents=10):
+
+	initial_opinions = a_random_initial_opinion_distribution(num_agents=num_agents)
+	agent_parameters = a_random_inner_trait_assignation(num_agents=num_agents)
+	adjacency_matrix = a_random_digraph(num_agents=num_agents)
+	model_parameters = [0.4, 2, 5]
+	opinion_evolution = model_evolution(initial_opinions=initial_opinions, adjacency_matrix=adjacency_matrix,
+										agent_parameters=adjacency_matrix, model_parameters=model_parameters,
+										model_function=cb_model_step, num_steps=50, default_type=0)
+
+	fig = plt.figure(figsize=(10, 7))
+	ax1 = fig.add_subplot(111)
+	plot_opinions(opinion_evolution, agent_parameters, cb_model_step, axes=ax1)
+	plt.gcf().canvas.draw()
+	plt.show()
+
+
+def example_3():
+	plot_digraph()
+
+
+def example_4():
+	gather_data(num_agents=100, num_iterations=20, global_name='Gather_data_example')
+
 

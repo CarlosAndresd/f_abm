@@ -6,8 +6,8 @@
 """
 
 
-from auxiliary_functions import create_random_numbers
 import numpy as np
+from src.auxiliary_functions import create_random_numbers
 
 
 def test_create_random_numbers():
