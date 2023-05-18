@@ -1,14 +1,23 @@
 """
 
+==============================================================
+Functions for Plotting, (:mod:`f_abm.src.plot_functions`)
+==============================================================
+
+Description
+-----------
+
     This is the module that takes care of all the plotting, whether it is for opinion distributions (histograms), or
     digraphs, or whatever it is required.
 
-    Functions:
+Functions
+---------
 
-    - plot_histogram
     - plot_digraph
     - plot_opinions
-
+    - plot_histogram
+    - plot_inner_traits
+    - plot_all_opinions
 
 """
 
@@ -21,13 +30,19 @@ from src.digraph_creation import default_digraph
 
 
 def plot_digraph(digraph=None, file_name=None, visual_style=None):
-    """ Function to plot the digraph
+    """
 
-    :param digraph: Digraph to be plotted, by default it is a simple ring digraph
-    :param file_name: string that is the name of the file to be plotted
-    :param visual_style: optional visual style
+    Function to plot the digraph
 
-    :return:
+    Parameters
+    ----------
+    digraph: Digraph to be plotted, by default it is a simple ring digraph
+    file_name: string that is the name of the file to be plotted
+    visual_style: optional visual style
+
+    Returns
+    -------
+
     """
 
     if digraph is None:
@@ -49,6 +64,22 @@ def plot_digraph(digraph=None, file_name=None, visual_style=None):
 
 
 def plot_opinions(opinion_evolution, agent_parameters, opinion_model, axes=None):
+    """
+
+    Function to plot the opinion evolution
+
+    Parameters
+    ----------
+    opinion_evolution: matrix with the opinion evolution data
+    agent_parameters: parameters for each agent
+    opinion_model: the label of the opinion model
+    axes: the axes for the plot
+
+    Returns
+    -------
+    Nothing
+
+    """
 
     # Get the number of agents
     num_agents = opinion_evolution.shape[0]
@@ -73,16 +104,22 @@ def plot_opinions(opinion_evolution, agent_parameters, opinion_model, axes=None)
 
 
 def plot_histogram(ax, opinions, num_bins=10, histogram_title='Opinions'):
-    """ This function creates and plots the histogram for a set of opinions
-
-    :param ax: the axis where the histogram is plotted
-    :param opinions: the set of opinions
-    :param num_bins: the number of bins of the histogram, by default it is 10
-    :param histogram_title: title of the histogram
-    :return:
     """
 
-    # print('f = plot_histogram')
+    This function creates and plots the histogram for a set of opinions
+
+    Parameters
+    ----------
+    ax: the axis where the histogram is plotted
+    opinions: the set of opinions
+    num_bins: the number of bins of the histogram, by default it is 10
+    histogram_title: title of the histogram
+
+    Returns
+    -------
+    Nothing
+
+    """
 
     ax.grid()
     ax.hist(opinions, bins=np.linspace(-1.0, 1.0, num_bins+1), edgecolor='black')
@@ -93,8 +130,19 @@ def plot_histogram(ax, opinions, num_bins=10, histogram_title='Opinions'):
 
 
 def plot_inner_traits(file_name='standard_inner_traits.npy'):
+    """
 
-    # print('f = plot_inner_traits')
+    Function to plot the inner traits for the Classification-based model
+
+    Parameters
+    ----------
+    file_name: name of the file that contains the inner traits
+
+    Returns
+    -------
+    Nothing
+
+    """
 
     all_inner_traits = np.load(file_name)  # loads your saved array into variable all_opinions
     fig = plt.figure()
@@ -116,6 +164,20 @@ def plot_inner_traits(file_name='standard_inner_traits.npy'):
 
 
 def plot_all_opinions(file_name='standard_initial_opinions.npy', color_by_type=False):
+    """
+
+    Function to plot a set of opinion distributions in the Agreement Plot
+
+    Parameters
+    ----------
+    file_name: name of the file that contains all the initial opinion distributions
+    color_by_type: boolean specifying how to color the plot
+
+    Returns
+    -------
+    Nothing
+
+    """
     all_opinions = np.load(file_name)  # loads your saved array into variable all_opinions
     if color_by_type:
         point_colors = [(0.16862745, 0.34901961, 0.76470588),
@@ -148,8 +210,3 @@ def plot_all_opinions(file_name='standard_initial_opinions.npy', color_by_type=F
     print(f'number Po = {counters[2]}')
     print(f'number Cl = {counters[3]}')
     print(f'number Di = {counters[4]}')
-
-
-
-
-

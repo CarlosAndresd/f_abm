@@ -13,6 +13,12 @@ Description
 Functions
 ---------
 
+    - a_random_digraph
+    - a_random_initial_opinion_distribution
+    - a_random_inner_trait_assignation
+    - create_inner_traits_local
+    - create_many_opinions
+    - create_many_inner_traits
 
 """
 
@@ -28,12 +34,18 @@ from src.plot_functions import plot_inner_traits
 
 def a_random_digraph(num_agents=10):
     """
-    This function returns a random digraph, NOT a digraph with random topology, but a random digraph
-    :param num_agents: number of agents
-    :return: a random digraph
-    """
 
-    # print('f = a_random_digraph')
+    This function returns a random digraph, NOT a digraph with random topology, but a random digraph
+
+    Parameters
+    ----------
+    num_agents: number of agents, by default 10
+
+    Returns
+    -------
+    a random digraph
+
+    """
 
     opinion_param_1 = [[0, -1.0, 1.0, 1]]
     opinion_param_2 = [[0, 0.0, 1.0, 1]]
@@ -106,12 +118,18 @@ def a_random_digraph(num_agents=10):
 
 def a_random_initial_opinion_distribution(num_agents=10):
     """
-    This function returns a random initial opinion distribution
-    :param num_agents: number of agents
-    :return: a random initial opinion distribution
-    """
 
-    # print('f = a_random_initial_opinion_distribution')
+    This function returns a random initial opinion distribution
+
+    Parameters
+    ----------
+    num_agents: number of agents, by default 10
+
+    Returns
+    -------
+    A random initial opinion distribution
+
+    """
 
     rng = np.random.default_rng()  # this is for the random numbers creation
 
@@ -150,12 +168,18 @@ def a_random_initial_opinion_distribution(num_agents=10):
 
 def a_random_inner_trait_assignation(num_agents=10):
     """
-    This function returns a random inner trait assignation
-    :param num_agents: number of agents
-    :return: inner trait assignation
-    """
 
-    # print('f = a_random_inner_trait_assignation')
+    This function returns a random inner trait assignation
+
+    Parameters
+    ----------
+    num_agents: number of agents
+
+    Returns
+    -------
+    Inner trait assignation
+
+    """
 
     rng = np.random.default_rng()  # this is for the random numbers creation
 
@@ -240,15 +264,21 @@ def a_random_inner_trait_assignation(num_agents=10):
 
 
 def create_inner_traits_local(num_agents=100):
-    """ Function to create randomly inner trait assignations, these are the agent parameters of the Classification-based
-        model
-
-    :param num_agents: number of agents
-    :return: inner traits, it is a list of lists, the first element is alpha, the second is beta (the weights of the
-        conformist and radical trait, respectively)
     """
 
-    # print('f = create_inner_traits_local')
+    Function to create randomly inner trait assignations, these are the agent parameters of the Classification-based
+    model
+
+    Parameters
+    ----------
+    num_agents: number of agents, by default 100
+
+    Returns
+    -------
+    inner traits, it is a list of lists, the first element is alpha, the second is beta (the weights of the conformist
+    and radical trait, respectively)
+
+    """
 
     inner_traits = np.zeros((num_agents, 2))
     rng = np.random.default_rng()
@@ -270,16 +300,21 @@ def create_inner_traits_local(num_agents=100):
 
 
 def create_many_opinions(num_agents=100, file_name='standard_initial_opinions', grid=None, show_result=False):
-    """ This function creates and saves many initial opinions to be used later
-
-    :param num_agents: the number of agents
-    :param file_name: name of the file created
-    :param grid: it is the reference grid to create the initial opinions
-    :param show_result: show the Agreement Plot of the resulting opinions. By default, it is false
-    :return:
     """
 
-    # print('f = create_many_opinions')
+    This function creates and saves many initial opinions to be used later
+
+    Parameters
+    ----------
+    num_agents: the number of agents, by default 100
+    file_name: name of the file created, by default 'standard_initial_opinions'
+    grid: it is the reference grid to create the initial opinions
+    show_result: show the Agreement Plot of the resulting opinions. By default, it is false
+
+    Returns
+    -------
+
+    """
 
     if grid is None:
         grid = np.array([[x, y] for x in np.linspace(0, 1, 41) for y in np.linspace(-1, 1, 41)  # 11 and 21
@@ -349,16 +384,22 @@ def create_many_opinions(num_agents=100, file_name='standard_initial_opinions', 
 
 
 def create_many_inner_traits(num_agents=100, file_name='standard_inner_traits', grid=None, show_result=False):
-    """ This function creates and saves many inner traits to be used later
-
-    :param num_agents: the number of agents
-    :param file_name: name of the file created
-    :param grid: it is the reference grid to create the inner traits
-    :param show_result: a boolean determining of the resulting inner traits are shown
-    :return: a list of numpy arrays with 'num_agents' rows and 2 columns
     """
 
-    # print('f = create_many_inner_traits')
+    This function creates and saves many inner traits to be used later
+
+    Parameters
+    ----------
+    num_agents: the number of agents
+    file_name: name of the file created
+    grid: it is the reference grid to create the inner traits
+    show_result: a boolean determining of the resulting inner traits are shown
+
+    Returns
+    -------
+    A list of numpy arrays with 'num_agents' rows and 2 columns
+
+    """
 
     all_inner_traits = []
     if grid is None:

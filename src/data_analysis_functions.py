@@ -32,7 +32,7 @@ Functions
 import random
 import numpy as np
 import pandas as pd
-from src.basiccreation import (create_many_inner_traits, create_many_opinions, a_random_digraph,
+from src.basic_creation import (create_many_inner_traits, create_many_opinions, a_random_digraph,
                                 a_random_initial_opinion_distribution, a_random_inner_trait_assignation, )
 from src.model_functions import model_evolution
 from src.auxiliary_functions import (histogram_classification, matrix_exp, digraph2topology, )
@@ -40,8 +40,30 @@ from src.digraph_creation import (default_digraph, )
 
 
 def gather_data(num_agents=1000, num_iterations=1000, global_name='default_name'):
+    """
+
+    This function perform the three steps to gather the data for the training of the algorithms to predict the opinions.
+    The three steps are to 1. create the inner traits, 2. create the initial opinions, and 3. compute the features
+
+    Parameters
+    ----------
+    num_agents: number of agents in the simulations, by default 1000
+    num_iterations: number of iterations or 'samples' by default 1000
+    global_name: the start of the name of the files where the resulting data will be saved
+
+    Returns
+    -------
+    Nothing
+
+    """
+
+    # Create the inner traits and save them in an external file
     _ = create_many_inner_traits(num_agents=num_agents, file_name=global_name+'_traits')
+
+    # Create the initial opinions and save them in an external file
     _ = create_many_opinions(num_agents=num_agents, file_name=global_name+'_opinions')
+
+    # Obtain all the features
     obtain_features(num_agents=num_agents, num_iterations=num_iterations, file_name=global_name+'_data',
                     traits_file_name=global_name+'_traits', opinions_file_name=global_name+'_opinions')
 
@@ -49,13 +71,23 @@ def gather_data(num_agents=1000, num_iterations=1000, global_name='default_name'
 def obtain_features(num_agents=1000, num_iterations=100, file_name=None, traits_file_name=None,
                     opinions_file_name=None):
     """
+
     File to create the data for the training, validation, and testing
 
-    :param num_agents: number of agents in all the simulations
-    :param num_iterations: number of iterations
-    :param file_name: name of the Excel data to print the output to
-    :return:
+    Parameters
+    ----------
+    num_agents: number of agents in all the simulations
+    num_iterations: number of iterations
+    file_name: name of the Excel data to print the output to
+    traits_file_name: name of the file with the inner traits
+    opinions_file_name: name of the file with the initial opinions
+
+    Returns
+    -------
+    None
+
     """
+
     # column_names = ['balance index',  # balance index,
     #                 'bidirectional coefficient',  # bidirectional coefficient,
     #                 'mean in-degree',  # mean in-degree,
@@ -156,8 +188,23 @@ def obtain_features(num_agents=1000, num_iterations=100, file_name=None, traits_
 
 def feature_computation(num_agents=10, print_information=False, adjacency_matrix=None, opinion_distribution=None,
                         inner_trait_assignations=None):
+    """
 
-    # print('f = feature_computation')
+    Function that computes the features for each sample
+
+    Parameters
+    ----------
+    num_agents: number of agents
+    print_information: whether to print the information or not
+    adjacency_matrix: the adjacency matrix
+    opinion_distribution: the initial opinion distribution
+    inner_trait_assignations: the inner trait assignation
+
+    Returns
+    -------
+    The computed features
+
+    """
 
     if adjacency_matrix is None:
         adjacency_matrix = a_random_digraph(num_agents=num_agents)
@@ -245,15 +292,21 @@ def feature_computation(num_agents=10, print_information=False, adjacency_matrix
 def compute_mean_opinion_difference(adjacency_matrix=None, opinion_distribution=None, num_agents=10,
                                     print_information=False):
     """
-    This function computes the mean opinion difference, given an adjacency matrix and an opinion distribution
-    :param adjacency_matrix: adjacency matrix
-    :param opinion_distribution: opinion distribution
-    :param num_agents: number of agents
-    :param print_information: boolean determining whether the metric is shown or not
-    :return: mean opinion difference
-    """
 
-    # print('f = compute_mean_opinion_difference')
+    This function computes the mean opinion difference, given an adjacency matrix and an opinion distribution
+
+    Parameters
+    ----------
+    adjacency_matrix: adjacency matrix
+    opinion_distribution: opinion distribution
+    num_agents: number of agents
+    print_information: boolean determining whether the metric is shown or not
+
+    Returns
+    -------
+    Mean opinion difference
+
+    """
 
     if adjacency_matrix is None:
         adjacency_matrix = a_random_digraph(num_agents=num_agents)
@@ -293,17 +346,22 @@ def compute_mean_opinion_difference(adjacency_matrix=None, opinion_distribution=
 
 def compute_opinion_metrics_by_agent_type(opinion_distribution=None, inner_traits=None, num_agents=10,
                                           print_information=False):
-
-    """ This function computes the opinion metric by agent type
-
-    :param opinion_distribution: the opinion distribution
-    :param inner_traits: the inner traits
-    :param num_agents: the number of agents
-    :param print_information: boolean determining whether the metric is shown or not
-    :return: the opinion metric by agent type
     """
 
-    # print('f = compute_opinion_metrics_by_agent_type')
+    This function computes the opinion metric by agent type
+
+    Parameters
+    ----------
+    opinion_distribution: the opinion distribution
+    inner_traits: the inner traits
+    num_agents: the number of agents
+    print_information: boolean determining whether the metric is shown or not
+
+    Returns
+    -------
+    The opinion metric by agent type
+
+    """
 
     # first, classify each agent, depending on which inner trait has the greatest weight
 
@@ -392,16 +450,21 @@ def compute_opinion_metrics_by_agent_type(opinion_distribution=None, inner_trait
 
 def compute_trait_allocation_metrics(adjacency_matrix=None, inner_traits=None, num_agents=10, print_information=False):
     """
+
     This function computes the mean inner trait difference between neighbours in the digraph
 
-    :param adjacency_matrix: the corresponding digraph
-    :param inner_traits: the corresponding inner trait assignation
-    :param num_agents: the number of agents
-    :param print_information: boolean determining whether the metric is shown or not
-    :return: the mean inner trait difference between neighbours in the digraph
-    """
+    Parameters
+    ----------
+    adjacency_matrix: the corresponding digraph
+    inner_traits: the corresponding inner trait assignation
+    num_agents: the number of agents
+    print_information: boolean determining whether the metric is shown or not
 
-    # print('f = compute_trait_allocation_metrics')
+    Returns
+    -------
+    The mean inner trait difference between neighbours in the digraph
+
+    """
 
     if inner_traits is None:
         inner_traits = a_random_inner_trait_assignation(num_agents=num_agents)
@@ -455,15 +518,20 @@ def compute_trait_allocation_metrics(adjacency_matrix=None, inner_traits=None, n
 
 def compute_opinion_metrics(opinion_distribution=None, num_agents=10, print_information=False):
     """
+
     This function computes the mean and mean of the absolute value of the opinion distribution
 
-    :param opinion_distribution: the opinion distribution
-    :param num_agents: number of agents
-    :param print_information: boolean determining whether the print the information or not
-    :return: the mean and mean of the absolute value of the opinion distribution
-    """
+    Parameters
+    ----------
+    opinion_distribution: the opinion distribution
+    num_agents: number of agents
+    print_information: boolean determining whether the print the information or not
 
-    # print('f = compute_opinion_metrics')
+    Returns
+    -------
+    The mean and mean of the absolute value of the opinion distribution
+
+    """
 
     if opinion_distribution is None:
         opinion_distribution = a_random_initial_opinion_distribution(num_agents=num_agents)
@@ -480,15 +548,20 @@ def compute_opinion_metrics(opinion_distribution=None, num_agents=10, print_info
 
 def compute_inner_trait_metrics(inner_traits=None, num_agents=10, print_information=False):
     """
+
     This function computes the metrics of the inner trait assignation
 
-    :param inner_traits: the inner trait assignation
-    :param num_agents: the number of agents
-    :param print_information: boolean that determines if the information is printed
-    :return:
-    """
+    Parameters
+    ----------
+    inner_traits: the inner trait assignation
+    num_agents: the number of agents
+    print_information: boolean that determines if the information is printed
 
-    # print('f = compute_inner_trait_metrics')
+    Returns
+    -------
+    The inner trait metrics
+
+    """
 
     if inner_traits is None:
         inner_traits = a_random_inner_trait_assignation(num_agents=num_agents)
@@ -535,15 +608,20 @@ def compute_inner_trait_metrics(inner_traits=None, num_agents=10, print_informat
 
 def compute_digraph_metrics(adjacency_matrix=None, default_type=0, print_information=False):
     """
+
     This is a function used to compute several digraph metrics at once
 
-    :param adjacency_matrix: the adjacency matrix for which the metrics will be computed
-    :param default_type: ID of the default adjacency matrix
-    :param print_information: whether to print information or not
-    :return:
-    """
+    Parameters
+    ----------
+    adjacency_matrix: the adjacency matrix for which the metrics will be computed
+    default_type: ID of the default adjacency matrix
+    print_information: whether to print information or not
 
-    # print('f = compute_digraph_metrics')
+    Returns
+    -------
+    The digraph metrics
+
+    """
 
     if adjacency_matrix is None:
         adjacency_matrix = default_digraph(default_type=default_type)
@@ -567,14 +645,20 @@ def compute_digraph_metrics(adjacency_matrix=None, default_type=0, print_informa
 
 def compute_balance_index(adjacency_matrix=None, default_type=0, print_information=False):
     """
-    Function to approximate the balance index of a signed network
-    :param adjacency_matrix: the adjacency matrix
-    :param default_type: ID of the default digraph
-    :param print_information: Boolean determining if the computed values are printed
-    :return: the balance index
-    """
 
-    # print('f = compute_balance_index')
+    Function to approximate the balance index of a signed network
+
+    Parameters
+    ----------
+    adjacency_matrix: the adjacency matrix
+    default_type: ID of the default digraph
+    print_information: Boolean determining if the computed values are printed
+
+    Returns
+    -------
+    The balance index
+
+    """
 
     if adjacency_matrix is None:
         adjacency_matrix = default_digraph(default_type=default_type)
@@ -589,14 +673,20 @@ def compute_balance_index(adjacency_matrix=None, default_type=0, print_informati
 
 def compute_bidirectional_coefficient(adjacency_matrix=None, default_type=0, print_information=False):
     """
-    This function computes the bidirectional coefficient of a given adjacency matrix
-    :param adjacency_matrix: the adjacency matrix.
-    :param default_type: ID of the default digraph
-    :param print_information: Boolean determining if the computed values are printed
-    :return: a float between 0.0 and 1.0 with the bidirectional coefficient
-    """
 
-    # print('f = compute_bidirectional_coefficient')
+    This function computes the bidirectional coefficient of a given adjacency matrix
+
+    Parameters
+    ----------
+    adjacency_matrix: the adjacency matrix.
+    default_type: ID of the default digraph
+    print_information: Boolean determining if the computed values are printed
+
+    Returns
+    -------
+    A float between 0.0 and 1.0 with the bidirectional coefficient
+
+    """
 
     if adjacency_matrix is None:
         adjacency_matrix = default_digraph(default_type=default_type)
@@ -628,16 +718,22 @@ def compute_bidirectional_coefficient(adjacency_matrix=None, default_type=0, pri
 
 def compute_degrees(adjacency_matrix=None, default_type=0, print_information=False):
     """
+
     Function used to compute the metrics related to the degree of the nodes, namely, the mean and variance of the in and
     out degrees
-    :param adjacency_matrix: the adjacency matrix
-    :param default_type: ID of the default digraph
-    :param print_information: Boolean determining if the computed values are printed
-    :return: a numpy array with 4 numbers corresponding, in order, to the mean in-degree, in-degree variance, mean
-    out-degree, and out-degree variance
-    """
 
-    # print('f = compute_degrees')
+    Parameters
+    ----------
+    adjacency_matrix: the adjacency matrix
+    default_type: ID of the default digraph
+    print_information: Boolean determining if the computed values are printed
+
+    Returns
+    -------
+    A numpy array with 4 numbers corresponding, in order, to the mean in-degree, in-degree variance, mean out-degree,
+    and out-degree variance
+
+    """
 
     if adjacency_matrix is None:
         adjacency_matrix = default_digraph(default_type=default_type)
@@ -666,14 +762,20 @@ def compute_degrees(adjacency_matrix=None, default_type=0, print_information=Fal
 
 def compute_clustering(adjacency_matrix=None, default_type=0, print_information=False):
     """
-    This is a function to compute the clustering mean and variance
-    :param adjacency_matrix: the adjacency matrix
-    :param default_type: ID of the default digraph
-    :param print_information: Boolean determining if the computed values are printed
-    :return: a numpy array with the mean and the variance of the clustering
-    """
 
-    # print('f = compute_clustering')
+    This is a function to compute the clustering mean and variance.
+
+    Parameters
+    ----------
+    adjacency_matrix: the adjacency matrix
+    default_type: ID of the default digraph
+    print_information: Boolean determining if the computed values are printed
+
+    Returns
+    -------
+    A numpy array with the mean and the variance of the clustering
+
+    """
 
     if adjacency_matrix is None:
         adjacency_matrix = default_digraph(default_type=default_type)

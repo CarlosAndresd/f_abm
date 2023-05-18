@@ -20,29 +20,34 @@ _________
 
 
 import numpy as np
-from src.basiccreation import (create_random_numbers, )
+from src.basic_creation import (create_random_numbers, )
 from src.digraph_creation import (default_digraph, )
 
 
 def model_evolution(initial_opinions=None, adjacency_matrix=None, agent_parameters=None, model_parameters=None,
                     model_function=None, num_steps=50, default_type=0):
-
-    """ This function evolves a given model, with the give initial opinions, adjacency matrix, agent parameters,
-        model parameters, and number of steps
-
-    :param initial_opinions: numpy list of initial opinions. By default, it calls the function 'create_opinions()'
-    :param adjacency_matrix: numpy 2d adjacency matrix.
-    :param agent_parameters: agent parameters, what this is depends on the model. By default, it is '[[0.33, 0.33]]*100'
-    :param model_parameters: model parameters, what this is depends on the model. By default, it is '[0.4, 2, 5]'
-    :param model_function: function that evolves the steps of the model. By default, it is 'cb_model_step', i.e. it
-        evolves the Classification-based model
-    :param num_steps: prediction horizon, it is an integer. By default, it is 50
-    :param default_type: ID of the default digraph
-    :return: a 2d numpy array with as many rows as agents, and as many columns as num_steps. Each row contains the
-        opinion evolution of every agent.
     """
 
-    # print('f = model_evolution')
+    This function evolves a given model, with the give initial opinions, adjacency matrix, agent parameters, model
+    parameters, and number of steps
+
+    Parameters
+    ----------
+    initial_opinions: numpy list of initial opinions. By default, it calls the function 'create_opinions()'
+    adjacency_matrix: numpy 2d adjacency matrix.
+    agent_parameters: agent parameters, what this is depends on the model. By default, it is '[[0.33, 0.33]]*100'
+    model_parameters: model parameters, what this is depends on the model. By default, it is '[0.4, 2, 5]'
+    model_function: function that evolves the steps of the model. By default, it is 'cb_model_step', i.e. it evolves
+                    the Classification-based model
+    num_steps: prediction horizon, it is an integer. By default, it is 50
+    default_type: ID of the default digraph
+
+    Returns
+    -------
+    A 2d numpy array with as many rows as agents, and as many columns as num_steps. Each row contains the opinion
+    evolution of every agent.
+
+    """
 
     if initial_opinions is None:
         initial_opinions = create_random_numbers()
@@ -76,17 +81,22 @@ def model_evolution(initial_opinions=None, adjacency_matrix=None, agent_paramete
 
 
 def cb_model_step(initial_opinions, adjacency_matrix, agent_parameters, model_parameters=(0.4, 2, 5)):
-    """ This function takes a step with the Classification-based model
-
-    :param initial_opinions: a list (or numpy array) of initial conditions
-    :param adjacency_matrix: a list of lists representing the adjacency matrix
-    :param agent_parameters: a list of lists containing the agent parameters, the first parameter is alpha
-                             and the second one is beta
-    :param model_parameters: the parameter tuple lambda, xi, and mu
-    :return:
     """
 
-    # print('f = cb_model_step')
+    This function takes a step with the Classification-based model
+
+    Parameters
+    ----------
+    initial_opinions: a list (or numpy array) of initial conditions
+    adjacency_matrix: a list of lists representing the adjacency matrix
+    agent_parameters: a list of lists containing the agent parameters, the first parameter is alpha and the second one
+                        is beta
+    model_parameters: the parameter tuple lambda, xi, and mu
+
+    Returns
+    -------
+
+    """
 
     # Get the number of agents
     num_agents = initial_opinions.shape[0]

@@ -1,10 +1,30 @@
 """
 
-    Description:
+==============================================================
+Auxiliary Functions, (:mod:`f_abm.src.auxiliary_functions`)
+==============================================================
 
-        This module contains auxiliary functions.
+Description
+-----------
 
-    Functions:
+    This module contains auxiliary functions that are use throughout the program.
+
+Functions
+---------
+
+    - matrix_exp
+    - digraph2topology
+    - add_random_edges
+    - add_rs_weights2matrix
+    - add_signs2matrix
+    - matrix2digraph
+    - create_random_numbers
+    - opinion2color
+    - modify_opinions_method_1
+    - modify_opinions_method_2
+    - histogram_classification
+    - modify_mean
+    - make_row_stochastic
 
 
 """
@@ -20,14 +40,19 @@ import igraph as ig
 
 def matrix_exp(matrix, order=10):
     """
+
     This is a function to approximate a matrix exponential to the order 'order'
 
-    :param matrix: matrix to calculate the exponential
-    :param order: the order of the approximation, by default it is 10
-    :return: returns the approximation of the matrix exponential
-    """
+    Parameters
+    ----------
+    matrix: matrix to calculate the exponential
+    order: the order of the approximation, by default it is 10
 
-    # print('f = matrix_exp')
+    Returns
+    -------
+    returns the approximation of the matrix exponential
+
+    """
 
     matrix_exp_approx = np.eye(np.shape(matrix)[0]) + matrix  # matrix_power(matrix, 0)
     matrix_product = matrix
@@ -41,11 +66,19 @@ def matrix_exp(matrix, order=10):
 
 def digraph2topology(adjacency_matrix=None, default_type=0):
     """
+
     Function to convert from any adjacency matrix to the corresponding topology (that is, the associated adjacency
-    matrix without signs or weights
-    :param adjacency_matrix: the adjacency matrix
-    :param default_type: ID of the default digraph
-    :return: a matrix of the same size as 'adjacency_matrix' but with only 0 or 1 corresponding to the topology.
+    matrix without signs or weights)
+
+    Parameters
+    ----------
+    adjacency_matrix: the adjacency matrix
+    default_type: ID of the default digraph
+
+    Returns
+    -------
+    A matrix of the same size as 'adjacency_matrix' but with only 0 or 1 corresponding to the topology.
+
     """
 
     # if adjacency_matrix is None:
@@ -64,14 +97,21 @@ def digraph2topology(adjacency_matrix=None, default_type=0):
 
 def add_random_edges(adjacency_matrix=None, num_iterations=10, default_type=0):
     """
+
     Function to add random edges to the adjacency matrix 'adjacency_matrix', the edges have no weight or sign.
     The function does not guarantee that these are new edges, it randomly selects cells of the adjacency matrix and
     adds edges
 
-    :param adjacency_matrix: the adjacency matrix to be modified
-    :param num_iterations: the number of iterations
-    :param default_type: the ID of the default digraph
-    :return:
+    Parameters
+    ----------
+    adjacency_matrix: the adjacency matrix to be modified
+    num_iterations: the number of iterations
+    default_type: the ID of the default digraph
+
+    Returns
+    -------
+    The same adjacency matrix with random edges. This is a side effect function.
+
     """
 
     # if adjacency_matrix is None:
@@ -80,7 +120,7 @@ def add_random_edges(adjacency_matrix=None, num_iterations=10, default_type=0):
     # Get the number of agents
     num_agents = adjacency_matrix.shape[0]
 
-    for _ in range(0,num_iterations):
+    for _ in range(0, num_iterations):
         randon_row = random.randint(0, num_agents-1)
         randon_col = random.randint(0, num_agents-1)
 
@@ -88,13 +128,19 @@ def add_random_edges(adjacency_matrix=None, num_iterations=10, default_type=0):
 
 
 def add_rs_weights2matrix(adjacency_matrix):
-    """ Function that adds the stochastic weights to an adjacency matrix
-
-    :param adjacency_matrix: original adjacency matrix
-    :return: there is no need to return anything, as the adjacency matrix is transformed in the function
     """
 
-    # print('f = add_rs_weights2matrix')
+    Function that adds the stochastic weights to an adjacency matrix
+
+    Parameters
+    ----------
+    adjacency_matrix: original adjacency matrix
+
+    Returns
+    -------
+    there is no need to return anything, as the adjacency matrix is transformed in the function
+
+    """
 
     # Get the number of agents
     num_agents = adjacency_matrix.shape[0]
@@ -109,14 +155,20 @@ def add_rs_weights2matrix(adjacency_matrix):
 
 
 def add_signs2matrix(adjacency_matrix, positive_edge_ratio):
-    """ Function that adds the signs to the adjacency matrix of a signed digraph
-
-    :param adjacency_matrix: current adjacency matrix, presumably with only non-negative weights
-    :param positive_edge_ratio: ratio of positive edges
-    :return: There is no need to return anything, since the function modifies the adjacency matrix as desired
     """
 
-    # print('f = add_signs2matrix')
+    Function that adds the signs to the adjacency matrix of a signed digraph
+
+    Parameters
+    ----------
+    adjacency_matrix: current adjacency matrix, presumably with only non-negative weights
+    positive_edge_ratio: ratio of positive edges
+
+    Returns
+    -------
+    There is no need to return anything, since the function modifies the adjacency matrix as desired
+
+    """
 
     # Get the number of agents
     num_agents = adjacency_matrix.shape[0]
@@ -142,15 +194,20 @@ def add_signs2matrix(adjacency_matrix, positive_edge_ratio):
 
 
 def matrix2digraph(adjacency_matrix=None, default_type=0):
-    """ Function that converts from an adjacency matrix to a digraph object
-        it is mainly used to plot
-
-    :param adjacency_matrix: the adjacency matrix, by default it is a simple ring digraph
-    :param default_type: ID of the default digraph
-    :return: the digraph object
     """
 
-    # print('f = matrix2digraph')
+    Function that converts from an adjacency matrix to a digraph object it is mainly used to plot
+
+    Parameters
+    ----------
+    adjacency_matrix: the adjacency matrix, by default it is a simple ring digraph
+    default_type: ID of the default digraph
+
+    Returns
+    -------
+    ID of the default digraph
+
+    """
 
     # if adjacency_matrix is None:
     #     adjacency_matrix = default_digraph(default_type=default_type) CIRCULAR DEPENDENCY TO FIX
@@ -159,11 +216,15 @@ def matrix2digraph(adjacency_matrix=None, default_type=0):
 
 
 def create_random_numbers(num_agents=100, number_parameters=None, limits=(-1, 1)):
-    """ This function creates and returns a list of random 'num_agents' numbers. This function is used to create initial
-        opinions and also to create agent parameters. Its default use is to create initial opinions
+    """
 
-    :param num_agents: number of opinions that are returned, by default 100
-    :param number_parameters: a lists of lists, every element corresponds to a different set of initial opinions to be
+    This function creates and returns a list of random 'num_agents' numbers. This function is used to create initial
+    opinions and also to create agent parameters. Its default use is to create initial opinions
+
+    Parameters
+    ----------
+    num_agents: number of opinions that are returned, by default 100
+    number_parameters: a lists of lists, every element corresponds to a different set of initial opinions to be
         created. Each element of this list contains 4 elements:
             [0] -> signals the type of distribution to create.  '0' is a uniform distribution
                                                                 'any non 0' is a normal distribution
@@ -172,12 +233,13 @@ def create_random_numbers(num_agents=100, number_parameters=None, limits=(-1, 1)
             [2] -> if the distribution is uniform, this is the maximum value. If the distribution is normal, this is the
                     variance
             [3] -> the fraction of all the agents. The sum does not have to add to one, as it will be normalized
+    limits: a tuple of two numbers, the first is the lower bound and the second the upper bound
 
-    :param limits: a tuple of two numbers, the first is the lower bound and the second the upper bound
-    :return: numpy array of 'num_agents' rows and 1 column (a list of lists) of opinions
+    Returns
+    -------
+    numpy array of 'num_agents' rows and 1 column (a list of lists) of opinions
+
     """
-
-    # print('f = create_random_numbers')
 
     rng = np.random.default_rng()  # this is for the random numbers creation
 
@@ -228,8 +290,20 @@ def create_random_numbers(num_agents=100, number_parameters=None, limits=(-1, 1)
 
 
 def opinion2color(opinion_model, agent_parameter):
+    """
 
-    # print('f = opinion2color')
+    This function transforms agent parameter to colors, depending on the model.
+
+    Parameters
+    ----------
+    opinion_model: the model name or identifier
+    agent_parameter: the agent parameters
+
+    Returns
+    -------
+    a color in a form of an RGB triplet
+
+    """
 
     if opinion_model == 'CB':
         b_value = agent_parameter[0]  # Conformist trait
@@ -242,20 +316,26 @@ def opinion2color(opinion_model, agent_parameter):
 
 def modify_opinions_method_1(opinions, des_mean, des_abs_mean, epsilon=0.05, max_counter=100, show_process=False,
                              limits=(-1, 1)):
-    """ This function modifies a given opinion distribution to create an opinion distribution with the desired mean
-    and absolute value mean using method 1
-
-    :param opinions: the original opinions
-    :param des_mean: the desired opinion mean
-    :param des_abs_mean: the desired opinion mean absolute value
-    :param epsilon: the tolerance for the infinity norm
-    :param max_counter: the maximum number of iterations to find the desired opinions
-    :param show_process: boolean determining whether to show the creation process or not
-    :param limits: a tuple with the upper and lower limits of the opinions
-    :return: the new, modified opinions
     """
 
-    # print('f = modify_opinions_method_1')
+    This function modifies a given opinion distribution to create an opinion distribution with the desired mean and
+    absolute value mean using method 1
+
+    Parameters
+    ----------
+    opinions: the original opinions
+    des_mean: the desired opinion mean
+    des_abs_mean: the desired opinion mean absolute value
+    epsilon: the tolerance for the infinity norm
+    max_counter: the maximum number of iterations to find the desired opinions
+    show_process: boolean determining whether to show the creation process or not
+    limits: a tuple with the upper and lower limits of the opinions
+
+    Returns
+    -------
+    the new, modified opinions
+
+    """
 
     if show_process:
         fig = plt.figure(figsize=(10, 7))
@@ -326,20 +406,26 @@ def modify_opinions_method_1(opinions, des_mean, des_abs_mean, epsilon=0.05, max
 
 def modify_opinions_method_2(opinions, des_mean, des_abs_mean, epsilon=0.05, max_counter=100, show_process=False,
                              limits=(-1, 1)):
-    """ This function modifies a given opinion distribution to create an opinion distribution with the desired mean
-    and absolute value mean using method 2
-
-    :param opinions: the original opinions
-    :param des_mean: the desired opinion mean
-    :param des_abs_mean: the desired opinion mean absolute value
-    :param epsilon: the tolerance for the infinity norm
-    :param max_counter: the maximum number of iterations to find the desired opinions
-    :param show_process: boolean determining whether to show the creation process or not
-    :param limits: a tuple with the upper and lower limits of the opinions
-    :return: the new, modified opinions
     """
 
-    # print('f = modify_opinions_method_2')
+    This function modifies a given opinion distribution to create an opinion distribution with the desired mean and
+    absolute value mean using method 2
+
+    Parameters
+    ----------
+    opinions: the original opinions
+    des_mean: the desired opinion mean
+    des_abs_mean: the desired opinion mean absolute value
+    epsilon: the tolerance for the infinity norm
+    max_counter: the maximum number of iterations to find the desired opinions
+    show_process: boolean determining whether to show the creation process or not
+    limits: a tuple with the upper and lower limits of the opinions
+
+    Returns
+    -------
+    the new, modified opinions
+
+    """
 
     if show_process:
         fig = plt.figure(figsize=(10, 7))
@@ -414,10 +500,22 @@ def modify_opinions_method_2(opinions, des_mean, des_abs_mean, epsilon=0.05, max
 
     return opinions
 
-
 def histogram_classification(opinion_distribution, classification_parameters=(10, 3, 4, 6, 50, 12, 40)):
+    """
 
-    # print('f = histogram_classification')
+    A function that classifies opinion distributions with any number of agents.
+
+    Parameters
+    ----------
+    opinion_distribution: the opinion distribution to be classified.
+    classification_parameters: the classification parameters.
+
+    Returns
+    -------
+    A number that encodes the classification, 0 is perfect consensus, 1 is consensus, 2 is polaristion, 3 is clustering,
+    and 4 is dissensus.
+
+    """
 
     # Get each of the parameter values
     m_value, b_value, k_value, u_value, t1_value, t2_value, t3_value = classification_parameters
@@ -512,10 +610,22 @@ def histogram_classification(opinion_distribution, classification_parameters=(10
 
     return 4  # Dissensus
 
-
 def modify_mean(weights, des_mean, epsilon=0.05, max_counter=100, limits=(0, 1)):
+    """
 
-    # print('f = modify_mean')
+    Parameters
+    ----------
+    weights: initial weights.
+    des_mean: desired weight mean.
+    epsilon: tolerance.
+    max_counter: maximum number of iterations.
+    limits: the limits of the weights.
+
+    Returns
+    -------
+    modified weights with the desired mean.
+
+    """
 
     weights_mean = weights.mean()
     mean_difference = np.absolute(weights_mean - des_mean)
@@ -538,12 +648,21 @@ def modify_mean(weights, des_mean, epsilon=0.05, max_counter=100, limits=(0, 1))
 
     return weights
 
-
 def make_row_stochastic(matrix):
+    """
 
-    # print('f = make_row_stochastic')
+    Function that takes a matrix and makes it row-stochastic
 
-    # Function that takes a matrix and makes it row-stochastic
+    Parameters
+    ----------
+    matrix: original matrix
+
+    Returns
+    -------
+    This function does not return anything, as it modifies the passed matrix
+
+    """
+
     for id_row in range(0, matrix.shape[0]):
         denominator = matrix[id_row, :].sum()
         if denominator == 0:

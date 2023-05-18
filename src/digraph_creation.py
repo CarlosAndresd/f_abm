@@ -7,10 +7,16 @@ Digraph Creation, (:mod:`f_abm.src.digraph_creation`)
 Description
 -----------
 
-    This module contains all the digraph creation functions
+    This module contains all the digraph creation functions.
 
 Functions
 ---------
+
+    - default_digraph
+    - complete_digraph
+    - ring_digraph
+    - small_world_digraph
+    - random_digraph
 
 
 """
@@ -23,11 +29,19 @@ from src.auxiliary_functions import (create_random_numbers, add_rs_weights2matri
 
 def default_digraph(default_type=0, num_agents=10):
     """
+
     This function returns pre-made digraphs to be used primarily as default for functions. The pre-made digraph that
     will be called for default will always be the one with default_type=0
-    :param default_type: ID of the default digraph
-    :param num_agents: number of agents
-    :return: the corresponding adjacency matrix
+
+    Parameters
+    ----------
+    default_type: ID of the default digraph
+    num_agents: number of agents
+
+    Returns
+    -------
+    The corresponding adjacency matrix
+
     """
 
     if default_type == 1:
@@ -59,14 +73,21 @@ def default_digraph(default_type=0, num_agents=10):
 
 
 def complete_digraph(num_agents=100, row_stochastic=False, positive_edge_ratio=1.0):
-    """ This is a function that returns a complete digraph
+    """
 
-    :param num_agents: Is the number of agents (and therefore vertices) of the digraph. By default, it is 100
-    :param row_stochastic: A boolean that determines if the returned digraph must
-                                have a row-stochastic matrix. By default, this is False
-    :param positive_edge_ratio: A floating number between 0 and 1 that determines
-                                the ratio of positive edges in the digraph. By default, it is 1
-    :return: The adjacency matrix of the corresponding generalised ring digraph
+    This is a function that returns a complete digraph
+
+    Parameters
+    ----------
+    num_agents: Is the number of agents (and therefore vertices) of the digraph. By default, it is 100
+    row_stochastic: A boolean that determines if the returned digraph must have a row-stochastic matrix. By default,
+                    this is False
+    positive_edge_ratio: A floating number between 0 and 1 that determines the ratio of positive edges in the digraph.
+                        By default, it is 1
+
+    Returns
+    -------
+    The adjacency matrix of the corresponding generalised ring digraph
 
     """
 
@@ -87,21 +108,26 @@ def complete_digraph(num_agents=100, row_stochastic=False, positive_edge_ratio=1
 
 def ring_digraph(num_agents=100, topology_signature=None, row_stochastic=False, positive_edge_ratio=1.0,
                  num_random_edges_it=0):
-    """ This is a function that returns a ring digraph
-
-    :param num_agents: Is the number of agents (and therefore vertices) of the digraph. By default, it is 100
-    :param topology_signature: Is a list with the relative indices of the
-                               vertices that influence each agent. By default, it is [0, 1]
-    :param row_stochastic: A boolean that determines if the returned digraph must
-                                have a row-stochastic matrix. By default, this is False
-    :param positive_edge_ratio: A floating number between 0 and 1 that determines
-                                the ratio of positive edges in the digraph. By default, it is 1
-    :param num_random_edges_it: number of iterations to add random edges
-    :return: The adjacency matrix of the corresponding generalised ring digraph
-
     """
 
-    # print('f = ring_digraph')
+    This is a function that returns a ring digraph
+
+    Parameters
+    ----------
+    num_agents: Is the number of agents (and therefore vertices) of the digraph. By default, it is 100
+    topology_signature: Is a list with the relative indices of the vertices that influence each agent. By default, it
+                        is [0, 1]
+    row_stochastic: A boolean that determines if the returned digraph must have a row-stochastic matrix. By default,
+                        this is False
+    positive_edge_ratio: A floating number between 0 and 1 that determines the ratio of positive edges in the digraph.
+                        By default, it is 1
+    num_random_edges_it: number of iterations to add random edges
+
+    Returns
+    -------
+    The adjacency matrix of the corresponding generalised ring digraph
+
+    """
 
     # First, create the topology
     # Initialise an array of zeros
@@ -144,26 +170,32 @@ def ring_digraph(num_agents=100, topology_signature=None, row_stochastic=False, 
 def small_world_digraph(num_agents=100, topology_signature=None, row_stochastic=False, positive_edge_ratio=1.0,
                         change_probability=0.0, reverse_probability=0.0, bidirectional_probability=0.0,
                         num_random_edges_it=0):
-    """ This is a function that creates a digraph with small-world topology
-
-    :param num_agents: number of agents, by default 100
-    :param topology_signature: the topology signature of the underlying ring digraph
-    :param row_stochastic: whether the adjacency matrix is row-stochastic, by default False
-    :param positive_edge_ratio: the positive edge ratio, by default 1
-    :param change_probability: the probability of edges changing target, it accepts a number between 0.0 and 1.0 or a
-        list of 'num_agents' numbers between 0.0 and 1.0. Each element in the list corresponds to the change probability
-        of the corresponding vertex
-    :param reverse_probability: the probability of edges reversing target, it accepts a number between 0.0 and 1.0 or a
-        list of 'num_agents' numbers between 0.0 and 1.0. Each element in the list corresponds to the reverse
-        probability of the corresponding vertex
-    :param bidirectional_probability: the probability of edges being bidirectional, it accepts a number between 0.0 and
-        1.0 or a list of 'num_agents' numbers between 0.0 and 1.0. Each element in the list corresponds to the
-        probability of the corresponding vertex being bidirectional
-    :param num_random_edges_it: number of iterations to add random edges
-    :return: the adjacency matrix associated with the corresponding small-world digraph
     """
 
-    # print('f = small_world_digraph')
+    This is a function that creates a digraph with small-world topology
+
+    Parameters
+    ----------
+    num_agents: number of agents, by default 100
+    topology_signature: the topology signature of the underlying ring digraph
+    row_stochastic: whether the adjacency matrix is row-stochastic, by default False
+    positive_edge_ratio: the positive edge ratio, by default 1
+    change_probability: the probability of edges changing target, it accepts a number between 0.0 and 1.0 or a
+        list of 'num_agents' numbers between 0.0 and 1.0. Each element in the list corresponds to the change probability
+        of the corresponding vertex
+    reverse_probability: the probability of edges reversing target, it accepts a number between 0.0 and 1.0 or a
+        list of 'num_agents' numbers between 0.0 and 1.0. Each element in the list corresponds to the reverse
+        probability of the corresponding vertex
+    bidirectional_probability: the probability of edges being bidirectional, it accepts a number between 0.0 and
+        1.0 or a list of 'num_agents' numbers between 0.0 and 1.0. Each element in the list corresponds to the
+        probability of the corresponding vertex being bidirectional
+    num_random_edges_it: number of iterations to add random edges
+
+    Returns
+    -------
+    The adjacency matrix associated with the corresponding small-world digraph
+
+    """
 
     # Preparation:
     # If the 'change_probability', 'reverse_probability', or 'bidirectional_probability' parameters are single numbers,
@@ -255,17 +287,22 @@ def small_world_digraph(num_agents=100, topology_signature=None, row_stochastic=
 
 def random_digraph(num_agents=100, row_stochastic=False, positive_edge_ratio=1.0, edge_probability=0.5):
     """
+
     This function creates a digraph with random topology. Note that not all the edges are random. The resulting
     adjacency matrix always has non-zero elements in the diagonal, indicating the self-loop
 
-    :param num_agents: number of agents of the digraph, by default 100
-    :param row_stochastic: boolean indicating if the adjacency matrix is row-stochastic
-    :param positive_edge_ratio: the positive edge ratio
-    :param edge_probability: the probability that an edge will exist
-    :return: the adjacency matrix
-    """
+    Parameters
+    ----------
+    num_agents: number of agents of the digraph, by default 100
+    row_stochastic: boolean indicating if the adjacency matrix is row-stochastic
+    positive_edge_ratio: the positive edge ratio
+    edge_probability: the probability that an edge will exist
 
-    # print('f = random_digraph')
+    Returns
+    -------
+    the adjacency matrix
+
+    """
 
     # First, create the topology
     # Initialise an identity matrix
