@@ -20,8 +20,8 @@ _________
 
 
 import numpy as np
-from f_abm.src.basic_creation import (create_random_numbers, )
-from f_abm.src.digraph_creation import (default_digraph, )
+from .basic_creation import (create_random_numbers, )
+from .digraph_creation import (default_digraph, )
 
 
 def model_evolution(initial_opinions=None, adjacency_matrix=None, agent_parameters=None, model_parameters=None,

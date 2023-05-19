@@ -7,12 +7,12 @@ Code Test, (:mod:`f_abm.src.code_test`)
 Description
 -----------
 
-    This module contains example functions aimed at showing newcomers how to use some of the functions in the program
+	This module contains example functions aimed at showing newcomers how to use some of the functions in the program
 
 Functions
 ---------
 
-    - example_1
+	- example_1
 	- example_2
 	- example_3
 	- example_4
@@ -20,10 +20,10 @@ Functions
 """
 
 import matplotlib.pyplot as plt
-from f_abm.src.basic_creation import a_random_initial_opinion_distribution, a_random_inner_trait_assignation, a_random_digraph
-from f_abm.src.plot_functions import (plot_histogram, plot_opinions, plot_digraph)
-from f_abm.src.model_functions import (model_evolution, cb_model_step)
-from f_abm.src.data_analysis_functions import gather_data
+from .basic_creation import a_random_initial_opinion_distribution, a_random_inner_trait_assignation, a_random_digraph
+from .plot_functions import (plot_histogram, plot_opinions, plot_digraph)
+from .model_functions import (model_evolution, cb_model_step)
+from .data_analysis_functions import gather_data
 
 
 def example_1(num_agents=100):

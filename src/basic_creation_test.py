@@ -18,7 +18,7 @@ Functions
 
 
 import numpy as np
-from f_abm.src.auxiliary_functions import create_random_numbers
+from .auxiliary_functions import create_random_numbers
 
 
 def test_create_random_numbers():

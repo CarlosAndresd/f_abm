@@ -24,7 +24,7 @@ Functions
 
 import random
 import numpy as np
-from f_abm.src.auxiliary_functions import (create_random_numbers, add_rs_weights2matrix, add_signs2matrix, add_random_edges, )
+from .auxiliary_functions import (create_random_numbers, add_rs_weights2matrix, add_signs2matrix, add_random_edges, )
 
 
 def default_digraph(default_type=0, num_agents=10):
