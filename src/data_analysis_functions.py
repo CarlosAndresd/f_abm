@@ -32,11 +32,11 @@ Functions
 import random
 import numpy as np
 import pandas as pd
-from src.basic_creation import (create_many_inner_traits, create_many_opinions, a_random_digraph,
+from f_abm.src.basic_creation import (create_many_inner_traits, create_many_opinions, a_random_digraph,
                                 a_random_initial_opinion_distribution, a_random_inner_trait_assignation, )
-from src.model_functions import model_evolution
-from src.auxiliary_functions import (histogram_classification, matrix_exp, digraph2topology, )
-from src.digraph_creation import (default_digraph, )
+from f_abm.src.model_functions import model_evolution
+from f_abm.src.auxiliary_functions import (histogram_classification, matrix_exp, digraph2topology, )
+from f_abm.src.digraph_creation import (default_digraph, )
 
 
 def gather_data(num_agents=1000, num_iterations=1000, global_name='default_name'):

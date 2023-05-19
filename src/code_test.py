@@ -20,10 +20,10 @@ Functions
 """
 
 import matplotlib.pyplot as plt
-from src.basic_creation import a_random_initial_opinion_distribution, a_random_inner_trait_assignation, a_random_digraph
-from src.plot_functions import (plot_histogram, plot_opinions, plot_digraph)
-from src.model_functions import (model_evolution, cb_model_step)
-from src.data_analysis_functions import gather_data
+from f_abm.src.basic_creation import a_random_initial_opinion_distribution, a_random_inner_trait_assignation, a_random_digraph
+from f_abm.src.plot_functions import (plot_histogram, plot_opinions, plot_digraph)
+from f_abm.src.model_functions import (model_evolution, cb_model_step)
+from f_abm.src.data_analysis_functions import gather_data
 
 
 def example_1(num_agents=100):
@@ -106,4 +106,6 @@ def example_4():
 	"""
 	gather_data(num_agents=100, num_iterations=20, global_name='Gather_data_example')
 
+
+example_1()
 

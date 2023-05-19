@@ -25,8 +25,8 @@ Functions
 import numpy as np
 import matplotlib.pyplot as plt
 import igraph as ig
-from src.auxiliary_functions import (matrix2digraph, opinion2color, histogram_classification)
-from src.digraph_creation import default_digraph
+from f_abm.src.auxiliary_functions import (matrix2digraph, opinion2color, histogram_classification)
+from f_abm.src.digraph_creation import default_digraph
 
 
 def plot_digraph(digraph=None, file_name=None, visual_style=None):

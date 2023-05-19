@@ -26,10 +26,10 @@ Functions
 import random
 import numpy as np
 import matplotlib.pyplot as plt
-from src.auxiliary_functions import (create_random_numbers, modify_opinions_method_1, modify_opinions_method_2,
+from f_abm.src.auxiliary_functions import (create_random_numbers, modify_opinions_method_1, modify_opinions_method_2,
                                      modify_mean, make_row_stochastic, histogram_classification)
-from src.digraph_creation import small_world_digraph
-from src.plot_functions import plot_inner_traits
+from f_abm.src.digraph_creation import small_world_digraph
+from f_abm.src.plot_functions import plot_inner_traits
 
 
 def a_random_digraph(num_agents=10):
