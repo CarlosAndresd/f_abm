@@ -225,14 +225,11 @@ def create_random_numbers(num_agents=100, number_parameters=None, limits=(-1, 1)
     ----------
     num_agents: number of opinions that are returned, by default 100
     number_parameters: a lists of lists, every element corresponds to a different set of initial opinions to be
-        created. Each element of this list contains 4 elements:
-            [0] -> signals the type of distribution to create.  '0' is a uniform distribution
-                                                                'any non 0' is a normal distribution
-            [1] -> if the distribution is uniform, this is the minimum value. If the distribution is normal, this is the
-                    mean
-            [2] -> if the distribution is uniform, this is the maximum value. If the distribution is normal, this is the
-                    variance
-            [3] -> the fraction of all the agents. The sum does not have to add to one, as it will be normalized
+    created. Each element of this list contains 4 elements: [0] signals the type of distribution to create. '0' is a
+    uniform distribution 'any non 0' is a normal distribution [1] if the distribution is uniform, this is the minimum
+    value. If the distribution is normal, this is the mean [2] if the distribution is uniform, this is the maximum
+    value. If the distribution is normal, this is the variance [3] the fraction of all the agents. The sum does not
+    have to add to one, as it will be normalized
     limits: a tuple of two numbers, the first is the lower bound and the second the upper bound
 
     Returns

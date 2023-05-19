@@ -1,0 +1,769 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>src.auxiliary_functions &mdash; Agent Based Model for Opinion Formation 0.1 documentation</title>
+      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/sphinx_highlight.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            Agent Based Model for Opinion Formation
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../src.html">src package</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">Agent Based Model for Opinion Formation</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">src.auxiliary_functions</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for src.auxiliary_functions</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">==============================================================</span>
+<span class="sd">Auxiliary Functions, (:mod:`f_abm.src.auxiliary_functions`)</span>
+<span class="sd">==============================================================</span>
+
+<span class="sd">Description</span>
+<span class="sd">-----------</span>
+
+<span class="sd">    This module contains auxiliary functions that are use throughout the program.</span>
+
+<span class="sd">Functions</span>
+<span class="sd">---------</span>
+
+<span class="sd">    - matrix_exp</span>
+<span class="sd">    - digraph2topology</span>
+<span class="sd">    - add_random_edges</span>
+<span class="sd">    - add_rs_weights2matrix</span>
+<span class="sd">    - add_signs2matrix</span>
+<span class="sd">    - matrix2digraph</span>
+<span class="sd">    - create_random_numbers</span>
+<span class="sd">    - opinion2color</span>
+<span class="sd">    - modify_opinions_method_1</span>
+<span class="sd">    - modify_opinions_method_2</span>
+<span class="sd">    - histogram_classification</span>
+<span class="sd">    - modify_mean</span>
+<span class="sd">    - make_row_stochastic</span>
+
+
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">random</span>
+<span class="kn">from</span> <span class="nn">math</span> <span class="kn">import</span> <span class="n">factorial</span>
+<span class="kn">import</span> <span class="nn">igraph</span> <span class="k">as</span> <span class="nn">ig</span>
+<span class="c1"># COMMENTED TO FIX TEMPORARILY CIRCULAR DEPENDENCIES WITH THE plot_functions MODULE</span>
+<span class="c1"># from src.plot_functions import plot_histogram</span>
+
+
+<div class="viewcode-block" id="matrix_exp"><a class="viewcode-back" href="../../src.html#src.auxiliary_functions.matrix_exp">[docs]</a><span class="k">def</span> <span class="nf">matrix_exp</span><span class="p">(</span><span class="n">matrix</span><span class="p">,</span> <span class="n">order</span><span class="o">=</span><span class="mi">10</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">    This is a function to approximate a matrix exponential to the order &#39;order&#39;</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    matrix: matrix to calculate the exponential</span>
+<span class="sd">    order: the order of the approximation, by default it is 10</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    returns the approximation of the matrix exponential</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">matrix_exp_approx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">matrix</span><span class="p">)[</span><span class="mi">0</span><span class="p">])</span> <span class="o">+</span> <span class="n">matrix</span>  <span class="c1"># matrix_power(matrix, 0)</span>
+    <span class="n">matrix_product</span> <span class="o">=</span> <span class="n">matrix</span>
+
+    <span class="k">for</span> <span class="n">local_order</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="n">order</span><span class="p">):</span>
+        <span class="n">matrix_product</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">matmul</span><span class="p">(</span><span class="n">matrix_product</span><span class="p">,</span> <span class="n">matrix</span><span class="p">)</span>
+        <span class="n">matrix_exp_approx</span> <span class="o">+=</span> <span class="n">matrix_product</span><span class="o">*</span><span class="p">(</span><span class="mi">1</span><span class="o">/</span><span class="n">factorial</span><span class="p">(</span><span class="n">local_order</span><span class="p">))</span>
+
+    <span class="k">return</span> <span class="n">matrix_exp_approx</span></div>
+
+
+<div class="viewcode-block" id="digraph2topology"><a class="viewcode-back" href="../../src.html#src.auxiliary_functions.digraph2topology">[docs]</a><span class="k">def</span> <span class="nf">digraph2topology</span><span class="p">(</span><span class="n">adjacency_matrix</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">default_type</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">    Function to convert from any adjacency matrix to the corresponding topology (that is, the associated adjacency</span>
+<span class="sd">    matrix without signs or weights)</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    adjacency_matrix: the adjacency matrix</span>
+<span class="sd">    default_type: ID of the default digraph</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    A matrix of the same size as &#39;adjacency_matrix&#39; but with only 0 or 1 corresponding to the topology.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c1"># if adjacency_matrix is None:</span>
+    <span class="c1">#     adjacency_matrix = default_digraph(default_type=default_type) CIRCULAR DEPENDENCY TO FIX</span>
+
+    <span class="n">num_agents</span> <span class="o">=</span> <span class="n">adjacency_matrix</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">adjacency_matrix</span> <span class="o">=</span> <span class="n">adjacency_matrix</span> <span class="o">!=</span> <span class="mi">0</span>
+    <span class="n">topology</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">num_agents</span><span class="p">,</span> <span class="n">num_agents</span><span class="p">))</span>
+    <span class="n">local_dictionary</span> <span class="o">=</span> <span class="p">{</span><span class="kc">True</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="kc">False</span><span class="p">:</span> <span class="mi">0</span><span class="p">}</span>
+    <span class="k">for</span> <span class="n">id_row</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">num_agents</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">id_col</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">num_agents</span><span class="p">):</span>
+            <span class="n">topology</span><span class="p">[</span><span class="n">id_row</span><span class="p">][</span><span class="n">id_col</span><span class="p">]</span> <span class="o">=</span> <span class="n">local_dictionary</span><span class="p">[</span><span class="n">adjacency_matrix</span><span class="p">[</span><span class="n">id_row</span><span class="p">][</span><span class="n">id_col</span><span class="p">]]</span>
+
+    <span class="k">return</span> <span class="n">topology</span></div>
+
+
+<div class="viewcode-block" id="add_random_edges"><a class="viewcode-back" href="../../src.html#src.auxiliary_functions.add_random_edges">[docs]</a><span class="k">def</span> <span class="nf">add_random_edges</span><span class="p">(</span><span class="n">adjacency_matrix</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">num_iterations</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">default_type</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">    Function to add random edges to the adjacency matrix &#39;adjacency_matrix&#39;, the edges have no weight or sign.</span>
+<span class="sd">    The function does not guarantee that these are new edges, it randomly selects cells of the adjacency matrix and</span>
+<span class="sd">    adds edges</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    adjacency_matrix: the adjacency matrix to be modified</span>
+<span class="sd">    num_iterations: the number of iterations</span>
+<span class="sd">    default_type: the ID of the default digraph</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    The same adjacency matrix with random edges. This is a side effect function.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c1"># if adjacency_matrix is None:</span>
+    <span class="c1">#     adjacency_matrix = default_digraph(default_type=default_type) CIRCULAR DEPENDENCY TO FIX</span>
+
+    <span class="c1"># Get the number of agents</span>
+    <span class="n">num_agents</span> <span class="o">=</span> <span class="n">adjacency_matrix</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+    <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">num_iterations</span><span class="p">):</span>
+        <span class="n">randon_row</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">num_agents</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">randon_col</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">num_agents</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+
+        <span class="n">adjacency_matrix</span><span class="p">[</span><span class="n">randon_row</span><span class="p">][</span><span class="n">randon_col</span><span class="p">]</span> <span class="o">=</span> <span class="mf">1.0</span></div>
+
+
+<div class="viewcode-block" id="add_rs_weights2matrix"><a class="viewcode-back" href="../../src.html#src.auxiliary_functions.add_rs_weights2matrix">[docs]</a><span class="k">def</span> <span class="nf">add_rs_weights2matrix</span><span class="p">(</span><span class="n">adjacency_matrix</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">    Function that adds the stochastic weights to an adjacency matrix</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    adjacency_matrix: original adjacency matrix</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    there is no need to return anything, as the adjacency matrix is transformed in the function</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c1"># Get the number of agents</span>
+    <span class="n">num_agents</span> <span class="o">=</span> <span class="n">adjacency_matrix</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+    <span class="c1"># Multiply the adjacency matrix by random numbers</span>
+
+    <span class="k">for</span> <span class="n">id_row</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">adjacency_matrix</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]):</span>
+        <span class="n">adjacency_matrix</span><span class="p">[</span><span class="n">id_row</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">adjacency_matrix</span><span class="p">[</span><span class="n">id_row</span><span class="p">,</span> <span class="p">:]</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="n">low</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">high</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">num_agents</span><span class="p">))</span>
+
+    <span class="c1"># Make the matrix row-stochastic</span>
+    <span class="n">make_row_stochastic</span><span class="p">(</span><span class="n">adjacency_matrix</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="add_signs2matrix"><a class="viewcode-back" href="../../src.html#src.auxiliary_functions.add_signs2matrix">[docs]</a><span class="k">def</span> <span class="nf">add_signs2matrix</span><span class="p">(</span><span class="n">adjacency_matrix</span><span class="p">,</span> <span class="n">positive_edge_ratio</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">    Function that adds the signs to the adjacency matrix of a signed digraph</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    adjacency_matrix: current adjacency matrix, presumably with only non-negative weights</span>
+<span class="sd">    positive_edge_ratio: ratio of positive edges</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    There is no need to return anything, since the function modifies the adjacency matrix as desired</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c1"># Get the number of agents</span>
+    <span class="n">num_agents</span> <span class="o">=</span> <span class="n">adjacency_matrix</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+    <span class="c1"># Total number of edges (excluding self-loops)</span>
+    <span class="n">num_edges</span> <span class="o">=</span> <span class="p">(</span><span class="n">adjacency_matrix</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span> <span class="o">-</span> <span class="n">num_agents</span>
+
+    <span class="c1"># Approximate the number of negative edges</span>
+    <span class="n">neg_edges</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">floor</span><span class="p">(</span><span class="n">positive_edge_ratio</span> <span class="o">*</span> <span class="n">num_edges</span><span class="p">))</span>
+
+    <span class="c1"># List all the non self-loop edges</span>
+    <span class="n">edges</span> <span class="o">=</span> <span class="p">[[</span><span class="n">id_row</span><span class="p">,</span> <span class="n">id_col</span><span class="p">]</span> <span class="k">for</span> <span class="n">id_row</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_agents</span><span class="p">)</span> <span class="k">for</span> <span class="n">id_col</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_agents</span><span class="p">)</span>
+             <span class="k">if</span> <span class="p">(</span><span class="n">id_row</span> <span class="o">!=</span> <span class="n">id_col</span> <span class="ow">and</span> <span class="n">adjacency_matrix</span><span class="p">[</span><span class="n">id_row</span><span class="p">,</span> <span class="n">id_col</span><span class="p">]</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">)]</span>
+
+    <span class="c1"># Sort them randomly</span>
+    <span class="n">rng</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">default_rng</span><span class="p">()</span>
+    <span class="n">rng</span><span class="o">.</span><span class="n">shuffle</span><span class="p">(</span><span class="n">edges</span><span class="p">)</span>
+    <span class="n">edges</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">edges</span><span class="p">)[:</span><span class="n">neg_edges</span><span class="p">,</span> <span class="p">:]</span>
+
+    <span class="c1"># Change the sign of the edge</span>
+    <span class="k">for</span> <span class="n">id_row</span><span class="p">,</span> <span class="n">id_col</span> <span class="ow">in</span> <span class="n">edges</span><span class="p">:</span>
+        <span class="n">adjacency_matrix</span><span class="p">[</span><span class="n">id_row</span><span class="p">,</span> <span class="n">id_col</span><span class="p">]</span> <span class="o">*=</span> <span class="o">-</span><span class="mi">1</span></div>
+
+
+<div class="viewcode-block" id="matrix2digraph"><a class="viewcode-back" href="../../src.html#src.auxiliary_functions.matrix2digraph">[docs]</a><span class="k">def</span> <span class="nf">matrix2digraph</span><span class="p">(</span><span class="n">adjacency_matrix</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">default_type</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">    Function that converts from an adjacency matrix to a digraph object it is mainly used to plot</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    adjacency_matrix: the adjacency matrix, by default it is a simple ring digraph</span>
+<span class="sd">    default_type: ID of the default digraph</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    ID of the default digraph</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c1"># if adjacency_matrix is None:</span>
+    <span class="c1">#     adjacency_matrix = default_digraph(default_type=default_type) CIRCULAR DEPENDENCY TO FIX</span>
+
+    <span class="k">return</span> <span class="n">ig</span><span class="o">.</span><span class="n">Graph</span><span class="o">.</span><span class="n">Weighted_Adjacency</span><span class="p">(</span><span class="n">adjacency_matrix</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="create_random_numbers"><a class="viewcode-back" href="../../src.html#src.auxiliary_functions.create_random_numbers">[docs]</a><span class="k">def</span> <span class="nf">create_random_numbers</span><span class="p">(</span><span class="n">num_agents</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">number_parameters</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">limits</span><span class="o">=</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">    This function creates and returns a list of random &#39;num_agents&#39; numbers. This function is used to create initial</span>
+<span class="sd">    opinions and also to create agent parameters. Its default use is to create initial opinions</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    num_agents: number of opinions that are returned, by default 100</span>
+<span class="sd">    number_parameters: a lists of lists, every element corresponds to a different set of initial opinions to be</span>
+<span class="sd">    created. Each element of this list contains 4 elements: [0] signals the type of distribution to create. &#39;0&#39; is a</span>
+<span class="sd">    uniform distribution &#39;any non 0&#39; is a normal distribution [1] if the distribution is uniform, this is the minimum</span>
+<span class="sd">    value. If the distribution is normal, this is the mean [2] if the distribution is uniform, this is the maximum</span>
+<span class="sd">    value. If the distribution is normal, this is the variance [3] the fraction of all the agents. The sum does not</span>
+<span class="sd">    have to add to one, as it will be normalized</span>
+<span class="sd">    limits: a tuple of two numbers, the first is the lower bound and the second the upper bound</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    numpy array of &#39;num_agents&#39; rows and 1 column (a list of lists) of opinions</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">rng</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">default_rng</span><span class="p">()</span>  <span class="c1"># this is for the random numbers creation</span>
+
+    <span class="k">if</span> <span class="n">number_parameters</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">number_parameters</span> <span class="o">=</span> <span class="p">[[</span><span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]]</span>
+
+    <span class="c1"># for ease, transform the list of lists to a numpy 2d array</span>
+    <span class="n">number_parameters</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">number_parameters</span><span class="p">)</span>
+
+    <span class="c1"># the first thing to do is to compute the number of agents each sub-distribution will have, start by normalizing the</span>
+    <span class="c1"># fractions</span>
+    <span class="n">fractions</span> <span class="o">=</span> <span class="n">number_parameters</span><span class="p">[:,</span> <span class="mi">3</span><span class="p">]</span>
+    <span class="n">fractions</span> <span class="o">=</span> <span class="n">fractions</span><span class="o">/</span><span class="n">fractions</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
+    <span class="n">sub_num_agents</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">floor</span><span class="p">(</span><span class="n">fractions</span><span class="o">*</span><span class="n">num_agents</span><span class="p">)</span>  <span class="c1"># compute the number of agents this assignation corresponds to</span>
+    <span class="n">missing_agents</span> <span class="o">=</span> <span class="n">num_agents</span><span class="o">-</span><span class="n">sub_num_agents</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>  <span class="c1"># number of agents that are left to assign</span>
+    <span class="k">while</span> <span class="n">missing_agents</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="c1"># randomly assign one agent to one subgroup</span>
+        <span class="n">random_index</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">sub_num_agents</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span><span class="p">))</span>
+        <span class="n">sub_num_agents</span><span class="p">[</span><span class="n">random_index</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="n">missing_agents</span> <span class="o">=</span> <span class="n">num_agents</span> <span class="o">-</span> <span class="n">sub_num_agents</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>  <span class="c1"># number of agents that are left to assign</span>
+
+    <span class="c1"># replace the fraction, for the actual number of agents</span>
+    <span class="n">number_parameters</span><span class="p">[:,</span> <span class="mi">3</span><span class="p">]</span> <span class="o">=</span> <span class="n">sub_num_agents</span>
+
+    <span class="n">initial_opinions</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="k">for</span> <span class="n">subgroup_info</span> <span class="ow">in</span> <span class="n">number_parameters</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">subgroup_info</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="c1"># create a uniform distribution</span>
+            <span class="n">min_op</span> <span class="o">=</span> <span class="n">subgroup_info</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+            <span class="n">max_op</span> <span class="o">=</span> <span class="n">subgroup_info</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+            <span class="n">local_opinions</span> <span class="o">=</span> <span class="p">(</span><span class="n">max_op</span> <span class="o">-</span> <span class="n">min_op</span><span class="p">)</span> <span class="o">*</span> <span class="n">rng</span><span class="o">.</span><span class="n">random</span><span class="p">((</span><span class="nb">int</span><span class="p">(</span><span class="n">subgroup_info</span><span class="p">[</span><span class="mi">3</span><span class="p">]),</span> <span class="mi">1</span><span class="p">))</span> <span class="o">+</span> <span class="n">min_op</span>
+
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># create a normal distribution</span>
+            <span class="n">dist_mean</span> <span class="o">=</span> <span class="n">subgroup_info</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+            <span class="n">dist_variance</span> <span class="o">=</span> <span class="n">subgroup_info</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+            <span class="n">local_opinions</span> <span class="o">=</span> <span class="n">rng</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="n">dist_mean</span><span class="p">,</span> <span class="n">dist_variance</span><span class="p">,</span> <span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">subgroup_info</span><span class="p">[</span><span class="mi">3</span><span class="p">]),</span> <span class="mi">1</span><span class="p">))</span>
+
+        <span class="k">if</span> <span class="n">initial_opinions</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">initial_opinions</span> <span class="o">=</span> <span class="n">local_opinions</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">initial_opinions</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">((</span><span class="n">initial_opinions</span><span class="p">,</span> <span class="n">local_opinions</span><span class="p">))</span>
+
+    <span class="c1"># Truncate the opinion values</span>
+    <span class="n">initial_opinions</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">maximum</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">minimum</span><span class="p">(</span><span class="n">initial_opinions</span><span class="p">,</span> <span class="n">limits</span><span class="p">[</span><span class="mi">1</span><span class="p">]),</span> <span class="n">limits</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+
+    <span class="k">return</span> <span class="n">initial_opinions</span></div>
+
+
+<div class="viewcode-block" id="opinion2color"><a class="viewcode-back" href="../../src.html#src.auxiliary_functions.opinion2color">[docs]</a><span class="k">def</span> <span class="nf">opinion2color</span><span class="p">(</span><span class="n">opinion_model</span><span class="p">,</span> <span class="n">agent_parameter</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">    This function transforms agent parameter to colors, depending on the model.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    opinion_model: the model name or identifier</span>
+<span class="sd">    agent_parameter: the agent parameters</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    a color in a form of an RGB triplet</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">if</span> <span class="n">opinion_model</span> <span class="o">==</span> <span class="s1">&#39;CB&#39;</span><span class="p">:</span>
+        <span class="n">b_value</span> <span class="o">=</span> <span class="n">agent_parameter</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>  <span class="c1"># Conformist trait</span>
+        <span class="n">r_value</span> <span class="o">=</span> <span class="n">agent_parameter</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>  <span class="c1"># Radical trait</span>
+        <span class="n">g_value</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">-</span> <span class="p">(</span><span class="n">b_value</span> <span class="o">+</span> <span class="n">r_value</span><span class="p">)</span>  <span class="c1"># Stubborn trait</span>
+
+        <span class="c1"># Return the value rounded</span>
+        <span class="k">return</span> <span class="n">r_value</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="mi">7</span><span class="p">),</span> <span class="n">g_value</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="mi">7</span><span class="p">),</span> <span class="n">b_value</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="mi">7</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="modify_opinions_method_1"><a class="viewcode-back" href="../../src.html#src.auxiliary_functions.modify_opinions_method_1">[docs]</a><span class="k">def</span> <span class="nf">modify_opinions_method_1</span><span class="p">(</span><span class="n">opinions</span><span class="p">,</span> <span class="n">des_mean</span><span class="p">,</span> <span class="n">des_abs_mean</span><span class="p">,</span> <span class="n">epsilon</span><span class="o">=</span><span class="mf">0.05</span><span class="p">,</span> <span class="n">max_counter</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">show_process</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                             <span class="n">limits</span><span class="o">=</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">    This function modifies a given opinion distribution to create an opinion distribution with the desired mean and</span>
+<span class="sd">    absolute value mean using method 1</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    opinions: the original opinions</span>
+<span class="sd">    des_mean: the desired opinion mean</span>
+<span class="sd">    des_abs_mean: the desired opinion mean absolute value</span>
+<span class="sd">    epsilon: the tolerance for the infinity norm</span>
+<span class="sd">    max_counter: the maximum number of iterations to find the desired opinions</span>
+<span class="sd">    show_process: boolean determining whether to show the creation process or not</span>
+<span class="sd">    limits: a tuple with the upper and lower limits of the opinions</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    the new, modified opinions</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">if</span> <span class="n">show_process</span><span class="p">:</span>
+        <span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">7</span><span class="p">))</span>
+        <span class="n">ax1</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">121</span><span class="p">)</span>
+        <span class="n">ax2</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">122</span><span class="p">)</span>
+        <span class="n">ax2</span><span class="o">.</span><span class="n">plot</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">])</span>
+        <span class="n">ax2</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">des_abs_mean</span><span class="p">,</span> <span class="n">des_mean</span><span class="p">,</span> <span class="s1">&#39;s&#39;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="p">(</span><span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">))</span>
+        <span class="n">ax2</span><span class="o">.</span><span class="n">grid</span><span class="p">()</span>
+
+    <span class="n">opinion_mean</span> <span class="o">=</span> <span class="n">opinions</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
+    <span class="n">opinion_abs_mean</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">absolute</span><span class="p">(</span><span class="n">opinions</span><span class="p">)</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
+
+    <span class="n">mean_difference</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">absolute</span><span class="p">(</span><span class="n">opinion_mean</span> <span class="o">-</span> <span class="n">des_mean</span><span class="p">)</span>
+    <span class="n">mean_abs_difference</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">absolute</span><span class="p">(</span><span class="n">opinion_abs_mean</span> <span class="o">-</span> <span class="n">des_abs_mean</span><span class="p">)</span>
+
+    <span class="n">switching_control</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">counter</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="k">while</span> <span class="p">((</span><span class="n">mean_difference</span> <span class="o">&gt;</span> <span class="n">epsilon</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span><span class="n">mean_abs_difference</span> <span class="o">&gt;</span> <span class="n">epsilon</span><span class="p">))</span> <span class="ow">and</span> <span class="p">(</span><span class="n">counter</span> <span class="o">&lt;</span> <span class="n">max_counter</span><span class="p">):</span>
+        <span class="n">counter</span> <span class="o">+=</span> <span class="mi">1</span>
+
+        <span class="k">if</span> <span class="n">switching_control</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">switching_control</span> <span class="o">=</span> <span class="mi">1</span>
+            <span class="c1"># Primary mean modification (vertical)</span>
+            <span class="n">xi_value</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">minimum</span><span class="p">(</span><span class="n">mean_difference</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">opinion_mean</span> <span class="o">&gt;</span> <span class="n">des_mean</span><span class="p">:</span>
+                <span class="c1"># Reduce the opinion mean</span>
+                <span class="n">opinions</span> <span class="o">-=</span> <span class="n">xi_value</span>
+                <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">5</span><span class="p">):</span>
+                    <span class="n">opinions</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">argmax</span><span class="p">(</span><span class="n">opinions</span><span class="p">)]</span> <span class="o">=</span> <span class="o">-</span><span class="n">opinions</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">argmax</span><span class="p">(</span><span class="n">opinions</span><span class="p">)]</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="c1"># Increase the opinion mean</span>
+                <span class="n">opinions</span> <span class="o">+=</span> <span class="n">xi_value</span>
+                <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">5</span><span class="p">):</span>
+                    <span class="n">opinions</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">argmin</span><span class="p">(</span><span class="n">opinions</span><span class="p">)]</span> <span class="o">=</span> <span class="o">-</span><span class="n">opinions</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">argmin</span><span class="p">(</span><span class="n">opinions</span><span class="p">)]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">switching_control</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="c1"># Primary abs mean modification (horizontal)</span>
+            <span class="n">mu_value</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">minimum</span><span class="p">(</span><span class="n">mean_abs_difference</span><span class="p">,</span> <span class="mf">0.3</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">opinion_abs_mean</span> <span class="o">&gt;</span> <span class="n">des_abs_mean</span><span class="p">:</span>
+                <span class="c1"># Reduce the opinion abs mean</span>
+                <span class="n">opinions</span> <span class="o">-=</span> <span class="n">np</span><span class="o">.</span><span class="n">sign</span><span class="p">(</span><span class="n">opinions</span><span class="p">)</span> <span class="o">*</span> <span class="n">mu_value</span>
+                <span class="n">opinions</span> <span class="o">*=</span> <span class="p">(</span><span class="mi">1</span><span class="o">-</span><span class="n">mu_value</span><span class="p">)</span>
+
+            <span class="k">else</span><span class="p">:</span>
+                <span class="c1"># Increase the opinion abs mean</span>
+                <span class="n">opinions</span> <span class="o">+=</span> <span class="n">np</span><span class="o">.</span><span class="n">sign</span><span class="p">(</span><span class="n">opinions</span><span class="p">)</span> <span class="o">*</span> <span class="n">mu_value</span>
+                <span class="n">opinions</span> <span class="o">*=</span> <span class="p">(</span><span class="mi">1</span><span class="o">+</span><span class="n">mu_value</span><span class="p">)</span>
+
+        <span class="c1"># Truncate the opinion values</span>
+        <span class="n">opinions</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">maximum</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">minimum</span><span class="p">(</span><span class="n">opinions</span><span class="p">,</span> <span class="n">limits</span><span class="p">[</span><span class="mi">1</span><span class="p">]),</span> <span class="n">limits</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+
+        <span class="c1"># COMMENTED TO FIX TEMPORARILY CIRCULAR DEPENDENCIES WITH THE plot_functions MODULE</span>
+        <span class="c1"># if show_process:</span>
+        <span class="c1">#     ax1.clear()</span>
+        <span class="c1">#     plot_histogram(ax1, opinions)</span>
+        <span class="c1">#     ax2.plot(opinion_abs_mean, opinion_mean, &#39;o&#39;, linewidth=2, color=(0.2, 0.5, 0.1))</span>
+        <span class="c1">#     plt.gcf().canvas.draw()</span>
+        <span class="c1">#     plt.pause(0.01)</span>
+
+        <span class="n">opinion_mean</span> <span class="o">=</span> <span class="n">opinions</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
+        <span class="n">opinion_abs_mean</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">absolute</span><span class="p">(</span><span class="n">opinions</span><span class="p">)</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
+
+        <span class="n">mean_difference</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">absolute</span><span class="p">(</span><span class="n">opinion_mean</span> <span class="o">-</span> <span class="n">des_mean</span><span class="p">)</span>
+        <span class="n">mean_abs_difference</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">absolute</span><span class="p">(</span><span class="n">opinion_abs_mean</span> <span class="o">-</span> <span class="n">des_abs_mean</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">opinions</span></div>
+
+
+<div class="viewcode-block" id="modify_opinions_method_2"><a class="viewcode-back" href="../../src.html#src.auxiliary_functions.modify_opinions_method_2">[docs]</a><span class="k">def</span> <span class="nf">modify_opinions_method_2</span><span class="p">(</span><span class="n">opinions</span><span class="p">,</span> <span class="n">des_mean</span><span class="p">,</span> <span class="n">des_abs_mean</span><span class="p">,</span> <span class="n">epsilon</span><span class="o">=</span><span class="mf">0.05</span><span class="p">,</span> <span class="n">max_counter</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">show_process</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                             <span class="n">limits</span><span class="o">=</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">    This function modifies a given opinion distribution to create an opinion distribution with the desired mean and</span>
+<span class="sd">    absolute value mean using method 2</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    opinions: the original opinions</span>
+<span class="sd">    des_mean: the desired opinion mean</span>
+<span class="sd">    des_abs_mean: the desired opinion mean absolute value</span>
+<span class="sd">    epsilon: the tolerance for the infinity norm</span>
+<span class="sd">    max_counter: the maximum number of iterations to find the desired opinions</span>
+<span class="sd">    show_process: boolean determining whether to show the creation process or not</span>
+<span class="sd">    limits: a tuple with the upper and lower limits of the opinions</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    the new, modified opinions</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">if</span> <span class="n">show_process</span><span class="p">:</span>
+        <span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">7</span><span class="p">))</span>
+        <span class="n">ax1</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">121</span><span class="p">)</span>
+        <span class="n">ax2</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">122</span><span class="p">)</span>
+        <span class="n">ax2</span><span class="o">.</span><span class="n">plot</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">])</span>
+        <span class="n">ax2</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">des_abs_mean</span><span class="p">,</span> <span class="n">des_mean</span><span class="p">,</span> <span class="s1">&#39;s&#39;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="p">(</span><span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">))</span>
+        <span class="n">ax2</span><span class="o">.</span><span class="n">grid</span><span class="p">()</span>
+
+    <span class="n">opinion_mean</span> <span class="o">=</span> <span class="n">opinions</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
+    <span class="n">opinion_abs_mean</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">absolute</span><span class="p">(</span><span class="n">opinions</span><span class="p">)</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
+
+    <span class="n">mean_difference</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">absolute</span><span class="p">(</span><span class="n">opinion_mean</span> <span class="o">-</span> <span class="n">des_mean</span><span class="p">)</span>
+    <span class="n">mean_abs_difference</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">absolute</span><span class="p">(</span><span class="n">opinion_abs_mean</span> <span class="o">-</span> <span class="n">des_abs_mean</span><span class="p">)</span>
+
+    <span class="n">switching_control</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">counter</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="k">while</span> <span class="p">((</span><span class="n">mean_difference</span> <span class="o">&gt;</span> <span class="n">epsilon</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span><span class="n">mean_abs_difference</span> <span class="o">&gt;</span> <span class="n">epsilon</span><span class="p">))</span> <span class="ow">and</span> <span class="p">(</span><span class="n">counter</span> <span class="o">&lt;</span> <span class="n">max_counter</span><span class="p">):</span>
+        <span class="n">counter</span> <span class="o">+=</span> <span class="mi">1</span>
+
+        <span class="k">if</span> <span class="n">switching_control</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">switching_control</span> <span class="o">=</span> <span class="mi">1</span>
+            <span class="c1"># Primary mean modification (vertical)</span>
+
+            <span class="n">m1</span> <span class="o">=</span> <span class="p">(</span><span class="n">des_mean</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">opinion_mean</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+            <span class="n">m2</span> <span class="o">=</span> <span class="p">(</span><span class="n">des_mean</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">opinion_mean</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">count</span><span class="p">,</span> <span class="n">old_opinion</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">opinions</span><span class="p">):</span>
+                <span class="k">if</span> <span class="n">old_opinion</span> <span class="o">&lt;=</span> <span class="n">opinion_mean</span><span class="p">:</span>
+                    <span class="n">opinions</span><span class="p">[</span><span class="n">count</span><span class="p">]</span> <span class="o">=</span> <span class="p">((</span><span class="n">old_opinion</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span><span class="o">*</span><span class="n">m1</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">opinions</span><span class="p">[</span><span class="n">count</span><span class="p">]</span> <span class="o">=</span> <span class="p">((</span><span class="n">old_opinion</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="n">m2</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">switching_control</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="c1"># Primary abs mean modification (horizontal)</span>
+            <span class="n">mu_value</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">minimum</span><span class="p">(</span><span class="n">mean_abs_difference</span><span class="p">,</span> <span class="mf">0.3</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">opinion_abs_mean</span> <span class="o">&gt;</span> <span class="n">des_abs_mean</span><span class="p">:</span>
+                <span class="c1"># Reduce the opinion abs mean by contracting the opinions</span>
+                <span class="c1"># remove the mean</span>
+                <span class="n">local_opinion_mean</span> <span class="o">=</span> <span class="n">opinions</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
+                <span class="n">opinions</span> <span class="o">-=</span> <span class="n">local_opinion_mean</span>
+                <span class="c1"># contract the opinions</span>
+                <span class="n">opinions</span> <span class="o">*=</span> <span class="p">(</span><span class="mi">1</span><span class="o">-</span><span class="n">mu_value</span><span class="p">)</span>
+                <span class="c1"># restore the mean</span>
+                <span class="n">opinions</span> <span class="o">+=</span> <span class="n">local_opinion_mean</span>
+
+            <span class="k">else</span><span class="p">:</span>
+                <span class="c1"># Increase the opinion abs mean by expanding the opinions</span>
+                <span class="c1"># remove the mean</span>
+                <span class="n">local_opinion_mean</span> <span class="o">=</span> <span class="n">opinions</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
+                <span class="n">opinions</span> <span class="o">-=</span> <span class="n">local_opinion_mean</span>
+                <span class="c1"># expand the opinions</span>
+                <span class="n">opinions</span> <span class="o">*=</span> <span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="n">mu_value</span><span class="p">)</span>
+                <span class="c1"># restore the mean</span>
+                <span class="n">opinions</span> <span class="o">+=</span> <span class="n">local_opinion_mean</span>
+
+        <span class="c1"># Truncate the opinion values</span>
+        <span class="n">opinions</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">maximum</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">minimum</span><span class="p">(</span><span class="n">opinions</span><span class="p">,</span> <span class="n">limits</span><span class="p">[</span><span class="mi">1</span><span class="p">]),</span> <span class="n">limits</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+
+        <span class="c1"># COMMENTED TO FIX TEMPORARILY CIRCULAR DEPENDENCIES WITH THE plot_functions MODULE</span>
+        <span class="c1"># if show_process:</span>
+        <span class="c1">#     ax1.clear()</span>
+        <span class="c1">#     plot_histogram(ax1, opinions)</span>
+        <span class="c1">#     ax2.plot(opinion_abs_mean, opinion_mean, &#39;o&#39;, linewidth=2, color=(0.2, 0.5, 0.1))</span>
+        <span class="c1">#     plt.gcf().canvas.draw()</span>
+        <span class="c1">#     plt.pause(0.01)</span>
+
+        <span class="n">opinion_mean</span> <span class="o">=</span> <span class="n">opinions</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
+        <span class="n">opinion_abs_mean</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">absolute</span><span class="p">(</span><span class="n">opinions</span><span class="p">)</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
+
+        <span class="n">mean_difference</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">absolute</span><span class="p">(</span><span class="n">opinion_mean</span> <span class="o">-</span> <span class="n">des_mean</span><span class="p">)</span>
+        <span class="n">mean_abs_difference</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">absolute</span><span class="p">(</span><span class="n">opinion_abs_mean</span> <span class="o">-</span> <span class="n">des_abs_mean</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">opinions</span></div>
+
+<div class="viewcode-block" id="histogram_classification"><a class="viewcode-back" href="../../src.html#src.auxiliary_functions.histogram_classification">[docs]</a><span class="k">def</span> <span class="nf">histogram_classification</span><span class="p">(</span><span class="n">opinion_distribution</span><span class="p">,</span> <span class="n">classification_parameters</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">50</span><span class="p">,</span> <span class="mi">12</span><span class="p">,</span> <span class="mi">40</span><span class="p">)):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">    A function that classifies opinion distributions with any number of agents.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    opinion_distribution: the opinion distribution to be classified.</span>
+<span class="sd">    classification_parameters: the classification parameters.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    A number that encodes the classification, 0 is perfect consensus, 1 is consensus, 2 is polaristion, 3 is clustering,</span>
+<span class="sd">    and 4 is dissensus.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c1"># Get each of the parameter values</span>
+    <span class="n">m_value</span><span class="p">,</span> <span class="n">b_value</span><span class="p">,</span> <span class="n">k_value</span><span class="p">,</span> <span class="n">u_value</span><span class="p">,</span> <span class="n">t1_value</span><span class="p">,</span> <span class="n">t2_value</span><span class="p">,</span> <span class="n">t3_value</span> <span class="o">=</span> <span class="n">classification_parameters</span>
+
+    <span class="c1"># First, get the histogram  counts</span>
+    <span class="n">hist_counts</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">histogram</span><span class="p">(</span><span class="n">opinion_distribution</span><span class="p">,</span> <span class="n">bins</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="o">-</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="n">m_value</span><span class="o">+</span><span class="mi">1</span><span class="p">))</span>
+
+    <span class="c1"># Normalize the bins, so they add up to 100</span>
+    <span class="n">hist_counts</span> <span class="o">=</span> <span class="n">hist_counts</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">*</span><span class="p">(</span><span class="mi">100</span><span class="o">/</span><span class="n">hist_counts</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">sum</span><span class="p">())</span>
+
+    <span class="c1"># If the histogram contains only two non-empty bins with at least U_value empty bins in between and each of these</span>
+    <span class="c1"># two non-empty bins has normalised group count larger than T3_value</span>
+
+    <span class="n">non_empty_bins</span> <span class="o">=</span> <span class="p">[</span><span class="n">count</span> <span class="k">for</span> <span class="n">count</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">hist_counts</span><span class="p">)</span> <span class="k">if</span> <span class="n">value</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">]</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">non_empty_bins</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+        <span class="k">if</span> <span class="p">((</span><span class="n">non_empty_bins</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">non_empty_bins</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">&gt;</span> <span class="n">u_value</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">hist_counts</span><span class="p">[</span><span class="n">non_empty_bins</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span> <span class="o">&gt;</span> <span class="n">t3_value</span><span class="p">)</span> \
+                <span class="ow">and</span> <span class="p">(</span><span class="n">hist_counts</span><span class="p">[</span><span class="n">non_empty_bins</span><span class="p">[</span><span class="mi">1</span><span class="p">]]</span> <span class="o">&gt;</span> <span class="n">t3_value</span><span class="p">):</span>
+            <span class="k">return</span> <span class="mi">2</span>  <span class="c1"># Returns polarisation</span>
+
+    <span class="c1"># If the height of one element is greater than t1_value, then it is perfect consensus</span>
+    <span class="k">if</span> <span class="n">hist_counts</span><span class="o">.</span><span class="n">max</span><span class="p">()</span> <span class="o">&gt;</span> <span class="n">t1_value</span><span class="p">:</span>
+        <span class="k">return</span> <span class="mi">0</span>  <span class="c1"># Returns perfect consensus</span>
+
+    <span class="c1"># Otherwise, we have to do more computations</span>
+    <span class="n">normalised_group_count</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">number_of_bins</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">group_distance</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="n">local_group_count</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">local_bin_count</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">local_group_distance</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">count_group_distance</span> <span class="o">=</span> <span class="kc">False</span>
+
+    <span class="k">for</span> <span class="n">bin_value</span> <span class="ow">in</span> <span class="n">hist_counts</span><span class="p">:</span>
+        <span class="c1"># go bin by bin</span>
+        <span class="k">if</span> <span class="n">bin_value</span> <span class="o">&gt;</span> <span class="n">t2_value</span><span class="p">:</span>
+            <span class="c1"># A new group starts, or continues, i.e. green or red bins</span>
+            <span class="n">local_group_count</span> <span class="o">+=</span> <span class="n">bin_value</span>  <span class="c1"># increase the count of the group</span>
+            <span class="n">local_bin_count</span> <span class="o">+=</span> <span class="mi">1</span>  <span class="c1"># increase the number of bins contained in that group</span>
+
+            <span class="k">if</span> <span class="n">count_group_distance</span> <span class="ow">and</span> <span class="p">(</span><span class="n">local_group_distance</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">):</span>
+                <span class="c1"># Ie we are in a group, but the previous group distance was not stored, store that information</span>
+                <span class="c1"># and initialize the group distance to zero</span>
+                <span class="n">group_distance</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">local_group_distance</span><span class="p">)</span>
+                <span class="n">local_group_distance</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># if this is a blue bin</span>
+            <span class="k">if</span> <span class="n">local_group_count</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="c1"># means that a group is closed behind, so information needs to be stored about that group</span>
+                <span class="n">normalised_group_count</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">local_group_count</span><span class="p">)</span>
+                <span class="n">number_of_bins</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">local_bin_count</span><span class="p">)</span>
+
+                <span class="c1"># also, it means that it is necessary to start counting group distance</span>
+                <span class="n">count_group_distance</span> <span class="o">=</span> <span class="kc">True</span>  <span class="c1"># start counting bin distance</span>
+                <span class="n">local_group_distance</span> <span class="o">=</span> <span class="mi">0</span>  <span class="c1"># initialize at zero</span>
+
+            <span class="k">if</span> <span class="n">count_group_distance</span><span class="p">:</span>
+                <span class="n">local_group_distance</span> <span class="o">+=</span> <span class="mi">1</span>  <span class="c1"># increase the group distance by one</span>
+
+            <span class="c1"># reset the group and bin count</span>
+            <span class="n">local_group_count</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="n">local_bin_count</span> <span class="o">=</span> <span class="mi">0</span>
+
+    <span class="c1"># if there was a final group, it is necessary to add it</span>
+    <span class="k">if</span> <span class="n">local_group_count</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">normalised_group_count</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">local_group_count</span><span class="p">)</span>
+        <span class="n">number_of_bins</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">local_bin_count</span><span class="p">)</span>
+        <span class="c1"># group_distance.append(local_group_distance) # no distance needs to be added</span>
+
+    <span class="c1"># Now, with this new information, we can further classify the histogram</span>
+    <span class="k">if</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">normalised_group_count</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">number_of_bins</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="n">b_value</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">normalised_group_count</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">50</span><span class="p">):</span>
+        <span class="k">return</span> <span class="mi">1</span>  <span class="c1"># Consensus</span>
+
+    <span class="k">if</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">normalised_group_count</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">number_of_bins</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="n">b_value</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">number_of_bins</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="n">b_value</span><span class="p">)</span> \
+            <span class="ow">and</span> <span class="p">(</span><span class="n">group_distance</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="n">k_value</span><span class="p">)</span> <span class="ow">and</span> <span class="p">((</span><span class="n">normalised_group_count</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">normalised_group_count</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span> <span class="o">&gt;</span> <span class="mi">50</span><span class="p">):</span>
+        <span class="k">return</span> <span class="mi">2</span>  <span class="c1"># Polarisation</span>
+
+    <span class="n">normalised_group_count</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">normalised_group_count</span><span class="p">)</span>
+    <span class="n">number_of_bins</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">number_of_bins</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">number_of_bins</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">max_bin_count</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">max_bin_count</span> <span class="o">=</span> <span class="n">number_of_bins</span><span class="o">.</span><span class="n">max</span><span class="p">()</span>
+
+    <span class="k">if</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">normalised_group_count</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="mi">2</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">max_bin_count</span> <span class="o">&lt;=</span> <span class="n">b_value</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">normalised_group_count</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span> <span class="o">&gt;</span> <span class="mi">50</span><span class="p">):</span>
+        <span class="c1"># COMMENTED (in part) TO FIX TEMPORARILY CIRCULAR DEPENDENCIES WITH THE plot_functions MODULE</span>
+        <span class="c1"># fig = plt.figure(figsize=(10, 7))</span>
+        <span class="c1"># ax = fig.add_subplot(111)</span>
+        <span class="c1"># plot_histogram(ax, opinion_distribution, num_bins=10)</span>
+        <span class="c1"># ax.plot([-1, 1], [12, 12], color=(1, 0, 0))</span>
+        <span class="k">return</span> <span class="mi">3</span>  <span class="c1"># Clustering</span>
+
+    <span class="k">return</span> <span class="mi">4</span>  <span class="c1"># Dissensus</span></div>
+
+<div class="viewcode-block" id="modify_mean"><a class="viewcode-back" href="../../src.html#src.auxiliary_functions.modify_mean">[docs]</a><span class="k">def</span> <span class="nf">modify_mean</span><span class="p">(</span><span class="n">weights</span><span class="p">,</span> <span class="n">des_mean</span><span class="p">,</span> <span class="n">epsilon</span><span class="o">=</span><span class="mf">0.05</span><span class="p">,</span> <span class="n">max_counter</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">limits</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    weights: initial weights.</span>
+<span class="sd">    des_mean: desired weight mean.</span>
+<span class="sd">    epsilon: tolerance.</span>
+<span class="sd">    max_counter: maximum number of iterations.</span>
+<span class="sd">    limits: the limits of the weights.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    modified weights with the desired mean.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">weights_mean</span> <span class="o">=</span> <span class="n">weights</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
+    <span class="n">mean_difference</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">absolute</span><span class="p">(</span><span class="n">weights_mean</span> <span class="o">-</span> <span class="n">des_mean</span><span class="p">)</span>
+    <span class="n">counter</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="k">while</span> <span class="p">(</span><span class="n">mean_difference</span> <span class="o">&gt;</span> <span class="n">epsilon</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">counter</span> <span class="o">&lt;</span> <span class="n">max_counter</span><span class="p">):</span>
+        <span class="n">counter</span> <span class="o">+=</span> <span class="mi">1</span>
+
+        <span class="n">m1</span> <span class="o">=</span> <span class="p">(</span><span class="n">des_mean</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">weights_mean</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="n">m2</span> <span class="o">=</span> <span class="p">(</span><span class="n">des_mean</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">weights_mean</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">count</span><span class="p">,</span> <span class="n">old_weight</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">weights</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">old_weight</span> <span class="o">&lt;=</span> <span class="n">weights_mean</span><span class="p">:</span>
+                <span class="n">weights</span><span class="p">[</span><span class="n">count</span><span class="p">]</span> <span class="o">=</span> <span class="p">((</span><span class="n">old_weight</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="n">m1</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">weights</span><span class="p">[</span><span class="n">count</span><span class="p">]</span> <span class="o">=</span> <span class="p">((</span><span class="n">old_weight</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="n">m2</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span>
+
+        <span class="c1"># Truncate the weight values</span>
+        <span class="n">weights</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">maximum</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">minimum</span><span class="p">(</span><span class="n">weights</span><span class="p">,</span> <span class="n">limits</span><span class="p">[</span><span class="mi">1</span><span class="p">]),</span> <span class="n">limits</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+        <span class="n">weights_mean</span> <span class="o">=</span> <span class="n">weights</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
+        <span class="n">mean_difference</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">absolute</span><span class="p">(</span><span class="n">weights_mean</span> <span class="o">-</span> <span class="n">des_mean</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">weights</span></div>
+
+<div class="viewcode-block" id="make_row_stochastic"><a class="viewcode-back" href="../../src.html#src.auxiliary_functions.make_row_stochastic">[docs]</a><span class="k">def</span> <span class="nf">make_row_stochastic</span><span class="p">(</span><span class="n">matrix</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">    Function that takes a matrix and makes it row-stochastic</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    matrix: original matrix</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    This function does not return anything, as it modifies the passed matrix</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">for</span> <span class="n">id_row</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">matrix</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]):</span>
+        <span class="n">denominator</span> <span class="o">=</span> <span class="n">matrix</span><span class="p">[</span><span class="n">id_row</span><span class="p">,</span> <span class="p">:]</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">denominator</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="c1"># If the denominator is zero, then amke every element in the row have the same weight</span>
+            <span class="n">matrix</span><span class="p">[</span><span class="n">id_row</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">matrix</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span><span class="o">*</span><span class="p">(</span><span class="mi">1</span><span class="o">/</span><span class="n">matrix</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">matrix</span><span class="p">[</span><span class="n">id_row</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">matrix</span><span class="p">[</span><span class="n">id_row</span><span class="p">,</span> <span class="p">:]</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span> <span class="o">/</span> <span class="n">denominator</span><span class="p">)</span></div>
+
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, Carlos Andres Devia.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

@@ -1,0 +1,925 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>src.data_analysis_functions &mdash; Agent Based Model for Opinion Formation 0.1 documentation</title>
+      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/sphinx_highlight.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            Agent Based Model for Opinion Formation
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../src.html">src package</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">Agent Based Model for Opinion Formation</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">src.data_analysis_functions</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for src.data_analysis_functions</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">==============================================================</span>
+<span class="sd">Data Analysis, (:mod:`f_abm.src.data_analysis_functions`)</span>
+<span class="sd">==============================================================</span>
+
+<span class="sd">Description</span>
+<span class="sd">-----------</span>
+
+<span class="sd">    This module contains all the data analysis related functions</span>
+
+<span class="sd">Functions</span>
+<span class="sd">---------</span>
+
+<span class="sd">    - gather_data</span>
+<span class="sd">    - obtain_features</span>
+<span class="sd">    - feature_computation</span>
+<span class="sd">    - compute_mean_opinion_difference</span>
+<span class="sd">    - compute_opinion_metrics_by_agent_type</span>
+<span class="sd">    - compute_trait_allocation_metrics</span>
+<span class="sd">    - compute_opinion_metrics</span>
+<span class="sd">    - compute_inner_trait_metrics</span>
+<span class="sd">    - compute_digraph_metrics</span>
+<span class="sd">    - compute_balance_index</span>
+<span class="sd">    - compute_bidirectional_coefficient</span>
+<span class="sd">    - compute_degrees</span>
+<span class="sd">    - compute_clustering</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+
+
+<span class="kn">import</span> <span class="nn">random</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">from</span> <span class="nn">.basic_creation</span> <span class="kn">import</span> <span class="p">(</span><span class="n">create_many_inner_traits</span><span class="p">,</span> <span class="n">create_many_opinions</span><span class="p">,</span> <span class="n">a_random_digraph</span><span class="p">,</span>
+                                <span class="n">a_random_initial_opinion_distribution</span><span class="p">,</span> <span class="n">a_random_inner_trait_assignation</span><span class="p">,</span> <span class="p">)</span>
+<span class="kn">from</span> <span class="nn">.model_functions</span> <span class="kn">import</span> <span class="n">model_evolution</span>
+<span class="kn">from</span> <span class="nn">.auxiliary_functions</span> <span class="kn">import</span> <span class="p">(</span><span class="n">histogram_classification</span><span class="p">,</span> <span class="n">matrix_exp</span><span class="p">,</span> <span class="n">digraph2topology</span><span class="p">,</span> <span class="p">)</span>
+<span class="kn">from</span> <span class="nn">.digraph_creation</span> <span class="kn">import</span> <span class="p">(</span><span class="n">default_digraph</span><span class="p">,</span> <span class="p">)</span>
+
+
+<div class="viewcode-block" id="gather_data"><a class="viewcode-back" href="../../src.html#src.data_analysis_functions.gather_data">[docs]</a><span class="k">def</span> <span class="nf">gather_data</span><span class="p">(</span><span class="n">num_agents</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">num_iterations</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">global_name</span><span class="o">=</span><span class="s1">&#39;default_name&#39;</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">    This function perform the three steps to gather the data for the training of the algorithms to predict the opinions.</span>
+<span class="sd">    The three steps are to 1. create the inner traits, 2. create the initial opinions, and 3. compute the features</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    num_agents: number of agents in the simulations, by default 1000</span>
+<span class="sd">    num_iterations: number of iterations or &#39;samples&#39; by default 1000</span>
+<span class="sd">    global_name: the start of the name of the files where the resulting data will be saved</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    Nothing</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c1"># Create the inner traits and save them in an external file</span>
+    <span class="n">_</span> <span class="o">=</span> <span class="n">create_many_inner_traits</span><span class="p">(</span><span class="n">num_agents</span><span class="o">=</span><span class="n">num_agents</span><span class="p">,</span> <span class="n">file_name</span><span class="o">=</span><span class="n">global_name</span><span class="o">+</span><span class="s1">&#39;_traits&#39;</span><span class="p">)</span>
+
+    <span class="c1"># Create the initial opinions and save them in an external file</span>
+    <span class="n">_</span> <span class="o">=</span> <span class="n">create_many_opinions</span><span class="p">(</span><span class="n">num_agents</span><span class="o">=</span><span class="n">num_agents</span><span class="p">,</span> <span class="n">file_name</span><span class="o">=</span><span class="n">global_name</span><span class="o">+</span><span class="s1">&#39;_opinions&#39;</span><span class="p">)</span>
+
+    <span class="c1"># Obtain all the features</span>
+    <span class="n">obtain_features</span><span class="p">(</span><span class="n">num_agents</span><span class="o">=</span><span class="n">num_agents</span><span class="p">,</span> <span class="n">num_iterations</span><span class="o">=</span><span class="n">num_iterations</span><span class="p">,</span> <span class="n">file_name</span><span class="o">=</span><span class="n">global_name</span><span class="o">+</span><span class="s1">&#39;_data&#39;</span><span class="p">,</span>
+                    <span class="n">traits_file_name</span><span class="o">=</span><span class="n">global_name</span><span class="o">+</span><span class="s1">&#39;_traits&#39;</span><span class="p">,</span> <span class="n">opinions_file_name</span><span class="o">=</span><span class="n">global_name</span><span class="o">+</span><span class="s1">&#39;_opinions&#39;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="obtain_features"><a class="viewcode-back" href="../../src.html#src.data_analysis_functions.obtain_features">[docs]</a><span class="k">def</span> <span class="nf">obtain_features</span><span class="p">(</span><span class="n">num_agents</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">num_iterations</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">file_name</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">traits_file_name</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                    <span class="n">opinions_file_name</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">    File to create the data for the training, validation, and testing</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    num_agents: number of agents in all the simulations</span>
+<span class="sd">    num_iterations: number of iterations</span>
+<span class="sd">    file_name: name of the Excel data to print the output to</span>
+<span class="sd">    traits_file_name: name of the file with the inner traits</span>
+<span class="sd">    opinions_file_name: name of the file with the initial opinions</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    None</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c1"># column_names = [&#39;balance index&#39;,  # balance index,</span>
+    <span class="c1">#                 &#39;bidirectional coefficient&#39;,  # bidirectional coefficient,</span>
+    <span class="c1">#                 &#39;mean in-degree&#39;,  # mean in-degree,</span>
+    <span class="c1">#                 &#39;in-degree variance&#39;,  # in-degree variance,</span>
+    <span class="c1">#                 &#39;mean out-degree&#39;,  # mean out-degree,</span>
+    <span class="c1">#                 &#39;out-degree variance&#39;,  # out-degree variance,</span>
+    <span class="c1">#                 &#39;mean cluster&#39;,  # mean cluster,</span>
+    <span class="c1">#                 &#39;variance cluster&#39;,  # variance cluster</span>
+    <span class="c1">#                 &#39;mean initial opinions&#39;,  # mean initial opinions</span>
+    <span class="c1">#                 &#39;mean abs initial opinions&#39;,  # mean abs initial opinions</span>
+    <span class="c1">#                 &#39;number conformist agents&#39;,  # num_con_agents,</span>
+    <span class="c1">#                 &#39;number radical agents&#39;,  # num_rad_agents,</span>
+    <span class="c1">#                 &#39;number stubborn agents&#39;,  # num_stb_agents,</span>
+    <span class="c1">#                 &#39;average conformist weight&#39;,  # av_con,</span>
+    <span class="c1">#                 &#39;average radical weight&#39;,  # av_rad,</span>
+    <span class="c1">#                 &#39;average stubborn weight&#39;,  # av_stb</span>
+    <span class="c1">#                 &#39;mean opinion digraph difference&#39;,  # mean_opinion_difference</span>
+    <span class="c1">#                 &#39;number conformist agents&#39;,  # num_con_agents,</span>
+    <span class="c1">#                 &#39;mean initial opinion conformist agents&#39;,  # opinion_mean_con_agents,</span>
+    <span class="c1">#                 &#39;mean abs initial opinion conformist agents&#39;,  # abs_opinion_mean_con_agents,</span>
+    <span class="c1">#                 &#39;number radical agents&#39;,  # num_rad_agents,</span>
+    <span class="c1">#                 &#39;mean initial opinion radical agents&#39;,  # opinion_mean_rad_agents,</span>
+    <span class="c1">#                 &#39;mean abs initial opinion radical agents&#39;,  # abs_opinion_mean_rad_agents,</span>
+    <span class="c1">#                 &#39;number stubborn agents&#39;,  # num_stb_agents,</span>
+    <span class="c1">#                 &#39;mean initial opinion stubborn agents&#39;,  # opinion_mean_stb_agents,</span>
+    <span class="c1">#                 &#39;mean abs initial opinion stubborn agents&#39;,  # abs_opinion_mean_stb_agents,</span>
+    <span class="c1">#                 &#39;mean difference trait allocation&#39;,  # mean_difference</span>
+    <span class="c1">#                 &#39;type final opinions&#39;,  # type</span>
+    <span class="c1">#                 &#39;mean final opinions&#39;,  # mean final opinions</span>
+    <span class="c1">#                 &#39;mean abs final opinions&#39;]  # mean abs final opinions</span>
+
+    <span class="n">column_names</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;bal_ind&#39;</span><span class="p">,</span>  <span class="c1"># balance index,</span>
+                    <span class="s1">&#39;bid_coe&#39;</span><span class="p">,</span>  <span class="c1"># bidirectional coefficient,</span>
+                    <span class="s1">&#39;mean_in_d&#39;</span><span class="p">,</span>  <span class="c1"># mean in-degree,</span>
+                    <span class="s1">&#39;var_in_d&#39;</span><span class="p">,</span>  <span class="c1"># in-degree variance,</span>
+                    <span class="s1">&#39;mean_out_d&#39;</span><span class="p">,</span>  <span class="c1"># mean out-degree,</span>
+                    <span class="s1">&#39;var_out_d&#39;</span><span class="p">,</span>  <span class="c1"># out-degree variance,</span>
+                    <span class="s1">&#39;mean_clu&#39;</span><span class="p">,</span>  <span class="c1"># mean cluster,</span>
+                    <span class="s1">&#39;var_clu&#39;</span><span class="p">,</span>  <span class="c1"># variance cluster</span>
+                    <span class="s1">&#39;mean_ini_op&#39;</span><span class="p">,</span>  <span class="c1"># mean initial opinions</span>
+                    <span class="s1">&#39;mean_abs_ini_op&#39;</span><span class="p">,</span>  <span class="c1"># mean abs initial opinions</span>
+                    <span class="s1">&#39;num_con&#39;</span><span class="p">,</span>  <span class="c1"># num_con_agents,</span>
+                    <span class="s1">&#39;num_rad&#39;</span><span class="p">,</span>  <span class="c1"># num_rad_agents,</span>
+                    <span class="s1">&#39;num_stb&#39;</span><span class="p">,</span>  <span class="c1"># num_stb_agents,</span>
+                    <span class="s1">&#39;av_con&#39;</span><span class="p">,</span>  <span class="c1"># av_con,</span>
+                    <span class="s1">&#39;av_rad&#39;</span><span class="p">,</span>  <span class="c1"># av_rad,</span>
+                    <span class="s1">&#39;av_stb&#39;</span><span class="p">,</span>  <span class="c1"># av_stb</span>
+                    <span class="s1">&#39;mean_op_di_diff&#39;</span><span class="p">,</span>  <span class="c1"># mean_opinion_difference</span>
+                    <span class="s1">&#39;num_con_n&#39;</span><span class="p">,</span>  <span class="c1"># num_con_agents,</span>
+                    <span class="s1">&#39;mean_op_con&#39;</span><span class="p">,</span>  <span class="c1"># opinion_mean_con_agents,</span>
+                    <span class="s1">&#39;mean_abs_op_con&#39;</span><span class="p">,</span>  <span class="c1"># abs_opinion_mean_con_agents,</span>
+                    <span class="s1">&#39;num_rad_n&#39;</span><span class="p">,</span>  <span class="c1"># num_rad_agents,</span>
+                    <span class="s1">&#39;mean_op_rad&#39;</span><span class="p">,</span>  <span class="c1"># opinion_mean_rad_agents,</span>
+                    <span class="s1">&#39;mean_abs_op_rad&#39;</span><span class="p">,</span>  <span class="c1"># abs_opinion_mean_rad_agents,</span>
+                    <span class="s1">&#39;num_stb_n&#39;</span><span class="p">,</span>  <span class="c1"># num_stb_agents,</span>
+                    <span class="s1">&#39;mean_op_stb&#39;</span><span class="p">,</span>  <span class="c1"># opinion_mean_stb_agents,</span>
+                    <span class="s1">&#39;mean_abs_op_stb&#39;</span><span class="p">,</span>  <span class="c1"># abs_opinion_mean_stb_agents,</span>
+                    <span class="s1">&#39;mean_diff_trait&#39;</span><span class="p">,</span>  <span class="c1"># mean_difference</span>
+                    <span class="s1">&#39;type_final&#39;</span><span class="p">,</span>  <span class="c1"># type</span>
+                    <span class="s1">&#39;mean_fin_op&#39;</span><span class="p">,</span>  <span class="c1"># mean final opinions</span>
+                    <span class="s1">&#39;mean_abs_fin_op&#39;</span><span class="p">]</span>  <span class="c1"># mean abs final opinions</span>
+
+    <span class="k">if</span> <span class="n">traits_file_name</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">traits_file_name</span> <span class="o">=</span> <span class="s1">&#39;default_name_traits&#39;</span>
+
+    <span class="k">if</span> <span class="n">opinions_file_name</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">opinions_file_name</span> <span class="o">=</span> <span class="s1">&#39;default_name_opinions&#39;</span>
+
+    <span class="c1"># Load the set of possible initial opinions (100 agents)</span>
+    <span class="n">all_opinions</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">opinions_file_name</span><span class="o">+</span><span class="s1">&#39;.npy&#39;</span><span class="p">)</span>
+    <span class="n">num_opinions</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">all_opinions</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>  <span class="c1"># Number of possible initial opinions</span>
+
+    <span class="c1"># Load the set of possible inner traits (100 agents)</span>
+    <span class="n">all_inner_traits</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">traits_file_name</span><span class="o">+</span><span class="s1">&#39;.npy&#39;</span><span class="p">)</span>
+    <span class="n">num_inner_traits</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">all_inner_traits</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>  <span class="c1"># Number of possible inner traits</span>
+
+    <span class="n">results</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">expand_dims</span><span class="p">(</span>
+        <span class="n">feature_computation</span><span class="p">(</span><span class="n">num_agents</span><span class="o">=</span><span class="n">num_agents</span><span class="p">,</span> <span class="n">adjacency_matrix</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                            <span class="n">opinion_distribution</span><span class="o">=</span><span class="n">all_opinions</span><span class="p">[</span><span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">num_opinions</span><span class="o">-</span><span class="mi">1</span><span class="p">)],</span>
+                            <span class="n">inner_trait_assignations</span><span class="o">=</span><span class="n">all_inner_traits</span><span class="p">[</span><span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">num_inner_traits</span><span class="o">-</span><span class="mi">1</span><span class="p">)]),</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+
+    <span class="k">for</span> <span class="n">id_row</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">num_iterations</span><span class="p">):</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Current row = </span><span class="si">{</span><span class="n">id_row</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+        <span class="n">new_results</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">expand_dims</span><span class="p">(</span>
+            <span class="n">feature_computation</span><span class="p">(</span><span class="n">num_agents</span><span class="o">=</span><span class="n">num_agents</span><span class="p">,</span> <span class="n">adjacency_matrix</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                                <span class="n">opinion_distribution</span><span class="o">=</span><span class="n">all_opinions</span><span class="p">[</span><span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">num_opinions</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)],</span>
+                                <span class="n">inner_trait_assignations</span><span class="o">=</span><span class="n">all_inner_traits</span><span class="p">[</span><span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">num_inner_traits</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)]),</span>
+            <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+        <span class="n">results</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">((</span><span class="n">results</span><span class="p">,</span> <span class="n">new_results</span><span class="p">),</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+
+    <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">results</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="n">column_names</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">file_name</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">file_name</span> <span class="o">=</span> <span class="s1">&#39;output&#39;</span>
+
+    <span class="n">df</span><span class="o">.</span><span class="n">to_excel</span><span class="p">(</span><span class="n">file_name</span> <span class="o">+</span> <span class="s1">&#39;.xlsx&#39;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="feature_computation"><a class="viewcode-back" href="../../src.html#src.data_analysis_functions.feature_computation">[docs]</a><span class="k">def</span> <span class="nf">feature_computation</span><span class="p">(</span><span class="n">num_agents</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">print_information</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">adjacency_matrix</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">opinion_distribution</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                        <span class="n">inner_trait_assignations</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">    Function that computes the features for each sample</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    num_agents: number of agents</span>
+<span class="sd">    print_information: whether to print the information or not</span>
+<span class="sd">    adjacency_matrix: the adjacency matrix</span>
+<span class="sd">    opinion_distribution: the initial opinion distribution</span>
+<span class="sd">    inner_trait_assignations: the inner trait assignation</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    The computed features</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">if</span> <span class="n">adjacency_matrix</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">adjacency_matrix</span> <span class="o">=</span> <span class="n">a_random_digraph</span><span class="p">(</span><span class="n">num_agents</span><span class="o">=</span><span class="n">num_agents</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">opinion_distribution</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">opinion_distribution</span> <span class="o">=</span> <span class="n">a_random_initial_opinion_distribution</span><span class="p">(</span><span class="n">num_agents</span><span class="o">=</span><span class="n">num_agents</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">inner_trait_assignations</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">inner_trait_assignations</span> <span class="o">=</span> <span class="n">a_random_inner_trait_assignation</span><span class="p">(</span><span class="n">num_agents</span><span class="o">=</span><span class="n">num_agents</span><span class="p">)</span>
+
+    <span class="c1"># Shuffle the opinion distribution and inner_trait_assignations</span>
+    <span class="n">rng</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">default_rng</span><span class="p">()</span>
+    <span class="n">rng</span><span class="o">.</span><span class="n">shuffle</span><span class="p">(</span><span class="n">opinion_distribution</span><span class="p">)</span>
+    <span class="n">rng</span><span class="o">.</span><span class="n">shuffle</span><span class="p">(</span><span class="n">inner_trait_assignations</span><span class="p">)</span>
+
+    <span class="n">final_opinions</span> <span class="o">=</span> <span class="n">model_evolution</span><span class="p">(</span><span class="n">initial_opinions</span><span class="o">=</span><span class="n">opinion_distribution</span><span class="p">,</span>
+                                     <span class="n">adjacency_matrix</span><span class="o">=</span><span class="n">adjacency_matrix</span><span class="p">,</span>
+                                     <span class="n">agent_parameters</span><span class="o">=</span><span class="n">inner_trait_assignations</span><span class="p">,</span>
+                                     <span class="n">num_steps</span><span class="o">=</span><span class="mi">50</span><span class="p">)</span>
+
+    <span class="c1"># Digraph metrics</span>
+    <span class="n">digraph_metrics</span> <span class="o">=</span> <span class="n">compute_digraph_metrics</span><span class="p">(</span><span class="n">adjacency_matrix</span><span class="o">=</span><span class="n">adjacency_matrix</span><span class="p">,</span>
+                                              <span class="n">print_information</span><span class="o">=</span><span class="n">print_information</span><span class="p">)</span>
+
+    <span class="c1"># balance index, bidirectional coefficient, mean in-degree, in-degree variance, mean</span>
+    <span class="c1"># out-degree, out-degree variance, mean cluster, variance cluster</span>
+
+    <span class="c1"># Opinion metrics</span>
+    <span class="n">initial_opinion_metrics</span> <span class="o">=</span> <span class="n">compute_opinion_metrics</span><span class="p">(</span><span class="n">opinion_distribution</span><span class="o">=</span><span class="n">opinion_distribution</span><span class="p">,</span>
+                                                      <span class="n">print_information</span><span class="o">=</span><span class="n">print_information</span><span class="p">)</span>
+
+    <span class="c1"># mean initial opinions</span>
+    <span class="c1"># mean abs initial opinions</span>
+
+    <span class="n">final_opinion_metrics</span> <span class="o">=</span> <span class="n">compute_opinion_metrics</span><span class="p">(</span><span class="n">opinion_distribution</span><span class="o">=</span><span class="n">final_opinions</span><span class="p">,</span>
+                                                    <span class="n">print_information</span><span class="o">=</span><span class="n">print_information</span><span class="p">)</span>
+
+    <span class="c1"># mean final opinions</span>
+    <span class="c1"># mean abs final opinions</span>
+
+    <span class="c1"># Inner trait assignation metrics</span>
+    <span class="n">inner_trait_metrics</span> <span class="o">=</span> <span class="n">compute_inner_trait_metrics</span><span class="p">(</span><span class="n">inner_traits</span><span class="o">=</span><span class="n">inner_trait_assignations</span><span class="p">,</span>
+                                                      <span class="n">print_information</span><span class="o">=</span><span class="n">print_information</span><span class="p">)</span>
+
+    <span class="c1"># num_con_agents, num_rad_agents, num_stb_agents, av_con, av_rad, av_stb</span>
+
+    <span class="c1"># Digraph and opinion metrics</span>
+    <span class="n">mean_opinion_difference</span> <span class="o">=</span> <span class="n">compute_mean_opinion_difference</span><span class="p">(</span><span class="n">adjacency_matrix</span><span class="o">=</span><span class="n">adjacency_matrix</span><span class="p">,</span>
+                                                              <span class="n">opinion_distribution</span><span class="o">=</span><span class="n">opinion_distribution</span><span class="p">,</span>
+                                                              <span class="n">print_information</span><span class="o">=</span><span class="n">print_information</span><span class="p">)</span>
+
+    <span class="c1"># mean_opinion_difference</span>
+
+    <span class="c1"># Opinion and traits metrics</span>
+    <span class="n">opinion_metrics_by_agent_type</span> <span class="o">=</span> <span class="n">compute_opinion_metrics_by_agent_type</span><span class="p">(</span><span class="n">opinion_distribution</span><span class="o">=</span><span class="n">opinion_distribution</span><span class="p">,</span>
+                                                                          <span class="n">inner_traits</span><span class="o">=</span><span class="n">inner_trait_assignations</span><span class="p">,</span>
+                                                                          <span class="n">print_information</span><span class="o">=</span><span class="n">print_information</span><span class="p">)</span>
+
+    <span class="c1"># num_con_agents, opinion_mean_con_agents, abs_opinion_mean_con_agents, num_rad_agents,</span>
+    <span class="c1"># opinion_mean_rad_agents, abs_opinion_mean_rad_agents, num_stb_agents, opinion_mean_stb_agents,</span>
+    <span class="c1"># abs_opinion_mean_stb_agents,</span>
+
+    <span class="c1"># Traits and digraph metrics</span>
+    <span class="n">trait_allocation_metrics</span> <span class="o">=</span> <span class="n">compute_trait_allocation_metrics</span><span class="p">(</span><span class="n">adjacency_matrix</span><span class="o">=</span><span class="n">adjacency_matrix</span><span class="p">,</span>
+                                                                <span class="n">inner_traits</span><span class="o">=</span><span class="n">inner_trait_assignations</span><span class="p">,</span>
+                                                                <span class="n">print_information</span><span class="o">=</span><span class="n">print_information</span><span class="p">)</span>
+
+    <span class="c1"># mean_difference</span>
+
+    <span class="n">final_type</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">histogram_classification</span><span class="p">(</span><span class="n">final_opinions</span><span class="p">)])</span>
+
+    <span class="n">all_features</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">((</span><span class="n">digraph_metrics</span><span class="p">,</span>
+                                   <span class="n">initial_opinion_metrics</span><span class="p">,</span>
+                                   <span class="n">inner_trait_metrics</span><span class="p">,</span>
+                                   <span class="n">mean_opinion_difference</span><span class="p">,</span>
+                                   <span class="n">opinion_metrics_by_agent_type</span><span class="p">,</span>
+                                   <span class="n">trait_allocation_metrics</span><span class="p">,</span>
+                                   <span class="n">final_type</span><span class="p">,</span>
+                                   <span class="n">final_opinion_metrics</span><span class="p">,</span>
+                                   <span class="p">))</span>
+
+    <span class="k">return</span> <span class="n">all_features</span></div>
+
+
+<div class="viewcode-block" id="compute_mean_opinion_difference"><a class="viewcode-back" href="../../src.html#src.data_analysis_functions.compute_mean_opinion_difference">[docs]</a><span class="k">def</span> <span class="nf">compute_mean_opinion_difference</span><span class="p">(</span><span class="n">adjacency_matrix</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">opinion_distribution</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">num_agents</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span>
+                                    <span class="n">print_information</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">    This function computes the mean opinion difference, given an adjacency matrix and an opinion distribution</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    adjacency_matrix: adjacency matrix</span>
+<span class="sd">    opinion_distribution: opinion distribution</span>
+<span class="sd">    num_agents: number of agents</span>
+<span class="sd">    print_information: boolean determining whether the metric is shown or not</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    Mean opinion difference</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">if</span> <span class="n">adjacency_matrix</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">adjacency_matrix</span> <span class="o">=</span> <span class="n">a_random_digraph</span><span class="p">(</span><span class="n">num_agents</span><span class="o">=</span><span class="n">num_agents</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="c1"># Get the number of agents</span>
+        <span class="n">num_agents</span> <span class="o">=</span> <span class="n">adjacency_matrix</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+    <span class="k">if</span> <span class="n">opinion_distribution</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">opinion_distribution</span> <span class="o">=</span> <span class="n">a_random_initial_opinion_distribution</span><span class="p">(</span><span class="n">num_agents</span><span class="o">=</span><span class="n">num_agents</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">num_agents</span> <span class="o">!=</span> <span class="n">opinion_distribution</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span>
+        <span class="c1"># The adjacency matrix and opinion distribution have incompatible dimensions</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;The adjacency matrix and opinion distribution have incompatible dimensions&#39;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="kc">None</span>
+
+    <span class="c1"># List all the edges, excluding self loops</span>
+    <span class="n">edges</span> <span class="o">=</span> <span class="p">[[</span><span class="n">id_row</span><span class="p">,</span> <span class="n">id_col</span><span class="p">]</span> <span class="k">for</span> <span class="n">id_row</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_agents</span><span class="p">)</span> <span class="k">for</span> <span class="n">id_col</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_agents</span><span class="p">)</span>
+             <span class="k">if</span> <span class="p">(</span><span class="n">id_row</span> <span class="o">!=</span> <span class="n">id_col</span> <span class="ow">and</span> <span class="n">adjacency_matrix</span><span class="p">[</span><span class="n">id_row</span><span class="p">,</span> <span class="n">id_col</span><span class="p">]</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">)]</span>
+
+    <span class="n">num_edges</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">total_difference</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="k">for</span> <span class="n">id_row</span><span class="p">,</span> <span class="n">id_col</span> <span class="ow">in</span> <span class="n">edges</span><span class="p">:</span>
+        <span class="n">num_edges</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="n">total_difference</span> <span class="o">+=</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">opinion_distribution</span><span class="p">[</span><span class="n">id_row</span><span class="p">]</span> <span class="o">-</span> <span class="n">opinion_distribution</span><span class="p">[</span><span class="n">id_col</span><span class="p">])</span>
+
+    <span class="k">if</span> <span class="n">num_edges</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">mean_opinion_difference</span> <span class="o">=</span> <span class="n">total_difference</span><span class="o">/</span><span class="n">num_edges</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="c1"># This would only happen if the digraph is completely disconnected</span>
+        <span class="n">mean_opinion_difference</span> <span class="o">=</span> <span class="mi">0</span>
+
+    <span class="k">if</span> <span class="n">print_information</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;mean opinion digraph difference </span><span class="si">{</span><span class="n">mean_opinion_difference</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">mean_opinion_difference</span></div>
+
+
+<div class="viewcode-block" id="compute_opinion_metrics_by_agent_type"><a class="viewcode-back" href="../../src.html#src.data_analysis_functions.compute_opinion_metrics_by_agent_type">[docs]</a><span class="k">def</span> <span class="nf">compute_opinion_metrics_by_agent_type</span><span class="p">(</span><span class="n">opinion_distribution</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">inner_traits</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">num_agents</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span>
+                                          <span class="n">print_information</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">    This function computes the opinion metric by agent type</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    opinion_distribution: the opinion distribution</span>
+<span class="sd">    inner_traits: the inner traits</span>
+<span class="sd">    num_agents: the number of agents</span>
+<span class="sd">    print_information: boolean determining whether the metric is shown or not</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    The opinion metric by agent type</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c1"># first, classify each agent, depending on which inner trait has the greatest weight</span>
+
+    <span class="k">if</span> <span class="n">opinion_distribution</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">opinion_distribution</span> <span class="o">=</span> <span class="n">a_random_initial_opinion_distribution</span><span class="p">(</span><span class="n">num_agents</span><span class="o">=</span><span class="n">num_agents</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="c1"># Get the number of agents</span>
+        <span class="n">num_agents</span> <span class="o">=</span> <span class="n">opinion_distribution</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+    <span class="k">if</span> <span class="n">inner_traits</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">inner_traits</span> <span class="o">=</span> <span class="n">a_random_inner_trait_assignation</span><span class="p">(</span><span class="n">num_agents</span><span class="o">=</span><span class="n">num_agents</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">num_agents</span> <span class="o">!=</span> <span class="n">inner_traits</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span>
+        <span class="c1"># The adjacency matrix and opinion distribution have incompatible dimensions</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;The inner traits and opinion distribution have incompatible dimensions&#39;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="kc">None</span>
+
+    <span class="n">con_agents</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">rad_agents</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">stb_agents</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="k">for</span> <span class="n">id_agent</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">num_agents</span><span class="p">):</span>
+        <span class="n">con_trait</span> <span class="o">=</span> <span class="n">inner_traits</span><span class="p">[</span><span class="n">id_agent</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">rad_trait</span> <span class="o">=</span> <span class="n">inner_traits</span><span class="p">[</span><span class="n">id_agent</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span>
+        <span class="n">stb_trait</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">-</span> <span class="p">(</span><span class="n">con_trait</span> <span class="o">+</span> <span class="n">rad_trait</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="n">con_trait</span> <span class="o">&gt;</span> <span class="n">rad_trait</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">con_trait</span> <span class="o">&gt;</span> <span class="n">stb_trait</span><span class="p">):</span>
+            <span class="n">con_agents</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">id_agent</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="p">(</span><span class="n">rad_trait</span> <span class="o">&gt;</span> <span class="n">con_trait</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">rad_trait</span> <span class="o">&gt;</span> <span class="n">stb_trait</span><span class="p">):</span>
+            <span class="n">rad_agents</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">id_agent</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="p">(</span><span class="n">stb_trait</span> <span class="o">&gt;</span> <span class="n">con_trait</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">rad_trait</span> <span class="o">&gt;</span> <span class="n">stb_trait</span><span class="p">):</span>
+            <span class="n">stb_agents</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">id_agent</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">stb_agents</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">id_agent</span><span class="p">)</span>
+
+    <span class="n">num_con_agents</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">con_agents</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">num_con_agents</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">opinion_mean_con_agents</span> <span class="o">=</span> <span class="n">opinion_distribution</span><span class="p">[</span><span class="n">con_agents</span><span class="p">]</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
+        <span class="n">abs_opinion_mean_con_agents</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">opinion_distribution</span><span class="p">[</span><span class="n">con_agents</span><span class="p">])</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">opinion_mean_con_agents</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">abs_opinion_mean_con_agents</span> <span class="o">=</span> <span class="mi">0</span>
+
+    <span class="n">num_rad_agents</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">rad_agents</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">num_rad_agents</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">opinion_mean_rad_agents</span> <span class="o">=</span> <span class="n">opinion_distribution</span><span class="p">[</span><span class="n">rad_agents</span><span class="p">]</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
+        <span class="n">abs_opinion_mean_rad_agents</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">opinion_distribution</span><span class="p">[</span><span class="n">rad_agents</span><span class="p">])</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">opinion_mean_rad_agents</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">abs_opinion_mean_rad_agents</span> <span class="o">=</span> <span class="mi">0</span>
+
+    <span class="n">num_stb_agents</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">stb_agents</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">num_stb_agents</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">opinion_mean_stb_agents</span> <span class="o">=</span> <span class="n">opinion_distribution</span><span class="p">[</span><span class="n">stb_agents</span><span class="p">]</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
+        <span class="n">abs_opinion_mean_stb_agents</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">opinion_distribution</span><span class="p">[</span><span class="n">stb_agents</span><span class="p">])</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">opinion_mean_stb_agents</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">abs_opinion_mean_stb_agents</span> <span class="o">=</span> <span class="mi">0</span>
+
+    <span class="k">if</span> <span class="n">print_information</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;number conformist agents </span><span class="si">{</span><span class="n">num_con_agents</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;opinion mean conformist agents </span><span class="si">{</span><span class="n">opinion_mean_con_agents</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;absolute value opinion mean conformist agents </span><span class="si">{</span><span class="n">abs_opinion_mean_con_agents</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;number radical agents </span><span class="si">{</span><span class="n">num_rad_agents</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;opinion mean radical agents </span><span class="si">{</span><span class="n">opinion_mean_rad_agents</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;absolute value opinion mean radical agents </span><span class="si">{</span><span class="n">abs_opinion_mean_rad_agents</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;number stubborn agents </span><span class="si">{</span><span class="n">num_stb_agents</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;opinion mean stubborn agents </span><span class="si">{</span><span class="n">opinion_mean_stb_agents</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;absolute value opinion mean stubborn agents </span><span class="si">{</span><span class="n">abs_opinion_mean_stb_agents</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+
+    <span class="n">metrics</span> <span class="o">=</span> <span class="p">[</span><span class="n">num_con_agents</span><span class="p">,</span>
+               <span class="n">opinion_mean_con_agents</span><span class="p">,</span>
+               <span class="n">abs_opinion_mean_con_agents</span><span class="p">,</span>
+               <span class="n">num_rad_agents</span><span class="p">,</span>
+               <span class="n">opinion_mean_rad_agents</span><span class="p">,</span>
+               <span class="n">abs_opinion_mean_rad_agents</span><span class="p">,</span>
+               <span class="n">num_stb_agents</span><span class="p">,</span>
+               <span class="n">opinion_mean_stb_agents</span><span class="p">,</span>
+               <span class="n">abs_opinion_mean_stb_agents</span><span class="p">,</span>
+               <span class="p">]</span>
+
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">metrics</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="compute_trait_allocation_metrics"><a class="viewcode-back" href="../../src.html#src.data_analysis_functions.compute_trait_allocation_metrics">[docs]</a><span class="k">def</span> <span class="nf">compute_trait_allocation_metrics</span><span class="p">(</span><span class="n">adjacency_matrix</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">inner_traits</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">num_agents</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">print_information</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">    This function computes the mean inner trait difference between neighbours in the digraph</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    adjacency_matrix: the corresponding digraph</span>
+<span class="sd">    inner_traits: the corresponding inner trait assignation</span>
+<span class="sd">    num_agents: the number of agents</span>
+<span class="sd">    print_information: boolean determining whether the metric is shown or not</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    The mean inner trait difference between neighbours in the digraph</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">if</span> <span class="n">inner_traits</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">inner_traits</span> <span class="o">=</span> <span class="n">a_random_inner_trait_assignation</span><span class="p">(</span><span class="n">num_agents</span><span class="o">=</span><span class="n">num_agents</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="c1"># Get the number of agents</span>
+        <span class="n">num_agents</span> <span class="o">=</span> <span class="n">inner_traits</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+    <span class="k">if</span> <span class="n">adjacency_matrix</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">adjacency_matrix</span> <span class="o">=</span> <span class="n">a_random_digraph</span><span class="p">(</span><span class="n">num_agents</span><span class="o">=</span><span class="n">num_agents</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">num_agents</span> <span class="o">!=</span> <span class="n">adjacency_matrix</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span>
+        <span class="c1"># The inner trait assignation and adjacency matrix have incompatible dimensions</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;The inner trait assignation and adjacency matrix have incompatible dimensions&#39;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="kc">None</span>
+
+    <span class="c1"># List all the edges, excluding self loops</span>
+    <span class="n">edges</span> <span class="o">=</span> <span class="p">[[</span><span class="n">id_row</span><span class="p">,</span> <span class="n">id_col</span><span class="p">]</span> <span class="k">for</span> <span class="n">id_row</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_agents</span><span class="p">)</span> <span class="k">for</span> <span class="n">id_col</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_agents</span><span class="p">)</span>
+             <span class="k">if</span> <span class="p">(</span><span class="n">id_row</span> <span class="o">!=</span> <span class="n">id_col</span> <span class="ow">and</span> <span class="n">adjacency_matrix</span><span class="p">[</span><span class="n">id_row</span><span class="p">,</span> <span class="n">id_col</span><span class="p">]</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">)]</span>
+
+    <span class="n">num_edges</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">total_difference</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="k">for</span> <span class="n">id_row</span><span class="p">,</span> <span class="n">id_col</span> <span class="ow">in</span> <span class="n">edges</span><span class="p">:</span>
+        <span class="n">num_edges</span> <span class="o">+=</span> <span class="mi">1</span>
+
+        <span class="n">con_src</span> <span class="o">=</span> <span class="n">inner_traits</span><span class="p">[</span><span class="n">id_row</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">con_trg</span> <span class="o">=</span> <span class="n">inner_traits</span><span class="p">[</span><span class="n">id_col</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+
+        <span class="n">rad_src</span> <span class="o">=</span> <span class="n">inner_traits</span><span class="p">[</span><span class="n">id_row</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span>
+        <span class="n">rad_trg</span> <span class="o">=</span> <span class="n">inner_traits</span><span class="p">[</span><span class="n">id_col</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span>
+
+        <span class="n">stb_src</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">-</span> <span class="p">(</span><span class="n">con_src</span> <span class="o">+</span> <span class="n">rad_src</span><span class="p">)</span>
+        <span class="n">stb_trg</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">-</span> <span class="p">(</span><span class="n">con_trg</span> <span class="o">+</span> <span class="n">rad_trg</span><span class="p">)</span>
+
+        <span class="n">con_diff</span> <span class="o">=</span> <span class="n">con_src</span> <span class="o">-</span> <span class="n">con_trg</span>
+        <span class="n">rad_diff</span> <span class="o">=</span> <span class="n">rad_src</span> <span class="o">-</span> <span class="n">rad_trg</span>
+        <span class="n">stb_diff</span> <span class="o">=</span> <span class="n">stb_src</span> <span class="o">-</span> <span class="n">stb_trg</span>
+
+        <span class="n">total_difference</span> <span class="o">+=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">((</span><span class="n">con_diff</span><span class="o">*</span><span class="n">con_diff</span><span class="p">)</span><span class="o">+</span><span class="p">(</span><span class="n">rad_diff</span><span class="o">*</span><span class="n">rad_diff</span><span class="p">)</span><span class="o">+</span><span class="p">(</span><span class="n">stb_diff</span><span class="o">*</span><span class="n">stb_diff</span><span class="p">))</span>
+
+    <span class="k">if</span> <span class="n">num_edges</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">mean_difference</span> <span class="o">=</span> <span class="n">total_difference</span> <span class="o">/</span> <span class="n">num_edges</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="c1"># This would only happen if the digraph is completely disconnected</span>
+        <span class="n">mean_difference</span> <span class="o">=</span> <span class="mi">0</span>
+
+    <span class="k">if</span> <span class="n">print_information</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;mean inner trait assignation difference </span><span class="si">{</span><span class="n">mean_difference</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">mean_difference</span><span class="p">])</span></div>
+
+
+<div class="viewcode-block" id="compute_opinion_metrics"><a class="viewcode-back" href="../../src.html#src.data_analysis_functions.compute_opinion_metrics">[docs]</a><span class="k">def</span> <span class="nf">compute_opinion_metrics</span><span class="p">(</span><span class="n">opinion_distribution</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">num_agents</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">print_information</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">    This function computes the mean and mean of the absolute value of the opinion distribution</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    opinion_distribution: the opinion distribution</span>
+<span class="sd">    num_agents: number of agents</span>
+<span class="sd">    print_information: boolean determining whether the print the information or not</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    The mean and mean of the absolute value of the opinion distribution</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">if</span> <span class="n">opinion_distribution</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">opinion_distribution</span> <span class="o">=</span> <span class="n">a_random_initial_opinion_distribution</span><span class="p">(</span><span class="n">num_agents</span><span class="o">=</span><span class="n">num_agents</span><span class="p">)</span>
+
+    <span class="n">mean_opinions</span> <span class="o">=</span> <span class="n">opinion_distribution</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
+    <span class="n">mean_abs_opinions</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">opinion_distribution</span><span class="p">)</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
+
+    <span class="k">if</span> <span class="n">print_information</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;opinion mean </span><span class="si">{</span><span class="n">mean_opinions</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;absolute value opinion mean </span><span class="si">{</span><span class="n">mean_abs_opinions</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">mean_opinions</span><span class="p">,</span> <span class="n">mean_abs_opinions</span><span class="p">])</span></div>
+
+
+<div class="viewcode-block" id="compute_inner_trait_metrics"><a class="viewcode-back" href="../../src.html#src.data_analysis_functions.compute_inner_trait_metrics">[docs]</a><span class="k">def</span> <span class="nf">compute_inner_trait_metrics</span><span class="p">(</span><span class="n">inner_traits</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">num_agents</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">print_information</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">    This function computes the metrics of the inner trait assignation</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    inner_traits: the inner trait assignation</span>
+<span class="sd">    num_agents: the number of agents</span>
+<span class="sd">    print_information: boolean that determines if the information is printed</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    The inner trait metrics</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">if</span> <span class="n">inner_traits</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">inner_traits</span> <span class="o">=</span> <span class="n">a_random_inner_trait_assignation</span><span class="p">(</span><span class="n">num_agents</span><span class="o">=</span><span class="n">num_agents</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="c1"># Get the number of agents</span>
+        <span class="n">num_agents</span> <span class="o">=</span> <span class="n">inner_traits</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+    <span class="n">av_con</span><span class="p">,</span> <span class="n">av_rad</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">maximum</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">minimum</span><span class="p">(</span><span class="n">inner_traits</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">),</span> <span class="mi">1</span><span class="p">),</span> <span class="mi">0</span><span class="p">)</span>
+    <span class="n">av_stb</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">-</span> <span class="p">(</span><span class="n">av_con</span> <span class="o">+</span> <span class="n">av_rad</span><span class="p">)</span>
+
+    <span class="n">con_agents</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">rad_agents</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">stb_agents</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="k">for</span> <span class="n">id_agent</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">num_agents</span><span class="p">):</span>
+        <span class="n">con_trait</span> <span class="o">=</span> <span class="n">inner_traits</span><span class="p">[</span><span class="n">id_agent</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">rad_trait</span> <span class="o">=</span> <span class="n">inner_traits</span><span class="p">[</span><span class="n">id_agent</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span>
+        <span class="n">stb_trait</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">-</span> <span class="p">(</span><span class="n">con_trait</span> <span class="o">+</span> <span class="n">rad_trait</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="n">con_trait</span> <span class="o">&gt;</span> <span class="n">rad_trait</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">con_trait</span> <span class="o">&gt;</span> <span class="n">stb_trait</span><span class="p">):</span>
+            <span class="n">con_agents</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">id_agent</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="p">(</span><span class="n">rad_trait</span> <span class="o">&gt;</span> <span class="n">con_trait</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">rad_trait</span> <span class="o">&gt;</span> <span class="n">stb_trait</span><span class="p">):</span>
+            <span class="n">rad_agents</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">id_agent</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="p">(</span><span class="n">stb_trait</span> <span class="o">&gt;</span> <span class="n">con_trait</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">rad_trait</span> <span class="o">&gt;</span> <span class="n">stb_trait</span><span class="p">):</span>
+            <span class="n">stb_agents</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">id_agent</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">stb_agents</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">id_agent</span><span class="p">)</span>
+
+    <span class="n">num_con_agents</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">con_agents</span><span class="p">)</span>
+    <span class="n">num_rad_agents</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">rad_agents</span><span class="p">)</span>
+    <span class="n">num_stb_agents</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">stb_agents</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">print_information</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;number conformist agents </span><span class="si">{</span><span class="n">num_con_agents</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;number radical agents </span><span class="si">{</span><span class="n">num_rad_agents</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;number stubborn agents </span><span class="si">{</span><span class="n">num_stb_agents</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;average conformist trait </span><span class="si">{</span><span class="n">av_con</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;average radical trait </span><span class="si">{</span><span class="n">av_rad</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;average stubborn trait </span><span class="si">{</span><span class="n">av_stb</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">num_con_agents</span><span class="p">,</span> <span class="n">num_rad_agents</span><span class="p">,</span> <span class="n">num_stb_agents</span><span class="p">,</span> <span class="n">av_con</span><span class="p">,</span> <span class="n">av_rad</span><span class="p">,</span> <span class="n">av_stb</span><span class="p">])</span></div>
+
+
+<div class="viewcode-block" id="compute_digraph_metrics"><a class="viewcode-back" href="../../src.html#src.data_analysis_functions.compute_digraph_metrics">[docs]</a><span class="k">def</span> <span class="nf">compute_digraph_metrics</span><span class="p">(</span><span class="n">adjacency_matrix</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">default_type</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">print_information</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">    This is a function used to compute several digraph metrics at once</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    adjacency_matrix: the adjacency matrix for which the metrics will be computed</span>
+<span class="sd">    default_type: ID of the default adjacency matrix</span>
+<span class="sd">    print_information: whether to print information or not</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    The digraph metrics</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">if</span> <span class="n">adjacency_matrix</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">adjacency_matrix</span> <span class="o">=</span> <span class="n">default_digraph</span><span class="p">(</span><span class="n">default_type</span><span class="o">=</span><span class="n">default_type</span><span class="p">)</span>
+
+    <span class="n">degree_metrics</span> <span class="o">=</span> <span class="n">compute_degrees</span><span class="p">(</span><span class="n">adjacency_matrix</span><span class="o">=</span><span class="n">adjacency_matrix</span><span class="p">,</span>
+                                     <span class="n">print_information</span><span class="o">=</span><span class="n">print_information</span><span class="p">)</span>  <span class="c1"># Degree metrics</span>
+    <span class="n">cluster_metrics</span> <span class="o">=</span> <span class="n">compute_clustering</span><span class="p">(</span><span class="n">adjacency_matrix</span><span class="o">=</span><span class="n">adjacency_matrix</span><span class="p">,</span>
+                                         <span class="n">print_information</span><span class="o">=</span><span class="n">print_information</span><span class="p">)</span> <span class="c1"># Clustering metrics</span>
+
+    <span class="n">metrics</span> <span class="o">=</span> <span class="p">[</span><span class="n">compute_balance_index</span><span class="p">(</span><span class="n">adjacency_matrix</span><span class="o">=</span><span class="n">adjacency_matrix</span><span class="p">,</span>
+                                     <span class="n">print_information</span><span class="o">=</span><span class="n">print_information</span><span class="p">),</span>  <span class="c1"># Balance index</span>
+               <span class="n">compute_bidirectional_coefficient</span><span class="p">(</span><span class="n">adjacency_matrix</span><span class="o">=</span><span class="n">adjacency_matrix</span><span class="p">,</span>
+                                                 <span class="n">print_information</span><span class="o">=</span><span class="n">print_information</span><span class="p">),</span>  <span class="c1"># Bidirectional coefficient</span>
+               <span class="n">degree_metrics</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">degree_metrics</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">degree_metrics</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">degree_metrics</span><span class="p">[</span><span class="mi">3</span><span class="p">],</span>
+               <span class="n">cluster_metrics</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">cluster_metrics</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
+               <span class="p">]</span>
+
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">metrics</span><span class="p">)</span>  <span class="c1"># balance index, bidirectional coefficient, mean in-degree, in-degree variance, mean</span></div>
+                                <span class="c1"># out-degree, out-degree variance, mean cluster, variance cluster</span>
+
+
+<div class="viewcode-block" id="compute_balance_index"><a class="viewcode-back" href="../../src.html#src.data_analysis_functions.compute_balance_index">[docs]</a><span class="k">def</span> <span class="nf">compute_balance_index</span><span class="p">(</span><span class="n">adjacency_matrix</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">default_type</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">print_information</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">    Function to approximate the balance index of a signed network</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    adjacency_matrix: the adjacency matrix</span>
+<span class="sd">    default_type: ID of the default digraph</span>
+<span class="sd">    print_information: Boolean determining if the computed values are printed</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    The balance index</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">if</span> <span class="n">adjacency_matrix</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">adjacency_matrix</span> <span class="o">=</span> <span class="n">default_digraph</span><span class="p">(</span><span class="n">default_type</span><span class="o">=</span><span class="n">default_type</span><span class="p">)</span>
+
+    <span class="n">balance_index</span> <span class="o">=</span> <span class="p">(</span><span class="n">matrix_exp</span><span class="p">(</span><span class="n">adjacency_matrix</span><span class="p">)</span><span class="o">.</span><span class="n">trace</span><span class="p">())</span><span class="o">/</span><span class="p">(</span><span class="n">matrix_exp</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">absolute</span><span class="p">(</span><span class="n">adjacency_matrix</span><span class="p">))</span><span class="o">.</span><span class="n">trace</span><span class="p">())</span>
+
+    <span class="k">if</span> <span class="n">print_information</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;The Balance index is </span><span class="si">{</span><span class="n">balance_index</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">balance_index</span></div>
+
+
+<div class="viewcode-block" id="compute_bidirectional_coefficient"><a class="viewcode-back" href="../../src.html#src.data_analysis_functions.compute_bidirectional_coefficient">[docs]</a><span class="k">def</span> <span class="nf">compute_bidirectional_coefficient</span><span class="p">(</span><span class="n">adjacency_matrix</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">default_type</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">print_information</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">    This function computes the bidirectional coefficient of a given adjacency matrix</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    adjacency_matrix: the adjacency matrix.</span>
+<span class="sd">    default_type: ID of the default digraph</span>
+<span class="sd">    print_information: Boolean determining if the computed values are printed</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    A float between 0.0 and 1.0 with the bidirectional coefficient</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">if</span> <span class="n">adjacency_matrix</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">adjacency_matrix</span> <span class="o">=</span> <span class="n">default_digraph</span><span class="p">(</span><span class="n">default_type</span><span class="o">=</span><span class="n">default_type</span><span class="p">)</span>
+
+    <span class="c1"># Get the number of agents</span>
+    <span class="n">num_agents</span> <span class="o">=</span> <span class="n">adjacency_matrix</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+    <span class="n">num_edges</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">num_bidirectional_edges</span> <span class="o">=</span> <span class="mi">0</span>
+
+    <span class="k">for</span> <span class="n">id_row</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">num_agents</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">id_col</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">num_agents</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">adjacency_matrix</span><span class="p">[</span><span class="n">id_row</span><span class="p">][</span><span class="n">id_col</span><span class="p">]</span> <span class="o">!=</span> <span class="mf">0.0</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">id_row</span> <span class="o">!=</span> <span class="n">id_col</span><span class="p">:</span>
+                    <span class="n">num_edges</span> <span class="o">+=</span> <span class="mi">1</span>
+                    <span class="k">if</span> <span class="n">adjacency_matrix</span><span class="p">[</span><span class="n">id_col</span><span class="p">][</span><span class="n">id_row</span><span class="p">]</span> <span class="o">!=</span> <span class="mf">0.0</span><span class="p">:</span>
+                        <span class="n">num_bidirectional_edges</span> <span class="o">+=</span> <span class="mi">1</span>
+
+    <span class="k">if</span> <span class="n">num_edges</span> <span class="o">==</span> <span class="mf">0.0</span><span class="p">:</span>
+        <span class="n">bidirectional_coefficient</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">bidirectional_coefficient</span> <span class="o">=</span> <span class="n">num_bidirectional_edges</span><span class="o">/</span><span class="n">num_edges</span>
+
+    <span class="k">if</span> <span class="n">print_information</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;The Bidirectional coefficient is </span><span class="si">{</span><span class="n">bidirectional_coefficient</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">bidirectional_coefficient</span></div>
+
+
+<div class="viewcode-block" id="compute_degrees"><a class="viewcode-back" href="../../src.html#src.data_analysis_functions.compute_degrees">[docs]</a><span class="k">def</span> <span class="nf">compute_degrees</span><span class="p">(</span><span class="n">adjacency_matrix</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">default_type</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">print_information</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">    Function used to compute the metrics related to the degree of the nodes, namely, the mean and variance of the in and</span>
+<span class="sd">    out degrees</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    adjacency_matrix: the adjacency matrix</span>
+<span class="sd">    default_type: ID of the default digraph</span>
+<span class="sd">    print_information: Boolean determining if the computed values are printed</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    A numpy array with 4 numbers corresponding, in order, to the mean in-degree, in-degree variance, mean out-degree,</span>
+<span class="sd">    and out-degree variance</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">if</span> <span class="n">adjacency_matrix</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">adjacency_matrix</span> <span class="o">=</span> <span class="n">default_digraph</span><span class="p">(</span><span class="n">default_type</span><span class="o">=</span><span class="n">default_type</span><span class="p">)</span>
+
+    <span class="n">topology</span> <span class="o">=</span> <span class="n">digraph2topology</span><span class="p">(</span><span class="n">adjacency_matrix</span><span class="o">=</span><span class="n">adjacency_matrix</span><span class="p">)</span>
+    <span class="n">transpose_topology</span> <span class="o">=</span> <span class="n">topology</span><span class="o">.</span><span class="n">transpose</span><span class="p">()</span>
+
+    <span class="n">in_degree</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([(</span><span class="n">in_neigh</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="k">for</span> <span class="n">in_neigh</span> <span class="ow">in</span> <span class="n">topology</span><span class="p">])</span>
+    <span class="n">out_degree</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([(</span><span class="n">out_neigh</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="k">for</span> <span class="n">out_neigh</span> <span class="ow">in</span> <span class="n">transpose_topology</span><span class="p">])</span>
+    <span class="c1"># 1 is subtracted to account for the self-loop</span>
+
+    <span class="n">mean_in_degree</span> <span class="o">=</span> <span class="n">in_degree</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
+    <span class="n">var_in_degree</span> <span class="o">=</span> <span class="n">in_degree</span><span class="o">.</span><span class="n">var</span><span class="p">()</span>
+
+    <span class="n">mean_out_degree</span> <span class="o">=</span> <span class="n">out_degree</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
+    <span class="n">var_out_degree</span> <span class="o">=</span> <span class="n">out_degree</span><span class="o">.</span><span class="n">var</span><span class="p">()</span>
+
+    <span class="k">if</span> <span class="n">print_information</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;The mean in-degree is </span><span class="si">{</span><span class="n">mean_in_degree</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;The in-degree variance is </span><span class="si">{</span><span class="n">var_in_degree</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;The mean out-degree is </span><span class="si">{</span><span class="n">mean_out_degree</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;The out-degree variance is </span><span class="si">{</span><span class="n">var_out_degree</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">mean_in_degree</span><span class="p">,</span> <span class="n">var_in_degree</span><span class="p">,</span> <span class="n">mean_out_degree</span><span class="p">,</span> <span class="n">var_out_degree</span><span class="p">])</span></div>
+
+
+<div class="viewcode-block" id="compute_clustering"><a class="viewcode-back" href="../../src.html#src.data_analysis_functions.compute_clustering">[docs]</a><span class="k">def</span> <span class="nf">compute_clustering</span><span class="p">(</span><span class="n">adjacency_matrix</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">default_type</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">print_information</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">    This is a function to compute the clustering mean and variance.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    adjacency_matrix: the adjacency matrix</span>
+<span class="sd">    default_type: ID of the default digraph</span>
+<span class="sd">    print_information: Boolean determining if the computed values are printed</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    A numpy array with the mean and the variance of the clustering</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">if</span> <span class="n">adjacency_matrix</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">adjacency_matrix</span> <span class="o">=</span> <span class="n">default_digraph</span><span class="p">(</span><span class="n">default_type</span><span class="o">=</span><span class="n">default_type</span><span class="p">)</span>
+
+    <span class="c1"># Get the number of agents</span>
+    <span class="n">num_agents</span> <span class="o">=</span> <span class="n">adjacency_matrix</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">clustering</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="n">topology</span> <span class="o">=</span> <span class="n">digraph2topology</span><span class="p">(</span><span class="n">adjacency_matrix</span><span class="o">=</span><span class="n">adjacency_matrix</span><span class="p">)</span>
+
+    <span class="k">for</span> <span class="n">id_agent</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">num_agents</span><span class="p">):</span>
+        <span class="c1"># Find the set of in-neighbours of agent &#39;id_agent&#39;, excluding itself</span>
+        <span class="n">in_neighbour_ast_set</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">((</span><span class="n">topology</span><span class="p">[</span><span class="n">id_agent</span><span class="p">][:</span><span class="n">id_agent</span><span class="p">],</span> <span class="n">topology</span><span class="p">[</span><span class="n">id_agent</span><span class="p">][</span><span class="n">id_agent</span><span class="o">+</span><span class="mi">1</span><span class="p">:]))</span>
+        <span class="n">num_in_neighbours</span> <span class="o">=</span> <span class="n">in_neighbour_ast_set</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>  <span class="c1"># :=</span>
+        <span class="k">if</span> <span class="n">num_in_neighbours</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+
+            <span class="c1"># If there are more in-neighbours than itself</span>
+            <span class="n">in_neighbour_ast</span> <span class="o">=</span> <span class="n">in_neighbour_ast_set</span><span class="o">.</span><span class="n">nonzero</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="n">topology_subset</span> <span class="o">=</span> <span class="n">topology</span><span class="o">.</span><span class="n">transpose</span><span class="p">()[</span><span class="n">in_neighbour_ast</span><span class="p">]</span><span class="o">.</span><span class="n">transpose</span><span class="p">()[</span><span class="n">in_neighbour_ast</span><span class="p">]</span>
+            <span class="n">number_internal_edges</span> <span class="o">=</span> <span class="n">topology_subset</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span> <span class="o">-</span> <span class="n">num_in_neighbours</span>
+            <span class="n">total_number_edges</span> <span class="o">=</span> <span class="n">num_in_neighbours</span><span class="o">*</span><span class="p">(</span><span class="n">num_in_neighbours</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+            <span class="n">clustering</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">number_internal_edges</span><span class="o">/</span><span class="n">total_number_edges</span><span class="p">)</span>
+
+        <span class="k">else</span><span class="p">:</span>
+
+            <span class="k">if</span> <span class="n">in_neighbour_ast_set</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="c1"># If the agent has a single in-neighbour</span>
+                <span class="n">clustering</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="c1"># If the only in-neighbour is itself, then append a nan</span>
+                <span class="n">clustering</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">)</span>
+
+    <span class="n">clustering</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">clustering</span><span class="p">)</span>
+
+    <span class="n">mean_clustering</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nanmean</span><span class="p">(</span><span class="n">clustering</span><span class="p">)</span>
+    <span class="n">var_clustering</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nanvar</span><span class="p">(</span><span class="n">clustering</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">print_information</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;The mean clustering is </span><span class="si">{</span><span class="n">mean_clustering</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;The clustering variance is </span><span class="si">{</span><span class="n">var_clustering</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">mean_clustering</span><span class="p">,</span> <span class="n">var_clustering</span><span class="p">])</span></div>
+
+
+
+
+
+
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, Carlos Andres Devia.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

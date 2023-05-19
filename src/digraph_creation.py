@@ -81,9 +81,9 @@ def complete_digraph(num_agents=100, row_stochastic=False, positive_edge_ratio=1
     ----------
     num_agents: Is the number of agents (and therefore vertices) of the digraph. By default, it is 100
     row_stochastic: A boolean that determines if the returned digraph must have a row-stochastic matrix. By default,
-                    this is False
+    this is False
     positive_edge_ratio: A floating number between 0 and 1 that determines the ratio of positive edges in the digraph.
-                        By default, it is 1
+    By default, it is 1
 
     Returns
     -------
@@ -116,11 +116,11 @@ def ring_digraph(num_agents=100, topology_signature=None, row_stochastic=False, 
     ----------
     num_agents: Is the number of agents (and therefore vertices) of the digraph. By default, it is 100
     topology_signature: Is a list with the relative indices of the vertices that influence each agent. By default, it
-                        is [0, 1]
+    is [0, 1]
     row_stochastic: A boolean that determines if the returned digraph must have a row-stochastic matrix. By default,
-                        this is False
+    this is False
     positive_edge_ratio: A floating number between 0 and 1 that determines the ratio of positive edges in the digraph.
-                        By default, it is 1
+    By default, it is 1
     num_random_edges_it: number of iterations to add random edges
 
     Returns
@@ -181,14 +181,14 @@ def small_world_digraph(num_agents=100, topology_signature=None, row_stochastic=
     row_stochastic: whether the adjacency matrix is row-stochastic, by default False
     positive_edge_ratio: the positive edge ratio, by default 1
     change_probability: the probability of edges changing target, it accepts a number between 0.0 and 1.0 or a
-        list of 'num_agents' numbers between 0.0 and 1.0. Each element in the list corresponds to the change probability
-        of the corresponding vertex
+    list of 'num_agents' numbers between 0.0 and 1.0. Each element in the list corresponds to the change probability
+    of the corresponding vertex
     reverse_probability: the probability of edges reversing target, it accepts a number between 0.0 and 1.0 or a
-        list of 'num_agents' numbers between 0.0 and 1.0. Each element in the list corresponds to the reverse
-        probability of the corresponding vertex
+    list of 'num_agents' numbers between 0.0 and 1.0. Each element in the list corresponds to the reverse
+    probability of the corresponding vertex
     bidirectional_probability: the probability of edges being bidirectional, it accepts a number between 0.0 and
-        1.0 or a list of 'num_agents' numbers between 0.0 and 1.0. Each element in the list corresponds to the
-        probability of the corresponding vertex being bidirectional
+    1.0 or a list of 'num_agents' numbers between 0.0 and 1.0. Each element in the list corresponds to the
+    probability of the corresponding vertex being bidirectional
     num_random_edges_it: number of iterations to add random edges
 
     Returns

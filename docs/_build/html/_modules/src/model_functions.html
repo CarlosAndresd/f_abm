@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>src.model_functions &mdash; Agent Based Model for Opinion Formation 0.1 documentation</title>
+      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/sphinx_highlight.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            Agent Based Model for Opinion Formation
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../src.html">src package</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">Agent Based Model for Opinion Formation</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">src.model_functions</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for src.model_functions</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">==============================================================</span>
+<span class="sd">Model Functions, (:mod:`f_abm.src.model_functions`)</span>
+<span class="sd">==============================================================</span>
+
+<span class="sd">Description</span>
+<span class="sd">-----------</span>
+
+<span class="sd">    This module contains all the model related functions, it includes all the functions to execute models, as well as</span>
+<span class="sd">    functions to execute any model</span>
+
+<span class="sd">Functions</span>
+<span class="sd">_________</span>
+
+<span class="sd">    - model_evolution</span>
+<span class="sd">    - cb_model_step</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+
+
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">.basic_creation</span> <span class="kn">import</span> <span class="p">(</span><span class="n">create_random_numbers</span><span class="p">,</span> <span class="p">)</span>
+<span class="kn">from</span> <span class="nn">.digraph_creation</span> <span class="kn">import</span> <span class="p">(</span><span class="n">default_digraph</span><span class="p">,</span> <span class="p">)</span>
+
+
+<div class="viewcode-block" id="model_evolution"><a class="viewcode-back" href="../../src.html#src.model_functions.model_evolution">[docs]</a><span class="k">def</span> <span class="nf">model_evolution</span><span class="p">(</span><span class="n">initial_opinions</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">adjacency_matrix</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">agent_parameters</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">model_parameters</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                    <span class="n">model_function</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">num_steps</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">default_type</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">    This function evolves a given model, with the give initial opinions, adjacency matrix, agent parameters, model</span>
+<span class="sd">    parameters, and number of steps</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    initial_opinions: numpy list of initial opinions. By default, it calls the function &#39;create_opinions()&#39;</span>
+<span class="sd">    adjacency_matrix: numpy 2d adjacency matrix.</span>
+<span class="sd">    agent_parameters: agent parameters, what this is depends on the model. By default, it is &#39;[[0.33, 0.33]]*100&#39;</span>
+<span class="sd">    model_parameters: model parameters, what this is depends on the model. By default, it is &#39;[0.4, 2, 5]&#39;</span>
+<span class="sd">    model_function: function that evolves the steps of the model. By default, it is &#39;cb_model_step&#39;, i.e. it evolves</span>
+<span class="sd">    the Classification-based model</span>
+<span class="sd">    num_steps: prediction horizon, it is an integer. By default, it is 50</span>
+<span class="sd">    default_type: ID of the default digraph</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    A 2d numpy array with as many rows as agents, and as many columns as num_steps. Each row contains the opinion</span>
+<span class="sd">    evolution of every agent.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">if</span> <span class="n">initial_opinions</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">initial_opinions</span> <span class="o">=</span> <span class="n">create_random_numbers</span><span class="p">()</span>
+
+    <span class="k">if</span> <span class="n">adjacency_matrix</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">adjacency_matrix</span> <span class="o">=</span> <span class="n">default_digraph</span><span class="p">(</span><span class="n">default_type</span><span class="o">=</span><span class="n">default_type</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">agent_parameters</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">agent_parameters</span> <span class="o">=</span> <span class="p">[[</span><span class="mf">0.33</span><span class="p">,</span> <span class="mf">0.33</span><span class="p">]]</span><span class="o">*</span><span class="mi">100</span>
+
+    <span class="k">if</span> <span class="n">model_parameters</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">model_parameters</span> <span class="o">=</span> <span class="p">[</span><span class="mf">0.4</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">5</span><span class="p">]</span>
+
+    <span class="k">if</span> <span class="n">model_function</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">model_function</span> <span class="o">=</span> <span class="n">cb_model_step</span>
+
+    <span class="c1"># Get the number of agents</span>
+    <span class="n">num_agents</span> <span class="o">=</span> <span class="n">initial_opinions</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+    <span class="c1"># Create the 2d array which will store the opinions</span>
+    <span class="n">all_opinions</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">num_agents</span><span class="p">,</span> <span class="n">num_steps</span><span class="p">))</span>
+    <span class="n">all_opinions</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">:</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">initial_opinions</span>
+    <span class="c1"># start_time = time.time()</span>
+    <span class="k">for</span> <span class="n">id_col</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">num_steps</span><span class="o">-</span><span class="mi">1</span><span class="p">):</span>
+        <span class="c1"># ini_time = time.time()</span>
+        <span class="n">all_opinions</span><span class="p">[:,</span> <span class="p">(</span><span class="n">id_col</span><span class="o">+</span><span class="mi">1</span><span class="p">):(</span><span class="n">id_col</span><span class="o">+</span><span class="mi">2</span><span class="p">)]</span> <span class="o">=</span> <span class="n">model_function</span><span class="p">(</span><span class="n">all_opinions</span><span class="p">[:,</span> <span class="n">id_col</span><span class="p">],</span> <span class="n">adjacency_matrix</span><span class="p">,</span>
+                                                                <span class="n">agent_parameters</span><span class="p">,</span> <span class="n">model_parameters</span><span class="p">)</span>
+        <span class="c1"># print(f&#39;{time.time() - ini_time} seconds, iteration {id_col}&#39;)</span>
+    <span class="c1"># print(&quot;--- %s seconds ---&quot; % (time.time() - start_time))</span>
+    <span class="k">return</span> <span class="n">all_opinions</span></div>
+
+
+<div class="viewcode-block" id="cb_model_step"><a class="viewcode-back" href="../../src.html#src.model_functions.cb_model_step">[docs]</a><span class="k">def</span> <span class="nf">cb_model_step</span><span class="p">(</span><span class="n">initial_opinions</span><span class="p">,</span> <span class="n">adjacency_matrix</span><span class="p">,</span> <span class="n">agent_parameters</span><span class="p">,</span> <span class="n">model_parameters</span><span class="o">=</span><span class="p">(</span><span class="mf">0.4</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">5</span><span class="p">)):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">    This function takes a step with the Classification-based model</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    initial_opinions: a list (or numpy array) of initial conditions</span>
+<span class="sd">    adjacency_matrix: a list of lists representing the adjacency matrix</span>
+<span class="sd">    agent_parameters: a list of lists containing the agent parameters, the first parameter is alpha and the second one</span>
+<span class="sd">    is beta</span>
+<span class="sd">    model_parameters: the parameter tuple lambda, xi, and mu</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c1"># Get the number of agents</span>
+    <span class="n">num_agents</span> <span class="o">=</span> <span class="n">initial_opinions</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+    <span class="c1"># get the model parameters</span>
+    <span class="n">lambda_value</span> <span class="o">=</span> <span class="n">model_parameters</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>  <span class="c1"># Opinion change magnitude</span>
+    <span class="n">xi_value</span> <span class="o">=</span> <span class="n">model_parameters</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>  <span class="c1"># Conformist parameter</span>
+    <span class="n">mu_value</span> <span class="o">=</span> <span class="n">model_parameters</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>  <span class="c1"># Radical parameter</span>
+
+    <span class="c1"># Create the array with new opinions</span>
+    <span class="n">new_opinions</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">num_agents</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+
+    <span class="c1"># Auxiliary vectorized function</span>
+    <span class="c1"># bool2int_vect_func = np.vectorize(boolean2int, o types=[float]) # remove the space between &#39;o&#39; and &#39;types&#39;</span>
+
+    <span class="c1"># Model Thresholds</span>
+    <span class="c1"># model_thresholds = [[6/5, 2],  # Thr, # of neighbours that agent $i$ perceives as agreeing much less that itself</span>
+    <span class="c1">#                     [2/5, 6/5],  # Thr, # of neighbours that agent $i$ perceives as agreeing less that itself</span>
+    <span class="c1">#                     [-2/5, 2/5],  # Thr, # of neighbours that agent $i$ perceives as agreeing the same that itself</span>
+    <span class="c1">#                     [-6/5, -2/5],  # Thr, # of neighbours that agent $i$ perceives as agreeing more that itself</span>
+    <span class="c1">#                     [-2, -6/5]]  # Thr, # of neighbours that agent $i$ perceives as agreeing much more that itself</span>
+
+    <span class="c1"># Compute the new opinions for each agent</span>
+    <span class="k">for</span> <span class="n">id_agent</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">num_agents</span><span class="p">):</span>
+
+        <span class="c1"># Although this implementation is more fancy ....</span>
+        <span class="c1"># Compute the number of neighbours</span>
+        <span class="c1"># num_neighbours = bool2int_vect_func(adjacency_matrix[id_agent] != 0.0).sum()</span>
+
+        <span class="c1"># Get the neighbour&#39;s perceived opinions</span>
+        <span class="c1"># neighbour_perceived_opinions = [adjacency_matrix[id_agent][i]*initial_opinions[i] for i, element</span>
+        <span class="c1">#                                 in enumerate(adjacency_matrix[id_agent]) if element != 0.0]</span>
+
+        <span class="c1"># shift the opinions to be relative to the current agent</span>
+        <span class="c1"># opinion_difference = initial_opinions[id_agent] - neighbour_perceived_opinions</span>
+
+        <span class="c1"># Compute the number of neighbours in each subset</span>
+        <span class="c1"># num_elements = np.zeros(5)</span>
+        <span class="c1"># for id_subset in range(0, 5):</span>
+        <span class="c1">#     num_elements[id_subset] = (bool2int_vect_func(opinion_difference &gt;= model_thresholds[id_subset][0])</span>
+        <span class="c1">#                                * bool2int_vect_func(opinion_difference &lt;</span>
+        <span class="c1">#                                model_thresholds[id_subset][1])).sum()</span>
+
+        <span class="c1"># Compute the opinion change</span>
+        <span class="c1"># opinion_change = (lambda_value / num_neighbours) \</span>
+        <span class="c1">#                  * ((agent_parameters[id_agent][0] * xi_value * (num_elements[4] - num_elements[0]))</span>
+        <span class="c1">#                   + (agent_parameters[id_agent][0] * (num_elements[3] - num_elements[1]))</span>
+        <span class="c1">#                   + (agent_parameters[id_agent][1] * mu_value * num_elements[2] * initial_opinions[id_agent]))</span>
+
+        <span class="c1"># ... this one is ~2.7 times faster with 100 agents and 100 time steps. Maybe it is faster in other cases</span>
+        <span class="n">num_d_p</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">num_d</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">num_n</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">num_a</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">num_a_p</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">num_neighbours</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">for</span> <span class="n">id_neigh</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">num_agents</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">adjacency_matrix</span><span class="p">[</span><span class="n">id_agent</span><span class="p">][</span><span class="n">id_neigh</span><span class="p">]</span> <span class="o">!=</span> <span class="mf">0.0</span><span class="p">:</span>
+                <span class="n">num_neighbours</span> <span class="o">+=</span> <span class="mi">1</span>
+                <span class="n">opinion_difference</span> <span class="o">=</span> <span class="n">initial_opinions</span><span class="p">[</span><span class="n">id_agent</span><span class="p">]</span> \
+                    <span class="o">-</span> <span class="p">(</span><span class="n">adjacency_matrix</span><span class="p">[</span><span class="n">id_agent</span><span class="p">][</span><span class="n">id_neigh</span><span class="p">]</span><span class="o">*</span><span class="n">initial_opinions</span><span class="p">[</span><span class="n">id_neigh</span><span class="p">])</span>
+
+                <span class="k">if</span> <span class="p">(</span><span class="n">opinion_difference</span> <span class="o">&gt;=</span> <span class="mf">1.2</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">opinion_difference</span> <span class="o">&lt;=</span> <span class="mf">2.0</span><span class="p">):</span>
+                    <span class="n">num_d_p</span> <span class="o">+=</span> <span class="mi">1</span>
+                <span class="k">elif</span> <span class="p">(</span><span class="n">opinion_difference</span> <span class="o">&gt;=</span> <span class="mf">0.4</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">opinion_difference</span> <span class="o">&lt;=</span> <span class="mf">1.2</span><span class="p">):</span>
+                    <span class="n">num_d</span> <span class="o">+=</span> <span class="mi">1</span>
+                <span class="k">elif</span> <span class="p">(</span><span class="n">opinion_difference</span> <span class="o">&gt;=</span> <span class="o">-</span><span class="mf">0.4</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">opinion_difference</span> <span class="o">&lt;=</span> <span class="mf">0.4</span><span class="p">):</span>
+                    <span class="n">num_n</span> <span class="o">+=</span> <span class="mi">1</span>
+                <span class="k">elif</span> <span class="p">(</span><span class="n">opinion_difference</span> <span class="o">&gt;=</span> <span class="o">-</span><span class="mf">1.2</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">opinion_difference</span> <span class="o">&lt;=</span> <span class="o">-</span><span class="mf">0.4</span><span class="p">):</span>
+                    <span class="n">num_a</span> <span class="o">+=</span> <span class="mi">1</span>
+                <span class="k">elif</span> <span class="p">(</span><span class="n">opinion_difference</span> <span class="o">&gt;=</span> <span class="o">-</span><span class="mf">2.0</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">opinion_difference</span> <span class="o">&lt;=</span> <span class="o">-</span><span class="mf">1.2</span><span class="p">):</span>
+                    <span class="n">num_a_p</span> <span class="o">+=</span> <span class="mi">1</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;this should not happen&#39;</span><span class="p">)</span>
+
+        <span class="c1"># Compute the opinion change</span>
+        <span class="n">opinion_change</span> <span class="o">=</span> <span class="p">(</span><span class="n">lambda_value</span><span class="o">/</span><span class="n">num_neighbours</span><span class="p">)</span> \
+            <span class="o">*</span> <span class="p">((</span><span class="n">agent_parameters</span><span class="p">[</span><span class="n">id_agent</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span><span class="o">*</span><span class="n">xi_value</span><span class="o">*</span><span class="p">(</span><span class="n">num_a_p</span><span class="o">-</span><span class="n">num_d_p</span><span class="p">))</span>
+               <span class="o">+</span> <span class="p">(</span><span class="n">agent_parameters</span><span class="p">[</span><span class="n">id_agent</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span><span class="o">*</span><span class="p">(</span><span class="n">num_a</span><span class="o">-</span><span class="n">num_d</span><span class="p">))</span>
+               <span class="o">+</span> <span class="p">(</span><span class="n">agent_parameters</span><span class="p">[</span><span class="n">id_agent</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span><span class="o">*</span><span class="n">mu_value</span><span class="o">*</span><span class="n">num_n</span><span class="o">*</span><span class="n">initial_opinions</span><span class="p">[</span><span class="n">id_agent</span><span class="p">]))</span>
+
+        <span class="n">new_opinions</span><span class="p">[</span><span class="n">id_agent</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">maximum</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">minimum</span><span class="p">(</span><span class="n">initial_opinions</span><span class="p">[</span><span class="n">id_agent</span><span class="p">]</span><span class="o">+</span><span class="n">opinion_change</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">),</span> <span class="o">-</span><span class="mf">1.0</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">new_opinions</span></div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, Carlos Andres Devia.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

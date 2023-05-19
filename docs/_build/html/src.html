@@ -1,0 +1,1233 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>src package &mdash; Agent Based Model for Opinion Formation 0.1 documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/sphinx_highlight.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="Welcome to Agent Based Model for Opinion Formation’s documentation!" href="index.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            Agent Based Model for Opinion Formation
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">src package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-src.auxiliary_functions">src.auxiliary_functions module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#auxiliary-functions-f-abm-src-auxiliary-functions">Auxiliary Functions, (<code class="xref py py-mod docutils literal notranslate"><span class="pre">f_abm.src.auxiliary_functions</span></code>)</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#description">Description</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#functions">Functions</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#src.auxiliary_functions.add_random_edges"><code class="docutils literal notranslate"><span class="pre">add_random_edges()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#src.auxiliary_functions.add_rs_weights2matrix"><code class="docutils literal notranslate"><span class="pre">add_rs_weights2matrix()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#src.auxiliary_functions.add_signs2matrix"><code class="docutils literal notranslate"><span class="pre">add_signs2matrix()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#src.auxiliary_functions.create_random_numbers"><code class="docutils literal notranslate"><span class="pre">create_random_numbers()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#src.auxiliary_functions.digraph2topology"><code class="docutils literal notranslate"><span class="pre">digraph2topology()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#src.auxiliary_functions.histogram_classification"><code class="docutils literal notranslate"><span class="pre">histogram_classification()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#src.auxiliary_functions.make_row_stochastic"><code class="docutils literal notranslate"><span class="pre">make_row_stochastic()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#src.auxiliary_functions.matrix2digraph"><code class="docutils literal notranslate"><span class="pre">matrix2digraph()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#src.auxiliary_functions.matrix_exp"><code class="docutils literal notranslate"><span class="pre">matrix_exp()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#src.auxiliary_functions.modify_mean"><code class="docutils literal notranslate"><span class="pre">modify_mean()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#src.auxiliary_functions.modify_opinions_method_1"><code class="docutils literal notranslate"><span class="pre">modify_opinions_method_1()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#src.auxiliary_functions.modify_opinions_method_2"><code class="docutils literal notranslate"><span class="pre">modify_opinions_method_2()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#src.auxiliary_functions.opinion2color"><code class="docutils literal notranslate"><span class="pre">opinion2color()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#module-src.basic_creation">src.basic_creation module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#basic-creation-f-abm-src-basic-creation">Basic Creation, (<code class="xref py py-mod docutils literal notranslate"><span class="pre">f_abm.src.basic_creation</span></code>)</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#id25">Description</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id26">Functions</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#src.basic_creation.a_random_digraph"><code class="docutils literal notranslate"><span class="pre">a_random_digraph()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#src.basic_creation.a_random_initial_opinion_distribution"><code class="docutils literal notranslate"><span class="pre">a_random_initial_opinion_distribution()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#src.basic_creation.a_random_inner_trait_assignation"><code class="docutils literal notranslate"><span class="pre">a_random_inner_trait_assignation()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#src.basic_creation.create_inner_traits_local"><code class="docutils literal notranslate"><span class="pre">create_inner_traits_local()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#src.basic_creation.create_many_inner_traits"><code class="docutils literal notranslate"><span class="pre">create_many_inner_traits()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#src.basic_creation.create_many_opinions"><code class="docutils literal notranslate"><span class="pre">create_many_opinions()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#module-src.basic_creation_test">src.basic_creation_test module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#basic-creation-test-f-abm-src-basic-creation-test">Basic Creation Test, (<code class="xref py py-mod docutils literal notranslate"><span class="pre">f_abm.src.basic_creation_test</span></code>)</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#id39">Description</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id40">Functions</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#src.basic_creation_test.test_create_random_numbers"><code class="docutils literal notranslate"><span class="pre">test_create_random_numbers()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#module-src.code_test">src.code_test module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#code-test-f-abm-src-code-test">Code Test, (<code class="xref py py-mod docutils literal notranslate"><span class="pre">f_abm.src.code_test</span></code>)</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#id41">Description</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id42">Functions</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#src.code_test.example_1"><code class="docutils literal notranslate"><span class="pre">example_1()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#src.code_test.example_2"><code class="docutils literal notranslate"><span class="pre">example_2()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#src.code_test.example_3"><code class="docutils literal notranslate"><span class="pre">example_3()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#src.code_test.example_4"><code class="docutils literal notranslate"><span class="pre">example_4()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#module-src.data_analysis_functions">src.data_analysis_functions module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#data-analysis-f-abm-src-data-analysis-functions">Data Analysis, (<code class="xref py py-mod docutils literal notranslate"><span class="pre">f_abm.src.data_analysis_functions</span></code>)</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#id49">Description</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id50">Functions</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#src.data_analysis_functions.compute_balance_index"><code class="docutils literal notranslate"><span class="pre">compute_balance_index()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#src.data_analysis_functions.compute_bidirectional_coefficient"><code class="docutils literal notranslate"><span class="pre">compute_bidirectional_coefficient()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#src.data_analysis_functions.compute_clustering"><code class="docutils literal notranslate"><span class="pre">compute_clustering()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#src.data_analysis_functions.compute_degrees"><code class="docutils literal notranslate"><span class="pre">compute_degrees()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#src.data_analysis_functions.compute_digraph_metrics"><code class="docutils literal notranslate"><span class="pre">compute_digraph_metrics()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#src.data_analysis_functions.compute_inner_trait_metrics"><code class="docutils literal notranslate"><span class="pre">compute_inner_trait_metrics()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#src.data_analysis_functions.compute_mean_opinion_difference"><code class="docutils literal notranslate"><span class="pre">compute_mean_opinion_difference()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#src.data_analysis_functions.compute_opinion_metrics"><code class="docutils literal notranslate"><span class="pre">compute_opinion_metrics()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#src.data_analysis_functions.compute_opinion_metrics_by_agent_type"><code class="docutils literal notranslate"><span class="pre">compute_opinion_metrics_by_agent_type()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#src.data_analysis_functions.compute_trait_allocation_metrics"><code class="docutils literal notranslate"><span class="pre">compute_trait_allocation_metrics()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#src.data_analysis_functions.feature_computation"><code class="docutils literal notranslate"><span class="pre">feature_computation()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#src.data_analysis_functions.gather_data"><code class="docutils literal notranslate"><span class="pre">gather_data()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#src.data_analysis_functions.obtain_features"><code class="docutils literal notranslate"><span class="pre">obtain_features()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#module-src.digraph_creation">src.digraph_creation module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#digraph-creation-f-abm-src-digraph-creation">Digraph Creation, (<code class="xref py py-mod docutils literal notranslate"><span class="pre">f_abm.src.digraph_creation</span></code>)</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#id77">Description</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id78">Functions</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#src.digraph_creation.complete_digraph"><code class="docutils literal notranslate"><span class="pre">complete_digraph()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#src.digraph_creation.default_digraph"><code class="docutils literal notranslate"><span class="pre">default_digraph()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#src.digraph_creation.random_digraph"><code class="docutils literal notranslate"><span class="pre">random_digraph()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#src.digraph_creation.ring_digraph"><code class="docutils literal notranslate"><span class="pre">ring_digraph()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#src.digraph_creation.small_world_digraph"><code class="docutils literal notranslate"><span class="pre">small_world_digraph()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#module-src.model_functions">src.model_functions module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#model-functions-f-abm-src-model-functions">Model Functions, (<code class="xref py py-mod docutils literal notranslate"><span class="pre">f_abm.src.model_functions</span></code>)</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#id89">Description</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#src.model_functions.cb_model_step"><code class="docutils literal notranslate"><span class="pre">cb_model_step()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#src.model_functions.model_evolution"><code class="docutils literal notranslate"><span class="pre">model_evolution()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#module-src.plot_functions">src.plot_functions module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#functions-for-plotting-f-abm-src-plot-functions">Functions for Plotting, (<code class="xref py py-mod docutils literal notranslate"><span class="pre">f_abm.src.plot_functions</span></code>)</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#id95">Description</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id96">Functions</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#src.plot_functions.plot_all_opinions"><code class="docutils literal notranslate"><span class="pre">plot_all_opinions()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#src.plot_functions.plot_digraph"><code class="docutils literal notranslate"><span class="pre">plot_digraph()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#src.plot_functions.plot_histogram"><code class="docutils literal notranslate"><span class="pre">plot_histogram()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#src.plot_functions.plot_inner_traits"><code class="docutils literal notranslate"><span class="pre">plot_inner_traits()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#src.plot_functions.plot_opinions"><code class="docutils literal notranslate"><span class="pre">plot_opinions()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#module-src">Module contents</a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Agent Based Model for Opinion Formation</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">src package</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/src.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="src-package">
+<h1>src package<a class="headerlink" href="#src-package" title="Permalink to this heading"></a></h1>
+<section id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this heading"></a></h2>
+</section>
+<section id="module-src.auxiliary_functions">
+<span id="src-auxiliary-functions-module"></span><h2>src.auxiliary_functions module<a class="headerlink" href="#module-src.auxiliary_functions" title="Permalink to this heading"></a></h2>
+<section id="auxiliary-functions-f-abm-src-auxiliary-functions">
+<h3>Auxiliary Functions, (<code class="xref py py-mod docutils literal notranslate"><span class="pre">f_abm.src.auxiliary_functions</span></code>)<a class="headerlink" href="#auxiliary-functions-f-abm-src-auxiliary-functions" title="Permalink to this heading"></a></h3>
+<section id="description">
+<h4>Description<a class="headerlink" href="#description" title="Permalink to this heading"></a></h4>
+<blockquote>
+<div><p>This module contains auxiliary functions that are use throughout the program.</p>
+</div></blockquote>
+</section>
+<section id="functions">
+<h4>Functions<a class="headerlink" href="#functions" title="Permalink to this heading"></a></h4>
+<blockquote>
+<div><ul class="simple">
+<li><p>matrix_exp</p></li>
+<li><p>digraph2topology</p></li>
+<li><p>add_random_edges</p></li>
+<li><p>add_rs_weights2matrix</p></li>
+<li><p>add_signs2matrix</p></li>
+<li><p>matrix2digraph</p></li>
+<li><p>create_random_numbers</p></li>
+<li><p>opinion2color</p></li>
+<li><p>modify_opinions_method_1</p></li>
+<li><p>modify_opinions_method_2</p></li>
+<li><p>histogram_classification</p></li>
+<li><p>modify_mean</p></li>
+<li><p>make_row_stochastic</p></li>
+</ul>
+</div></blockquote>
+</section>
+</section>
+<dl class="py function">
+<dt class="sig sig-object py" id="src.auxiliary_functions.add_random_edges">
+<span class="sig-prename descclassname"><span class="pre">src.auxiliary_functions.</span></span><span class="sig-name descname"><span class="pre">add_random_edges</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">adjacency_matrix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_iterations</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">default_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/auxiliary_functions.html#add_random_edges"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.auxiliary_functions.add_random_edges" title="Permalink to this definition"></a></dt>
+<dd><p>Function to add random edges to the adjacency matrix ‘adjacency_matrix’, the edges have no weight or sign.
+The function does not guarantee that these are new edges, it randomly selects cells of the adjacency matrix and
+adds edges</p>
+<section id="parameters">
+<h3>Parameters<a class="headerlink" href="#parameters" title="Permalink to this heading"></a></h3>
+<p>adjacency_matrix: the adjacency matrix to be modified
+num_iterations: the number of iterations
+default_type: the ID of the default digraph</p>
+</section>
+<section id="returns">
+<h3>Returns<a class="headerlink" href="#returns" title="Permalink to this heading"></a></h3>
+<p>The same adjacency matrix with random edges. This is a side effect function.</p>
+</section>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="src.auxiliary_functions.add_rs_weights2matrix">
+<span class="sig-prename descclassname"><span class="pre">src.auxiliary_functions.</span></span><span class="sig-name descname"><span class="pre">add_rs_weights2matrix</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">adjacency_matrix</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/auxiliary_functions.html#add_rs_weights2matrix"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.auxiliary_functions.add_rs_weights2matrix" title="Permalink to this definition"></a></dt>
+<dd><p>Function that adds the stochastic weights to an adjacency matrix</p>
+<section id="id1">
+<h3>Parameters<a class="headerlink" href="#id1" title="Permalink to this heading"></a></h3>
+<p>adjacency_matrix: original adjacency matrix</p>
+</section>
+<section id="id2">
+<h3>Returns<a class="headerlink" href="#id2" title="Permalink to this heading"></a></h3>
+<p>there is no need to return anything, as the adjacency matrix is transformed in the function</p>
+</section>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="src.auxiliary_functions.add_signs2matrix">
+<span class="sig-prename descclassname"><span class="pre">src.auxiliary_functions.</span></span><span class="sig-name descname"><span class="pre">add_signs2matrix</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">adjacency_matrix</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">positive_edge_ratio</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/auxiliary_functions.html#add_signs2matrix"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.auxiliary_functions.add_signs2matrix" title="Permalink to this definition"></a></dt>
+<dd><p>Function that adds the signs to the adjacency matrix of a signed digraph</p>
+<section id="id3">
+<h3>Parameters<a class="headerlink" href="#id3" title="Permalink to this heading"></a></h3>
+<p>adjacency_matrix: current adjacency matrix, presumably with only non-negative weights
+positive_edge_ratio: ratio of positive edges</p>
+</section>
+<section id="id4">
+<h3>Returns<a class="headerlink" href="#id4" title="Permalink to this heading"></a></h3>
+<p>There is no need to return anything, since the function modifies the adjacency matrix as desired</p>
+</section>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="src.auxiliary_functions.create_random_numbers">
+<span class="sig-prename descclassname"><span class="pre">src.auxiliary_functions.</span></span><span class="sig-name descname"><span class="pre">create_random_numbers</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">num_agents</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">100</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">number_parameters</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">limits</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">(-1,</span> <span class="pre">1)</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/auxiliary_functions.html#create_random_numbers"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.auxiliary_functions.create_random_numbers" title="Permalink to this definition"></a></dt>
+<dd><p>This function creates and returns a list of random ‘num_agents’ numbers. This function is used to create initial
+opinions and also to create agent parameters. Its default use is to create initial opinions</p>
+<section id="id5">
+<h3>Parameters<a class="headerlink" href="#id5" title="Permalink to this heading"></a></h3>
+<p>num_agents: number of opinions that are returned, by default 100
+number_parameters: a lists of lists, every element corresponds to a different set of initial opinions to be
+created. Each element of this list contains 4 elements: [0] signals the type of distribution to create. ‘0’ is a
+uniform distribution ‘any non 0’ is a normal distribution [1] if the distribution is uniform, this is the minimum
+value. If the distribution is normal, this is the mean [2] if the distribution is uniform, this is the maximum
+value. If the distribution is normal, this is the variance [3] the fraction of all the agents. The sum does not
+have to add to one, as it will be normalized
+limits: a tuple of two numbers, the first is the lower bound and the second the upper bound</p>
+</section>
+<section id="id6">
+<h3>Returns<a class="headerlink" href="#id6" title="Permalink to this heading"></a></h3>
+<p>numpy array of ‘num_agents’ rows and 1 column (a list of lists) of opinions</p>
+</section>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="src.auxiliary_functions.digraph2topology">
+<span class="sig-prename descclassname"><span class="pre">src.auxiliary_functions.</span></span><span class="sig-name descname"><span class="pre">digraph2topology</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">adjacency_matrix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">default_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/auxiliary_functions.html#digraph2topology"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.auxiliary_functions.digraph2topology" title="Permalink to this definition"></a></dt>
+<dd><p>Function to convert from any adjacency matrix to the corresponding topology (that is, the associated adjacency
+matrix without signs or weights)</p>
+<section id="id7">
+<h3>Parameters<a class="headerlink" href="#id7" title="Permalink to this heading"></a></h3>
+<p>adjacency_matrix: the adjacency matrix
+default_type: ID of the default digraph</p>
+</section>
+<section id="id8">
+<h3>Returns<a class="headerlink" href="#id8" title="Permalink to this heading"></a></h3>
+<p>A matrix of the same size as ‘adjacency_matrix’ but with only 0 or 1 corresponding to the topology.</p>
+</section>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="src.auxiliary_functions.histogram_classification">
+<span class="sig-prename descclassname"><span class="pre">src.auxiliary_functions.</span></span><span class="sig-name descname"><span class="pre">histogram_classification</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">opinion_distribution</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">classification_parameters</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">(10,</span> <span class="pre">3,</span> <span class="pre">4,</span> <span class="pre">6,</span> <span class="pre">50,</span> <span class="pre">12,</span> <span class="pre">40)</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/auxiliary_functions.html#histogram_classification"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.auxiliary_functions.histogram_classification" title="Permalink to this definition"></a></dt>
+<dd><p>A function that classifies opinion distributions with any number of agents.</p>
+<section id="id9">
+<h3>Parameters<a class="headerlink" href="#id9" title="Permalink to this heading"></a></h3>
+<p>opinion_distribution: the opinion distribution to be classified.
+classification_parameters: the classification parameters.</p>
+</section>
+<section id="id10">
+<h3>Returns<a class="headerlink" href="#id10" title="Permalink to this heading"></a></h3>
+<p>A number that encodes the classification, 0 is perfect consensus, 1 is consensus, 2 is polaristion, 3 is clustering,
+and 4 is dissensus.</p>
+</section>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="src.auxiliary_functions.make_row_stochastic">
+<span class="sig-prename descclassname"><span class="pre">src.auxiliary_functions.</span></span><span class="sig-name descname"><span class="pre">make_row_stochastic</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">matrix</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/auxiliary_functions.html#make_row_stochastic"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.auxiliary_functions.make_row_stochastic" title="Permalink to this definition"></a></dt>
+<dd><p>Function that takes a matrix and makes it row-stochastic</p>
+<section id="id11">
+<h3>Parameters<a class="headerlink" href="#id11" title="Permalink to this heading"></a></h3>
+<p>matrix: original matrix</p>
+</section>
+<section id="id12">
+<h3>Returns<a class="headerlink" href="#id12" title="Permalink to this heading"></a></h3>
+<p>This function does not return anything, as it modifies the passed matrix</p>
+</section>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="src.auxiliary_functions.matrix2digraph">
+<span class="sig-prename descclassname"><span class="pre">src.auxiliary_functions.</span></span><span class="sig-name descname"><span class="pre">matrix2digraph</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">adjacency_matrix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">default_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/auxiliary_functions.html#matrix2digraph"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.auxiliary_functions.matrix2digraph" title="Permalink to this definition"></a></dt>
+<dd><p>Function that converts from an adjacency matrix to a digraph object it is mainly used to plot</p>
+<section id="id13">
+<h3>Parameters<a class="headerlink" href="#id13" title="Permalink to this heading"></a></h3>
+<p>adjacency_matrix: the adjacency matrix, by default it is a simple ring digraph
+default_type: ID of the default digraph</p>
+</section>
+<section id="id14">
+<h3>Returns<a class="headerlink" href="#id14" title="Permalink to this heading"></a></h3>
+<p>ID of the default digraph</p>
+</section>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="src.auxiliary_functions.matrix_exp">
+<span class="sig-prename descclassname"><span class="pre">src.auxiliary_functions.</span></span><span class="sig-name descname"><span class="pre">matrix_exp</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">matrix</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">order</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/auxiliary_functions.html#matrix_exp"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.auxiliary_functions.matrix_exp" title="Permalink to this definition"></a></dt>
+<dd><p>This is a function to approximate a matrix exponential to the order ‘order’</p>
+<section id="id15">
+<h3>Parameters<a class="headerlink" href="#id15" title="Permalink to this heading"></a></h3>
+<p>matrix: matrix to calculate the exponential
+order: the order of the approximation, by default it is 10</p>
+</section>
+<section id="id16">
+<h3>Returns<a class="headerlink" href="#id16" title="Permalink to this heading"></a></h3>
+<p>returns the approximation of the matrix exponential</p>
+</section>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="src.auxiliary_functions.modify_mean">
+<span class="sig-prename descclassname"><span class="pre">src.auxiliary_functions.</span></span><span class="sig-name descname"><span class="pre">modify_mean</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">weights</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">des_mean</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">epsilon</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.05</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_counter</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">100</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">limits</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">(0,</span> <span class="pre">1)</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/auxiliary_functions.html#modify_mean"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.auxiliary_functions.modify_mean" title="Permalink to this definition"></a></dt>
+<dd><section id="id17">
+<h3>Parameters<a class="headerlink" href="#id17" title="Permalink to this heading"></a></h3>
+<p>weights: initial weights.
+des_mean: desired weight mean.
+epsilon: tolerance.
+max_counter: maximum number of iterations.
+limits: the limits of the weights.</p>
+</section>
+<section id="id18">
+<h3>Returns<a class="headerlink" href="#id18" title="Permalink to this heading"></a></h3>
+<p>modified weights with the desired mean.</p>
+</section>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="src.auxiliary_functions.modify_opinions_method_1">
+<span class="sig-prename descclassname"><span class="pre">src.auxiliary_functions.</span></span><span class="sig-name descname"><span class="pre">modify_opinions_method_1</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">opinions</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">des_mean</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">des_abs_mean</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">epsilon</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.05</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_counter</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">100</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">show_process</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">limits</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">(-1,</span> <span class="pre">1)</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/auxiliary_functions.html#modify_opinions_method_1"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.auxiliary_functions.modify_opinions_method_1" title="Permalink to this definition"></a></dt>
+<dd><p>This function modifies a given opinion distribution to create an opinion distribution with the desired mean and
+absolute value mean using method 1</p>
+<section id="id19">
+<h3>Parameters<a class="headerlink" href="#id19" title="Permalink to this heading"></a></h3>
+<p>opinions: the original opinions
+des_mean: the desired opinion mean
+des_abs_mean: the desired opinion mean absolute value
+epsilon: the tolerance for the infinity norm
+max_counter: the maximum number of iterations to find the desired opinions
+show_process: boolean determining whether to show the creation process or not
+limits: a tuple with the upper and lower limits of the opinions</p>
+</section>
+<section id="id20">
+<h3>Returns<a class="headerlink" href="#id20" title="Permalink to this heading"></a></h3>
+<p>the new, modified opinions</p>
+</section>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="src.auxiliary_functions.modify_opinions_method_2">
+<span class="sig-prename descclassname"><span class="pre">src.auxiliary_functions.</span></span><span class="sig-name descname"><span class="pre">modify_opinions_method_2</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">opinions</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">des_mean</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">des_abs_mean</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">epsilon</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.05</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_counter</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">100</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">show_process</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">limits</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">(-1,</span> <span class="pre">1)</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/auxiliary_functions.html#modify_opinions_method_2"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.auxiliary_functions.modify_opinions_method_2" title="Permalink to this definition"></a></dt>
+<dd><p>This function modifies a given opinion distribution to create an opinion distribution with the desired mean and
+absolute value mean using method 2</p>
+<section id="id21">
+<h3>Parameters<a class="headerlink" href="#id21" title="Permalink to this heading"></a></h3>
+<p>opinions: the original opinions
+des_mean: the desired opinion mean
+des_abs_mean: the desired opinion mean absolute value
+epsilon: the tolerance for the infinity norm
+max_counter: the maximum number of iterations to find the desired opinions
+show_process: boolean determining whether to show the creation process or not
+limits: a tuple with the upper and lower limits of the opinions</p>
+</section>
+<section id="id22">
+<h3>Returns<a class="headerlink" href="#id22" title="Permalink to this heading"></a></h3>
+<p>the new, modified opinions</p>
+</section>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="src.auxiliary_functions.opinion2color">
+<span class="sig-prename descclassname"><span class="pre">src.auxiliary_functions.</span></span><span class="sig-name descname"><span class="pre">opinion2color</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">opinion_model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">agent_parameter</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/auxiliary_functions.html#opinion2color"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.auxiliary_functions.opinion2color" title="Permalink to this definition"></a></dt>
+<dd><p>This function transforms agent parameter to colors, depending on the model.</p>
+<section id="id23">
+<h3>Parameters<a class="headerlink" href="#id23" title="Permalink to this heading"></a></h3>
+<p>opinion_model: the model name or identifier
+agent_parameter: the agent parameters</p>
+</section>
+<section id="id24">
+<h3>Returns<a class="headerlink" href="#id24" title="Permalink to this heading"></a></h3>
+<p>a color in a form of an RGB triplet</p>
+</section>
+</dd></dl>
+
+</section>
+<section id="module-src.basic_creation">
+<span id="src-basic-creation-module"></span><h2>src.basic_creation module<a class="headerlink" href="#module-src.basic_creation" title="Permalink to this heading"></a></h2>
+<section id="basic-creation-f-abm-src-basic-creation">
+<h3>Basic Creation, (<code class="xref py py-mod docutils literal notranslate"><span class="pre">f_abm.src.basic_creation</span></code>)<a class="headerlink" href="#basic-creation-f-abm-src-basic-creation" title="Permalink to this heading"></a></h3>
+<section id="id25">
+<h4>Description<a class="headerlink" href="#id25" title="Permalink to this heading"></a></h4>
+<blockquote>
+<div><p>This module contains all the basic creation functions. It is primarily aimed at creating opinion distributions
+and agent parameters, since for digraph creation there is a separate module</p>
+</div></blockquote>
+</section>
+<section id="id26">
+<h4>Functions<a class="headerlink" href="#id26" title="Permalink to this heading"></a></h4>
+<blockquote>
+<div><ul class="simple">
+<li><p>a_random_digraph</p></li>
+<li><p>a_random_initial_opinion_distribution</p></li>
+<li><p>a_random_inner_trait_assignation</p></li>
+<li><p>create_inner_traits_local</p></li>
+<li><p>create_many_opinions</p></li>
+<li><p>create_many_inner_traits</p></li>
+</ul>
+</div></blockquote>
+</section>
+</section>
+<dl class="py function">
+<dt class="sig sig-object py" id="src.basic_creation.a_random_digraph">
+<span class="sig-prename descclassname"><span class="pre">src.basic_creation.</span></span><span class="sig-name descname"><span class="pre">a_random_digraph</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">num_agents</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/basic_creation.html#a_random_digraph"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.basic_creation.a_random_digraph" title="Permalink to this definition"></a></dt>
+<dd><p>This function returns a random digraph, NOT a digraph with random topology, but a random digraph</p>
+<section id="id27">
+<h3>Parameters<a class="headerlink" href="#id27" title="Permalink to this heading"></a></h3>
+<p>num_agents: number of agents, by default 10</p>
+</section>
+<section id="id28">
+<h3>Returns<a class="headerlink" href="#id28" title="Permalink to this heading"></a></h3>
+<p>a random digraph</p>
+</section>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="src.basic_creation.a_random_initial_opinion_distribution">
+<span class="sig-prename descclassname"><span class="pre">src.basic_creation.</span></span><span class="sig-name descname"><span class="pre">a_random_initial_opinion_distribution</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">num_agents</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/basic_creation.html#a_random_initial_opinion_distribution"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.basic_creation.a_random_initial_opinion_distribution" title="Permalink to this definition"></a></dt>
+<dd><p>This function returns a random initial opinion distribution</p>
+<section id="id29">
+<h3>Parameters<a class="headerlink" href="#id29" title="Permalink to this heading"></a></h3>
+<p>num_agents: number of agents, by default 10</p>
+</section>
+<section id="id30">
+<h3>Returns<a class="headerlink" href="#id30" title="Permalink to this heading"></a></h3>
+<p>A random initial opinion distribution</p>
+</section>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="src.basic_creation.a_random_inner_trait_assignation">
+<span class="sig-prename descclassname"><span class="pre">src.basic_creation.</span></span><span class="sig-name descname"><span class="pre">a_random_inner_trait_assignation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">num_agents</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/basic_creation.html#a_random_inner_trait_assignation"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.basic_creation.a_random_inner_trait_assignation" title="Permalink to this definition"></a></dt>
+<dd><p>This function returns a random inner trait assignation</p>
+<section id="id31">
+<h3>Parameters<a class="headerlink" href="#id31" title="Permalink to this heading"></a></h3>
+<p>num_agents: number of agents</p>
+</section>
+<section id="id32">
+<h3>Returns<a class="headerlink" href="#id32" title="Permalink to this heading"></a></h3>
+<p>Inner trait assignation</p>
+</section>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="src.basic_creation.create_inner_traits_local">
+<span class="sig-prename descclassname"><span class="pre">src.basic_creation.</span></span><span class="sig-name descname"><span class="pre">create_inner_traits_local</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">num_agents</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">100</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/basic_creation.html#create_inner_traits_local"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.basic_creation.create_inner_traits_local" title="Permalink to this definition"></a></dt>
+<dd><p>Function to create randomly inner trait assignations, these are the agent parameters of the Classification-based
+model</p>
+<section id="id33">
+<h3>Parameters<a class="headerlink" href="#id33" title="Permalink to this heading"></a></h3>
+<p>num_agents: number of agents, by default 100</p>
+</section>
+<section id="id34">
+<h3>Returns<a class="headerlink" href="#id34" title="Permalink to this heading"></a></h3>
+<p>inner traits, it is a list of lists, the first element is alpha, the second is beta (the weights of the conformist
+and radical trait, respectively)</p>
+</section>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="src.basic_creation.create_many_inner_traits">
+<span class="sig-prename descclassname"><span class="pre">src.basic_creation.</span></span><span class="sig-name descname"><span class="pre">create_many_inner_traits</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">num_agents</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">100</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">file_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'standard_inner_traits'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">grid</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">show_result</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/basic_creation.html#create_many_inner_traits"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.basic_creation.create_many_inner_traits" title="Permalink to this definition"></a></dt>
+<dd><p>This function creates and saves many inner traits to be used later</p>
+<section id="id35">
+<h3>Parameters<a class="headerlink" href="#id35" title="Permalink to this heading"></a></h3>
+<p>num_agents: the number of agents
+file_name: name of the file created
+grid: it is the reference grid to create the inner traits
+show_result: a boolean determining of the resulting inner traits are shown</p>
+</section>
+<section id="id36">
+<h3>Returns<a class="headerlink" href="#id36" title="Permalink to this heading"></a></h3>
+<p>A list of numpy arrays with ‘num_agents’ rows and 2 columns</p>
+</section>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="src.basic_creation.create_many_opinions">
+<span class="sig-prename descclassname"><span class="pre">src.basic_creation.</span></span><span class="sig-name descname"><span class="pre">create_many_opinions</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">num_agents</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">100</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">file_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'standard_initial_opinions'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">grid</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">show_result</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/basic_creation.html#create_many_opinions"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.basic_creation.create_many_opinions" title="Permalink to this definition"></a></dt>
+<dd><p>This function creates and saves many initial opinions to be used later</p>
+<section id="id37">
+<h3>Parameters<a class="headerlink" href="#id37" title="Permalink to this heading"></a></h3>
+<p>num_agents: the number of agents, by default 100
+file_name: name of the file created, by default ‘standard_initial_opinions’
+grid: it is the reference grid to create the initial opinions
+show_result: show the Agreement Plot of the resulting opinions. By default, it is false</p>
+</section>
+<section id="id38">
+<h3>Returns<a class="headerlink" href="#id38" title="Permalink to this heading"></a></h3>
+</section>
+</dd></dl>
+
+</section>
+<section id="module-src.basic_creation_test">
+<span id="src-basic-creation-test-module"></span><h2>src.basic_creation_test module<a class="headerlink" href="#module-src.basic_creation_test" title="Permalink to this heading"></a></h2>
+<section id="basic-creation-test-f-abm-src-basic-creation-test">
+<h3>Basic Creation Test, (<code class="xref py py-mod docutils literal notranslate"><span class="pre">f_abm.src.basic_creation_test</span></code>)<a class="headerlink" href="#basic-creation-test-f-abm-src-basic-creation-test" title="Permalink to this heading"></a></h3>
+<section id="id39">
+<h4>Description<a class="headerlink" href="#id39" title="Permalink to this heading"></a></h4>
+<blockquote>
+<div><p>This module contains all the test functions for the ‘basic_creation.py’ module</p>
+</div></blockquote>
+</section>
+<section id="id40">
+<h4>Functions<a class="headerlink" href="#id40" title="Permalink to this heading"></a></h4>
+<blockquote>
+<div><ul class="simple">
+<li><p>test_create_random_numbers</p></li>
+</ul>
+</div></blockquote>
+</section>
+</section>
+<dl class="py function">
+<dt class="sig sig-object py" id="src.basic_creation_test.test_create_random_numbers">
+<span class="sig-prename descclassname"><span class="pre">src.basic_creation_test.</span></span><span class="sig-name descname"><span class="pre">test_create_random_numbers</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/basic_creation_test.html#test_create_random_numbers"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.basic_creation_test.test_create_random_numbers" title="Permalink to this definition"></a></dt>
+<dd><p>Test function for the ‘create_random_numbers’ function, it checks that the returned values are within the desired
+interval</p>
+</dd></dl>
+
+</section>
+<section id="module-src.code_test">
+<span id="src-code-test-module"></span><h2>src.code_test module<a class="headerlink" href="#module-src.code_test" title="Permalink to this heading"></a></h2>
+<section id="code-test-f-abm-src-code-test">
+<h3>Code Test, (<code class="xref py py-mod docutils literal notranslate"><span class="pre">f_abm.src.code_test</span></code>)<a class="headerlink" href="#code-test-f-abm-src-code-test" title="Permalink to this heading"></a></h3>
+<section id="id41">
+<h4>Description<a class="headerlink" href="#id41" title="Permalink to this heading"></a></h4>
+<blockquote>
+<div><p>This module contains example functions aimed at showing newcomers how to use some of the functions in the program</p>
+</div></blockquote>
+</section>
+<section id="id42">
+<h4>Functions<a class="headerlink" href="#id42" title="Permalink to this heading"></a></h4>
+<blockquote>
+<div><ul class="simple">
+<li><p>example_1</p></li>
+<li><p>example_2</p></li>
+<li><p>example_3</p></li>
+<li><p>example_4</p></li>
+</ul>
+</div></blockquote>
+</section>
+</section>
+<dl class="py function">
+<dt class="sig sig-object py" id="src.code_test.example_1">
+<span class="sig-prename descclassname"><span class="pre">src.code_test.</span></span><span class="sig-name descname"><span class="pre">example_1</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">num_agents</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">100</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/code_test.html#example_1"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.code_test.example_1" title="Permalink to this definition"></a></dt>
+<dd><p>Example 1, which plots the histogram of some opinion distribution created at random</p>
+<section id="id43">
+<h3>Parameters<a class="headerlink" href="#id43" title="Permalink to this heading"></a></h3>
+<p>num_agents: number of agents of the initial opinion distribution, by default 100</p>
+</section>
+<section id="id44">
+<h3>Returns<a class="headerlink" href="#id44" title="Permalink to this heading"></a></h3>
+<p>Nothing</p>
+</section>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="src.code_test.example_2">
+<span class="sig-prename descclassname"><span class="pre">src.code_test.</span></span><span class="sig-name descname"><span class="pre">example_2</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">num_agents</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/code_test.html#example_2"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.code_test.example_2" title="Permalink to this definition"></a></dt>
+<dd><p>Example 2. It shows the opinion evolution of ‘num_agents’ agents according to the Classification-based model. The
+initial opinions, agent parameters, and underlying digraph are created at random.</p>
+<section id="id45">
+<h3>Parameters<a class="headerlink" href="#id45" title="Permalink to this heading"></a></h3>
+<p>num_agents: number of agents in the simulation.</p>
+</section>
+<section id="id46">
+<h3>Returns<a class="headerlink" href="#id46" title="Permalink to this heading"></a></h3>
+<p>Nothing</p>
+</section>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="src.code_test.example_3">
+<span class="sig-prename descclassname"><span class="pre">src.code_test.</span></span><span class="sig-name descname"><span class="pre">example_3</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/code_test.html#example_3"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.code_test.example_3" title="Permalink to this definition"></a></dt>
+<dd><p>Example 3. This example simply plots a digraph, it is better to make it more interesting, such as plotting various
+digraphs with different topologies and colors.</p>
+<section id="id47">
+<h3>Returns<a class="headerlink" href="#id47" title="Permalink to this heading"></a></h3>
+<p>Nothing</p>
+</section>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="src.code_test.example_4">
+<span class="sig-prename descclassname"><span class="pre">src.code_test.</span></span><span class="sig-name descname"><span class="pre">example_4</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/code_test.html#example_4"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.code_test.example_4" title="Permalink to this definition"></a></dt>
+<dd><p>Example 4. This is for data analysis, needs to be improved</p>
+<section id="id48">
+<h3>Returns<a class="headerlink" href="#id48" title="Permalink to this heading"></a></h3>
+<p>Nothing</p>
+</section>
+</dd></dl>
+
+</section>
+<section id="module-src.data_analysis_functions">
+<span id="src-data-analysis-functions-module"></span><h2>src.data_analysis_functions module<a class="headerlink" href="#module-src.data_analysis_functions" title="Permalink to this heading"></a></h2>
+<section id="data-analysis-f-abm-src-data-analysis-functions">
+<h3>Data Analysis, (<code class="xref py py-mod docutils literal notranslate"><span class="pre">f_abm.src.data_analysis_functions</span></code>)<a class="headerlink" href="#data-analysis-f-abm-src-data-analysis-functions" title="Permalink to this heading"></a></h3>
+<section id="id49">
+<h4>Description<a class="headerlink" href="#id49" title="Permalink to this heading"></a></h4>
+<blockquote>
+<div><p>This module contains all the data analysis related functions</p>
+</div></blockquote>
+</section>
+<section id="id50">
+<h4>Functions<a class="headerlink" href="#id50" title="Permalink to this heading"></a></h4>
+<blockquote>
+<div><ul class="simple">
+<li><p>gather_data</p></li>
+<li><p>obtain_features</p></li>
+<li><p>feature_computation</p></li>
+<li><p>compute_mean_opinion_difference</p></li>
+<li><p>compute_opinion_metrics_by_agent_type</p></li>
+<li><p>compute_trait_allocation_metrics</p></li>
+<li><p>compute_opinion_metrics</p></li>
+<li><p>compute_inner_trait_metrics</p></li>
+<li><p>compute_digraph_metrics</p></li>
+<li><p>compute_balance_index</p></li>
+<li><p>compute_bidirectional_coefficient</p></li>
+<li><p>compute_degrees</p></li>
+<li><p>compute_clustering</p></li>
+</ul>
+</div></blockquote>
+</section>
+</section>
+<dl class="py function">
+<dt class="sig sig-object py" id="src.data_analysis_functions.compute_balance_index">
+<span class="sig-prename descclassname"><span class="pre">src.data_analysis_functions.</span></span><span class="sig-name descname"><span class="pre">compute_balance_index</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">adjacency_matrix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">default_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">print_information</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/data_analysis_functions.html#compute_balance_index"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.data_analysis_functions.compute_balance_index" title="Permalink to this definition"></a></dt>
+<dd><p>Function to approximate the balance index of a signed network</p>
+<section id="id51">
+<h3>Parameters<a class="headerlink" href="#id51" title="Permalink to this heading"></a></h3>
+<p>adjacency_matrix: the adjacency matrix
+default_type: ID of the default digraph
+print_information: Boolean determining if the computed values are printed</p>
+</section>
+<section id="id52">
+<h3>Returns<a class="headerlink" href="#id52" title="Permalink to this heading"></a></h3>
+<p>The balance index</p>
+</section>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="src.data_analysis_functions.compute_bidirectional_coefficient">
+<span class="sig-prename descclassname"><span class="pre">src.data_analysis_functions.</span></span><span class="sig-name descname"><span class="pre">compute_bidirectional_coefficient</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">adjacency_matrix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">default_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">print_information</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/data_analysis_functions.html#compute_bidirectional_coefficient"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.data_analysis_functions.compute_bidirectional_coefficient" title="Permalink to this definition"></a></dt>
+<dd><p>This function computes the bidirectional coefficient of a given adjacency matrix</p>
+<section id="id53">
+<h3>Parameters<a class="headerlink" href="#id53" title="Permalink to this heading"></a></h3>
+<p>adjacency_matrix: the adjacency matrix.
+default_type: ID of the default digraph
+print_information: Boolean determining if the computed values are printed</p>
+</section>
+<section id="id54">
+<h3>Returns<a class="headerlink" href="#id54" title="Permalink to this heading"></a></h3>
+<p>A float between 0.0 and 1.0 with the bidirectional coefficient</p>
+</section>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="src.data_analysis_functions.compute_clustering">
+<span class="sig-prename descclassname"><span class="pre">src.data_analysis_functions.</span></span><span class="sig-name descname"><span class="pre">compute_clustering</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">adjacency_matrix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">default_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">print_information</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/data_analysis_functions.html#compute_clustering"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.data_analysis_functions.compute_clustering" title="Permalink to this definition"></a></dt>
+<dd><p>This is a function to compute the clustering mean and variance.</p>
+<section id="id55">
+<h3>Parameters<a class="headerlink" href="#id55" title="Permalink to this heading"></a></h3>
+<p>adjacency_matrix: the adjacency matrix
+default_type: ID of the default digraph
+print_information: Boolean determining if the computed values are printed</p>
+</section>
+<section id="id56">
+<h3>Returns<a class="headerlink" href="#id56" title="Permalink to this heading"></a></h3>
+<p>A numpy array with the mean and the variance of the clustering</p>
+</section>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="src.data_analysis_functions.compute_degrees">
+<span class="sig-prename descclassname"><span class="pre">src.data_analysis_functions.</span></span><span class="sig-name descname"><span class="pre">compute_degrees</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">adjacency_matrix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">default_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">print_information</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/data_analysis_functions.html#compute_degrees"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.data_analysis_functions.compute_degrees" title="Permalink to this definition"></a></dt>
+<dd><p>Function used to compute the metrics related to the degree of the nodes, namely, the mean and variance of the in and
+out degrees</p>
+<section id="id57">
+<h3>Parameters<a class="headerlink" href="#id57" title="Permalink to this heading"></a></h3>
+<p>adjacency_matrix: the adjacency matrix
+default_type: ID of the default digraph
+print_information: Boolean determining if the computed values are printed</p>
+</section>
+<section id="id58">
+<h3>Returns<a class="headerlink" href="#id58" title="Permalink to this heading"></a></h3>
+<p>A numpy array with 4 numbers corresponding, in order, to the mean in-degree, in-degree variance, mean out-degree,
+and out-degree variance</p>
+</section>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="src.data_analysis_functions.compute_digraph_metrics">
+<span class="sig-prename descclassname"><span class="pre">src.data_analysis_functions.</span></span><span class="sig-name descname"><span class="pre">compute_digraph_metrics</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">adjacency_matrix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">default_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">print_information</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/data_analysis_functions.html#compute_digraph_metrics"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.data_analysis_functions.compute_digraph_metrics" title="Permalink to this definition"></a></dt>
+<dd><p>This is a function used to compute several digraph metrics at once</p>
+<section id="id59">
+<h3>Parameters<a class="headerlink" href="#id59" title="Permalink to this heading"></a></h3>
+<p>adjacency_matrix: the adjacency matrix for which the metrics will be computed
+default_type: ID of the default adjacency matrix
+print_information: whether to print information or not</p>
+</section>
+<section id="id60">
+<h3>Returns<a class="headerlink" href="#id60" title="Permalink to this heading"></a></h3>
+<p>The digraph metrics</p>
+</section>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="src.data_analysis_functions.compute_inner_trait_metrics">
+<span class="sig-prename descclassname"><span class="pre">src.data_analysis_functions.</span></span><span class="sig-name descname"><span class="pre">compute_inner_trait_metrics</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">inner_traits</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_agents</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">print_information</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/data_analysis_functions.html#compute_inner_trait_metrics"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.data_analysis_functions.compute_inner_trait_metrics" title="Permalink to this definition"></a></dt>
+<dd><p>This function computes the metrics of the inner trait assignation</p>
+<section id="id61">
+<h3>Parameters<a class="headerlink" href="#id61" title="Permalink to this heading"></a></h3>
+<p>inner_traits: the inner trait assignation
+num_agents: the number of agents
+print_information: boolean that determines if the information is printed</p>
+</section>
+<section id="id62">
+<h3>Returns<a class="headerlink" href="#id62" title="Permalink to this heading"></a></h3>
+<p>The inner trait metrics</p>
+</section>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="src.data_analysis_functions.compute_mean_opinion_difference">
+<span class="sig-prename descclassname"><span class="pre">src.data_analysis_functions.</span></span><span class="sig-name descname"><span class="pre">compute_mean_opinion_difference</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">adjacency_matrix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">opinion_distribution</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_agents</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">print_information</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/data_analysis_functions.html#compute_mean_opinion_difference"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.data_analysis_functions.compute_mean_opinion_difference" title="Permalink to this definition"></a></dt>
+<dd><p>This function computes the mean opinion difference, given an adjacency matrix and an opinion distribution</p>
+<section id="id63">
+<h3>Parameters<a class="headerlink" href="#id63" title="Permalink to this heading"></a></h3>
+<p>adjacency_matrix: adjacency matrix
+opinion_distribution: opinion distribution
+num_agents: number of agents
+print_information: boolean determining whether the metric is shown or not</p>
+</section>
+<section id="id64">
+<h3>Returns<a class="headerlink" href="#id64" title="Permalink to this heading"></a></h3>
+<p>Mean opinion difference</p>
+</section>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="src.data_analysis_functions.compute_opinion_metrics">
+<span class="sig-prename descclassname"><span class="pre">src.data_analysis_functions.</span></span><span class="sig-name descname"><span class="pre">compute_opinion_metrics</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">opinion_distribution</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_agents</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">print_information</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/data_analysis_functions.html#compute_opinion_metrics"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.data_analysis_functions.compute_opinion_metrics" title="Permalink to this definition"></a></dt>
+<dd><p>This function computes the mean and mean of the absolute value of the opinion distribution</p>
+<section id="id65">
+<h3>Parameters<a class="headerlink" href="#id65" title="Permalink to this heading"></a></h3>
+<p>opinion_distribution: the opinion distribution
+num_agents: number of agents
+print_information: boolean determining whether the print the information or not</p>
+</section>
+<section id="id66">
+<h3>Returns<a class="headerlink" href="#id66" title="Permalink to this heading"></a></h3>
+<p>The mean and mean of the absolute value of the opinion distribution</p>
+</section>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="src.data_analysis_functions.compute_opinion_metrics_by_agent_type">
+<span class="sig-prename descclassname"><span class="pre">src.data_analysis_functions.</span></span><span class="sig-name descname"><span class="pre">compute_opinion_metrics_by_agent_type</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">opinion_distribution</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">inner_traits</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_agents</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">print_information</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/data_analysis_functions.html#compute_opinion_metrics_by_agent_type"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.data_analysis_functions.compute_opinion_metrics_by_agent_type" title="Permalink to this definition"></a></dt>
+<dd><p>This function computes the opinion metric by agent type</p>
+<section id="id67">
+<h3>Parameters<a class="headerlink" href="#id67" title="Permalink to this heading"></a></h3>
+<p>opinion_distribution: the opinion distribution
+inner_traits: the inner traits
+num_agents: the number of agents
+print_information: boolean determining whether the metric is shown or not</p>
+</section>
+<section id="id68">
+<h3>Returns<a class="headerlink" href="#id68" title="Permalink to this heading"></a></h3>
+<p>The opinion metric by agent type</p>
+</section>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="src.data_analysis_functions.compute_trait_allocation_metrics">
+<span class="sig-prename descclassname"><span class="pre">src.data_analysis_functions.</span></span><span class="sig-name descname"><span class="pre">compute_trait_allocation_metrics</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">adjacency_matrix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">inner_traits</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_agents</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">print_information</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/data_analysis_functions.html#compute_trait_allocation_metrics"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.data_analysis_functions.compute_trait_allocation_metrics" title="Permalink to this definition"></a></dt>
+<dd><p>This function computes the mean inner trait difference between neighbours in the digraph</p>
+<section id="id69">
+<h3>Parameters<a class="headerlink" href="#id69" title="Permalink to this heading"></a></h3>
+<p>adjacency_matrix: the corresponding digraph
+inner_traits: the corresponding inner trait assignation
+num_agents: the number of agents
+print_information: boolean determining whether the metric is shown or not</p>
+</section>
+<section id="id70">
+<h3>Returns<a class="headerlink" href="#id70" title="Permalink to this heading"></a></h3>
+<p>The mean inner trait difference between neighbours in the digraph</p>
+</section>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="src.data_analysis_functions.feature_computation">
+<span class="sig-prename descclassname"><span class="pre">src.data_analysis_functions.</span></span><span class="sig-name descname"><span class="pre">feature_computation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">num_agents</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">print_information</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">adjacency_matrix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">opinion_distribution</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">inner_trait_assignations</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/data_analysis_functions.html#feature_computation"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.data_analysis_functions.feature_computation" title="Permalink to this definition"></a></dt>
+<dd><p>Function that computes the features for each sample</p>
+<section id="id71">
+<h3>Parameters<a class="headerlink" href="#id71" title="Permalink to this heading"></a></h3>
+<p>num_agents: number of agents
+print_information: whether to print the information or not
+adjacency_matrix: the adjacency matrix
+opinion_distribution: the initial opinion distribution
+inner_trait_assignations: the inner trait assignation</p>
+</section>
+<section id="id72">
+<h3>Returns<a class="headerlink" href="#id72" title="Permalink to this heading"></a></h3>
+<p>The computed features</p>
+</section>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="src.data_analysis_functions.gather_data">
+<span class="sig-prename descclassname"><span class="pre">src.data_analysis_functions.</span></span><span class="sig-name descname"><span class="pre">gather_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">num_agents</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_iterations</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">global_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'default_name'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/data_analysis_functions.html#gather_data"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.data_analysis_functions.gather_data" title="Permalink to this definition"></a></dt>
+<dd><p>This function perform the three steps to gather the data for the training of the algorithms to predict the opinions.
+The three steps are to 1. create the inner traits, 2. create the initial opinions, and 3. compute the features</p>
+<section id="id73">
+<h3>Parameters<a class="headerlink" href="#id73" title="Permalink to this heading"></a></h3>
+<p>num_agents: number of agents in the simulations, by default 1000
+num_iterations: number of iterations or ‘samples’ by default 1000
+global_name: the start of the name of the files where the resulting data will be saved</p>
+</section>
+<section id="id74">
+<h3>Returns<a class="headerlink" href="#id74" title="Permalink to this heading"></a></h3>
+<p>Nothing</p>
+</section>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="src.data_analysis_functions.obtain_features">
+<span class="sig-prename descclassname"><span class="pre">src.data_analysis_functions.</span></span><span class="sig-name descname"><span class="pre">obtain_features</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">num_agents</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_iterations</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">100</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">file_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">traits_file_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">opinions_file_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/data_analysis_functions.html#obtain_features"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.data_analysis_functions.obtain_features" title="Permalink to this definition"></a></dt>
+<dd><p>File to create the data for the training, validation, and testing</p>
+<section id="id75">
+<h3>Parameters<a class="headerlink" href="#id75" title="Permalink to this heading"></a></h3>
+<p>num_agents: number of agents in all the simulations
+num_iterations: number of iterations
+file_name: name of the Excel data to print the output to
+traits_file_name: name of the file with the inner traits
+opinions_file_name: name of the file with the initial opinions</p>
+</section>
+<section id="id76">
+<h3>Returns<a class="headerlink" href="#id76" title="Permalink to this heading"></a></h3>
+<p>None</p>
+</section>
+</dd></dl>
+
+</section>
+<section id="module-src.digraph_creation">
+<span id="src-digraph-creation-module"></span><h2>src.digraph_creation module<a class="headerlink" href="#module-src.digraph_creation" title="Permalink to this heading"></a></h2>
+<section id="digraph-creation-f-abm-src-digraph-creation">
+<h3>Digraph Creation, (<code class="xref py py-mod docutils literal notranslate"><span class="pre">f_abm.src.digraph_creation</span></code>)<a class="headerlink" href="#digraph-creation-f-abm-src-digraph-creation" title="Permalink to this heading"></a></h3>
+<section id="id77">
+<h4>Description<a class="headerlink" href="#id77" title="Permalink to this heading"></a></h4>
+<blockquote>
+<div><p>This module contains all the digraph creation functions.</p>
+</div></blockquote>
+</section>
+<section id="id78">
+<h4>Functions<a class="headerlink" href="#id78" title="Permalink to this heading"></a></h4>
+<blockquote>
+<div><ul class="simple">
+<li><p>default_digraph</p></li>
+<li><p>complete_digraph</p></li>
+<li><p>ring_digraph</p></li>
+<li><p>small_world_digraph</p></li>
+<li><p>random_digraph</p></li>
+</ul>
+</div></blockquote>
+</section>
+</section>
+<dl class="py function">
+<dt class="sig sig-object py" id="src.digraph_creation.complete_digraph">
+<span class="sig-prename descclassname"><span class="pre">src.digraph_creation.</span></span><span class="sig-name descname"><span class="pre">complete_digraph</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">num_agents</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">100</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">row_stochastic</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">positive_edge_ratio</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/digraph_creation.html#complete_digraph"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.digraph_creation.complete_digraph" title="Permalink to this definition"></a></dt>
+<dd><p>This is a function that returns a complete digraph</p>
+<section id="id79">
+<h3>Parameters<a class="headerlink" href="#id79" title="Permalink to this heading"></a></h3>
+<p>num_agents: Is the number of agents (and therefore vertices) of the digraph. By default, it is 100
+row_stochastic: A boolean that determines if the returned digraph must have a row-stochastic matrix. By default,
+this is False
+positive_edge_ratio: A floating number between 0 and 1 that determines the ratio of positive edges in the digraph.
+By default, it is 1</p>
+</section>
+<section id="id80">
+<h3>Returns<a class="headerlink" href="#id80" title="Permalink to this heading"></a></h3>
+<p>The adjacency matrix of the corresponding generalised ring digraph</p>
+</section>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="src.digraph_creation.default_digraph">
+<span class="sig-prename descclassname"><span class="pre">src.digraph_creation.</span></span><span class="sig-name descname"><span class="pre">default_digraph</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">default_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_agents</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/digraph_creation.html#default_digraph"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.digraph_creation.default_digraph" title="Permalink to this definition"></a></dt>
+<dd><p>This function returns pre-made digraphs to be used primarily as default for functions. The pre-made digraph that
+will be called for default will always be the one with default_type=0</p>
+<section id="id81">
+<h3>Parameters<a class="headerlink" href="#id81" title="Permalink to this heading"></a></h3>
+<p>default_type: ID of the default digraph
+num_agents: number of agents</p>
+</section>
+<section id="id82">
+<h3>Returns<a class="headerlink" href="#id82" title="Permalink to this heading"></a></h3>
+<p>The corresponding adjacency matrix</p>
+</section>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="src.digraph_creation.random_digraph">
+<span class="sig-prename descclassname"><span class="pre">src.digraph_creation.</span></span><span class="sig-name descname"><span class="pre">random_digraph</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">num_agents</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">100</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">row_stochastic</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">positive_edge_ratio</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">edge_probability</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.5</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/digraph_creation.html#random_digraph"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.digraph_creation.random_digraph" title="Permalink to this definition"></a></dt>
+<dd><p>This function creates a digraph with random topology. Note that not all the edges are random. The resulting
+adjacency matrix always has non-zero elements in the diagonal, indicating the self-loop</p>
+<section id="id83">
+<h3>Parameters<a class="headerlink" href="#id83" title="Permalink to this heading"></a></h3>
+<p>num_agents: number of agents of the digraph, by default 100
+row_stochastic: boolean indicating if the adjacency matrix is row-stochastic
+positive_edge_ratio: the positive edge ratio
+edge_probability: the probability that an edge will exist</p>
+</section>
+<section id="id84">
+<h3>Returns<a class="headerlink" href="#id84" title="Permalink to this heading"></a></h3>
+<p>the adjacency matrix</p>
+</section>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="src.digraph_creation.ring_digraph">
+<span class="sig-prename descclassname"><span class="pre">src.digraph_creation.</span></span><span class="sig-name descname"><span class="pre">ring_digraph</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">num_agents</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">100</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">topology_signature</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">row_stochastic</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">positive_edge_ratio</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_random_edges_it</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/digraph_creation.html#ring_digraph"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.digraph_creation.ring_digraph" title="Permalink to this definition"></a></dt>
+<dd><p>This is a function that returns a ring digraph</p>
+<section id="id85">
+<h3>Parameters<a class="headerlink" href="#id85" title="Permalink to this heading"></a></h3>
+<p>num_agents: Is the number of agents (and therefore vertices) of the digraph. By default, it is 100
+topology_signature: Is a list with the relative indices of the vertices that influence each agent. By default, it
+is [0, 1]
+row_stochastic: A boolean that determines if the returned digraph must have a row-stochastic matrix. By default,
+this is False
+positive_edge_ratio: A floating number between 0 and 1 that determines the ratio of positive edges in the digraph.
+By default, it is 1
+num_random_edges_it: number of iterations to add random edges</p>
+</section>
+<section id="id86">
+<h3>Returns<a class="headerlink" href="#id86" title="Permalink to this heading"></a></h3>
+<p>The adjacency matrix of the corresponding generalised ring digraph</p>
+</section>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="src.digraph_creation.small_world_digraph">
+<span class="sig-prename descclassname"><span class="pre">src.digraph_creation.</span></span><span class="sig-name descname"><span class="pre">small_world_digraph</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">num_agents</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">100</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">topology_signature</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">row_stochastic</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">positive_edge_ratio</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">change_probability</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">reverse_probability</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bidirectional_probability</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_random_edges_it</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/digraph_creation.html#small_world_digraph"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.digraph_creation.small_world_digraph" title="Permalink to this definition"></a></dt>
+<dd><p>This is a function that creates a digraph with small-world topology</p>
+<section id="id87">
+<h3>Parameters<a class="headerlink" href="#id87" title="Permalink to this heading"></a></h3>
+<p>num_agents: number of agents, by default 100
+topology_signature: the topology signature of the underlying ring digraph
+row_stochastic: whether the adjacency matrix is row-stochastic, by default False
+positive_edge_ratio: the positive edge ratio, by default 1
+change_probability: the probability of edges changing target, it accepts a number between 0.0 and 1.0 or a
+list of ‘num_agents’ numbers between 0.0 and 1.0. Each element in the list corresponds to the change probability
+of the corresponding vertex
+reverse_probability: the probability of edges reversing target, it accepts a number between 0.0 and 1.0 or a
+list of ‘num_agents’ numbers between 0.0 and 1.0. Each element in the list corresponds to the reverse
+probability of the corresponding vertex
+bidirectional_probability: the probability of edges being bidirectional, it accepts a number between 0.0 and
+1.0 or a list of ‘num_agents’ numbers between 0.0 and 1.0. Each element in the list corresponds to the
+probability of the corresponding vertex being bidirectional
+num_random_edges_it: number of iterations to add random edges</p>
+</section>
+<section id="id88">
+<h3>Returns<a class="headerlink" href="#id88" title="Permalink to this heading"></a></h3>
+<p>The adjacency matrix associated with the corresponding small-world digraph</p>
+</section>
+</dd></dl>
+
+</section>
+<section id="module-src.model_functions">
+<span id="src-model-functions-module"></span><h2>src.model_functions module<a class="headerlink" href="#module-src.model_functions" title="Permalink to this heading"></a></h2>
+<section id="model-functions-f-abm-src-model-functions">
+<h3>Model Functions, (<code class="xref py py-mod docutils literal notranslate"><span class="pre">f_abm.src.model_functions</span></code>)<a class="headerlink" href="#model-functions-f-abm-src-model-functions" title="Permalink to this heading"></a></h3>
+<section id="id89">
+<h4>Description<a class="headerlink" href="#id89" title="Permalink to this heading"></a></h4>
+<blockquote>
+<div><p>This module contains all the model related functions, it includes all the functions to execute models, as well as
+functions to execute any model</p>
+</div></blockquote>
+<section id="id90">
+<h5>Functions<a class="headerlink" href="#id90" title="Permalink to this heading"></a></h5>
+<blockquote>
+<div><ul class="simple">
+<li><p>model_evolution</p></li>
+<li><p>cb_model_step</p></li>
+</ul>
+</div></blockquote>
+</section>
+</section>
+</section>
+<dl class="py function">
+<dt class="sig sig-object py" id="src.model_functions.cb_model_step">
+<span class="sig-prename descclassname"><span class="pre">src.model_functions.</span></span><span class="sig-name descname"><span class="pre">cb_model_step</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">initial_opinions</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">adjacency_matrix</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">agent_parameters</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model_parameters</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">(0.4,</span> <span class="pre">2,</span> <span class="pre">5)</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/model_functions.html#cb_model_step"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.model_functions.cb_model_step" title="Permalink to this definition"></a></dt>
+<dd><p>This function takes a step with the Classification-based model</p>
+<section id="id91">
+<h3>Parameters<a class="headerlink" href="#id91" title="Permalink to this heading"></a></h3>
+<p>initial_opinions: a list (or numpy array) of initial conditions
+adjacency_matrix: a list of lists representing the adjacency matrix
+agent_parameters: a list of lists containing the agent parameters, the first parameter is alpha and the second one
+is beta
+model_parameters: the parameter tuple lambda, xi, and mu</p>
+</section>
+<section id="id92">
+<h3>Returns<a class="headerlink" href="#id92" title="Permalink to this heading"></a></h3>
+</section>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="src.model_functions.model_evolution">
+<span class="sig-prename descclassname"><span class="pre">src.model_functions.</span></span><span class="sig-name descname"><span class="pre">model_evolution</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">initial_opinions</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">adjacency_matrix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">agent_parameters</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model_parameters</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model_function</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_steps</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">50</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">default_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/model_functions.html#model_evolution"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.model_functions.model_evolution" title="Permalink to this definition"></a></dt>
+<dd><p>This function evolves a given model, with the give initial opinions, adjacency matrix, agent parameters, model
+parameters, and number of steps</p>
+<section id="id93">
+<h3>Parameters<a class="headerlink" href="#id93" title="Permalink to this heading"></a></h3>
+<p>initial_opinions: numpy list of initial opinions. By default, it calls the function ‘create_opinions()’
+adjacency_matrix: numpy 2d adjacency matrix.
+agent_parameters: agent parameters, what this is depends on the model. By default, it is ‘[[0.33, 0.33]]*100’
+model_parameters: model parameters, what this is depends on the model. By default, it is ‘[0.4, 2, 5]’
+model_function: function that evolves the steps of the model. By default, it is ‘cb_model_step’, i.e. it evolves
+the Classification-based model
+num_steps: prediction horizon, it is an integer. By default, it is 50
+default_type: ID of the default digraph</p>
+</section>
+<section id="id94">
+<h3>Returns<a class="headerlink" href="#id94" title="Permalink to this heading"></a></h3>
+<p>A 2d numpy array with as many rows as agents, and as many columns as num_steps. Each row contains the opinion
+evolution of every agent.</p>
+</section>
+</dd></dl>
+
+</section>
+<section id="module-src.plot_functions">
+<span id="src-plot-functions-module"></span><h2>src.plot_functions module<a class="headerlink" href="#module-src.plot_functions" title="Permalink to this heading"></a></h2>
+<section id="functions-for-plotting-f-abm-src-plot-functions">
+<h3>Functions for Plotting, (<code class="xref py py-mod docutils literal notranslate"><span class="pre">f_abm.src.plot_functions</span></code>)<a class="headerlink" href="#functions-for-plotting-f-abm-src-plot-functions" title="Permalink to this heading"></a></h3>
+<section id="id95">
+<h4>Description<a class="headerlink" href="#id95" title="Permalink to this heading"></a></h4>
+<blockquote>
+<div><p>This is the module that takes care of all the plotting, whether it is for opinion distributions (histograms), or
+digraphs, or whatever it is required.</p>
+</div></blockquote>
+</section>
+<section id="id96">
+<h4>Functions<a class="headerlink" href="#id96" title="Permalink to this heading"></a></h4>
+<blockquote>
+<div><ul class="simple">
+<li><p>plot_digraph</p></li>
+<li><p>plot_opinions</p></li>
+<li><p>plot_histogram</p></li>
+<li><p>plot_inner_traits</p></li>
+<li><p>plot_all_opinions</p></li>
+</ul>
+</div></blockquote>
+</section>
+</section>
+<dl class="py function">
+<dt class="sig sig-object py" id="src.plot_functions.plot_all_opinions">
+<span class="sig-prename descclassname"><span class="pre">src.plot_functions.</span></span><span class="sig-name descname"><span class="pre">plot_all_opinions</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'standard_initial_opinions.npy'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">color_by_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/plot_functions.html#plot_all_opinions"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.plot_functions.plot_all_opinions" title="Permalink to this definition"></a></dt>
+<dd><p>Function to plot a set of opinion distributions in the Agreement Plot</p>
+<section id="id97">
+<h3>Parameters<a class="headerlink" href="#id97" title="Permalink to this heading"></a></h3>
+<p>file_name: name of the file that contains all the initial opinion distributions
+color_by_type: boolean specifying how to color the plot</p>
+</section>
+<section id="id98">
+<h3>Returns<a class="headerlink" href="#id98" title="Permalink to this heading"></a></h3>
+<p>Nothing</p>
+</section>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="src.plot_functions.plot_digraph">
+<span class="sig-prename descclassname"><span class="pre">src.plot_functions.</span></span><span class="sig-name descname"><span class="pre">plot_digraph</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">digraph</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">file_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">visual_style</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/plot_functions.html#plot_digraph"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.plot_functions.plot_digraph" title="Permalink to this definition"></a></dt>
+<dd><p>Function to plot the digraph</p>
+<section id="id99">
+<h3>Parameters<a class="headerlink" href="#id99" title="Permalink to this heading"></a></h3>
+<p>digraph: Digraph to be plotted, by default it is a simple ring digraph
+file_name: string that is the name of the file to be plotted
+visual_style: optional visual style</p>
+</section>
+<section id="id100">
+<h3>Returns<a class="headerlink" href="#id100" title="Permalink to this heading"></a></h3>
+</section>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="src.plot_functions.plot_histogram">
+<span class="sig-prename descclassname"><span class="pre">src.plot_functions.</span></span><span class="sig-name descname"><span class="pre">plot_histogram</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ax</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">opinions</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_bins</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">histogram_title</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'Opinions'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/plot_functions.html#plot_histogram"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.plot_functions.plot_histogram" title="Permalink to this definition"></a></dt>
+<dd><p>This function creates and plots the histogram for a set of opinions</p>
+<section id="id101">
+<h3>Parameters<a class="headerlink" href="#id101" title="Permalink to this heading"></a></h3>
+<p>ax: the axis where the histogram is plotted
+opinions: the set of opinions
+num_bins: the number of bins of the histogram, by default it is 10
+histogram_title: title of the histogram</p>
+</section>
+<section id="id102">
+<h3>Returns<a class="headerlink" href="#id102" title="Permalink to this heading"></a></h3>
+<p>Nothing</p>
+</section>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="src.plot_functions.plot_inner_traits">
+<span class="sig-prename descclassname"><span class="pre">src.plot_functions.</span></span><span class="sig-name descname"><span class="pre">plot_inner_traits</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'standard_inner_traits.npy'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/plot_functions.html#plot_inner_traits"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.plot_functions.plot_inner_traits" title="Permalink to this definition"></a></dt>
+<dd><p>Function to plot the inner traits for the Classification-based model</p>
+<section id="id103">
+<h3>Parameters<a class="headerlink" href="#id103" title="Permalink to this heading"></a></h3>
+<p>file_name: name of the file that contains the inner traits</p>
+</section>
+<section id="id104">
+<h3>Returns<a class="headerlink" href="#id104" title="Permalink to this heading"></a></h3>
+<p>Nothing</p>
+</section>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="src.plot_functions.plot_opinions">
+<span class="sig-prename descclassname"><span class="pre">src.plot_functions.</span></span><span class="sig-name descname"><span class="pre">plot_opinions</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">opinion_evolution</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">agent_parameters</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">opinion_model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">axes</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/plot_functions.html#plot_opinions"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.plot_functions.plot_opinions" title="Permalink to this definition"></a></dt>
+<dd><p>Function to plot the opinion evolution</p>
+<section id="id105">
+<h3>Parameters<a class="headerlink" href="#id105" title="Permalink to this heading"></a></h3>
+<p>opinion_evolution: matrix with the opinion evolution data
+agent_parameters: parameters for each agent
+opinion_model: the label of the opinion model
+axes: the axes for the plot</p>
+</section>
+<section id="id106">
+<h3>Returns<a class="headerlink" href="#id106" title="Permalink to this heading"></a></h3>
+<p>Nothing</p>
+</section>
+</dd></dl>
+
+</section>
+<section id="module-src">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-src" title="Permalink to this heading"></a></h2>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="index.html" class="btn btn-neutral float-left" title="Welcome to Agent Based Model for Opinion Formation’s documentation!" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, Carlos Andres Devia.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

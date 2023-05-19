@@ -38,7 +38,7 @@ def model_evolution(initial_opinions=None, adjacency_matrix=None, agent_paramete
     agent_parameters: agent parameters, what this is depends on the model. By default, it is '[[0.33, 0.33]]*100'
     model_parameters: model parameters, what this is depends on the model. By default, it is '[0.4, 2, 5]'
     model_function: function that evolves the steps of the model. By default, it is 'cb_model_step', i.e. it evolves
-                    the Classification-based model
+    the Classification-based model
     num_steps: prediction horizon, it is an integer. By default, it is 50
     default_type: ID of the default digraph
 
@@ -90,7 +90,7 @@ def cb_model_step(initial_opinions, adjacency_matrix, agent_parameters, model_pa
     initial_opinions: a list (or numpy array) of initial conditions
     adjacency_matrix: a list of lists representing the adjacency matrix
     agent_parameters: a list of lists containing the agent parameters, the first parameter is alpha and the second one
-                        is beta
+    is beta
     model_parameters: the parameter tuple lambda, xi, and mu
 
     Returns

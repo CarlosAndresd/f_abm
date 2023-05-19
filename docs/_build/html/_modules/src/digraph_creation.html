@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>src.digraph_creation &mdash; Agent Based Model for Opinion Formation 0.1 documentation</title>
+      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/sphinx_highlight.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            Agent Based Model for Opinion Formation
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../src.html">src package</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">Agent Based Model for Opinion Formation</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">src.digraph_creation</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for src.digraph_creation</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">==============================================================</span>
+<span class="sd">Digraph Creation, (:mod:`f_abm.src.digraph_creation`)</span>
+<span class="sd">==============================================================</span>
+
+<span class="sd">Description</span>
+<span class="sd">-----------</span>
+
+<span class="sd">    This module contains all the digraph creation functions.</span>
+
+<span class="sd">Functions</span>
+<span class="sd">---------</span>
+
+<span class="sd">    - default_digraph</span>
+<span class="sd">    - complete_digraph</span>
+<span class="sd">    - ring_digraph</span>
+<span class="sd">    - small_world_digraph</span>
+<span class="sd">    - random_digraph</span>
+
+
+<span class="sd">&quot;&quot;&quot;</span>
+
+
+<span class="kn">import</span> <span class="nn">random</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">.auxiliary_functions</span> <span class="kn">import</span> <span class="p">(</span><span class="n">create_random_numbers</span><span class="p">,</span> <span class="n">add_rs_weights2matrix</span><span class="p">,</span> <span class="n">add_signs2matrix</span><span class="p">,</span> <span class="n">add_random_edges</span><span class="p">,</span> <span class="p">)</span>
+
+
+<div class="viewcode-block" id="default_digraph"><a class="viewcode-back" href="../../src.html#src.digraph_creation.default_digraph">[docs]</a><span class="k">def</span> <span class="nf">default_digraph</span><span class="p">(</span><span class="n">default_type</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">num_agents</span><span class="o">=</span><span class="mi">10</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">    This function returns pre-made digraphs to be used primarily as default for functions. The pre-made digraph that</span>
+<span class="sd">    will be called for default will always be the one with default_type=0</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    default_type: ID of the default digraph</span>
+<span class="sd">    num_agents: number of agents</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    The corresponding adjacency matrix</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">if</span> <span class="n">default_type</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="c1"># Random digraph</span>
+        <span class="n">digraph</span> <span class="o">=</span> <span class="n">random_digraph</span><span class="p">(</span><span class="n">num_agents</span><span class="o">=</span><span class="n">num_agents</span><span class="p">,</span> <span class="n">row_stochastic</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">positive_edge_ratio</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span>
+                                 <span class="n">edge_probability</span><span class="o">=</span><span class="mf">0.8</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">digraph</span>
+    <span class="k">elif</span> <span class="n">default_type</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+        <span class="c1"># Ring digraph</span>
+        <span class="n">digraph</span> <span class="o">=</span> <span class="n">ring_digraph</span><span class="p">(</span><span class="n">num_agents</span><span class="o">=</span><span class="n">num_agents</span><span class="p">,</span> <span class="n">row_stochastic</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">positive_edge_ratio</span><span class="o">=</span><span class="mf">1.0</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">digraph</span>
+    <span class="k">elif</span> <span class="n">default_type</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="c1"># Small-world</span>
+        <span class="n">random_parameters</span> <span class="o">=</span> <span class="p">[[</span><span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mf">1.0</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.7</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.2</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mf">0.7</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]]</span>
+        <span class="n">random_numbers</span> <span class="o">=</span> <span class="n">create_random_numbers</span><span class="p">(</span><span class="n">num_agents</span><span class="o">=</span><span class="n">num_agents</span><span class="p">,</span> <span class="n">number_parameters</span><span class="o">=</span><span class="n">random_parameters</span><span class="p">,</span>
+                                               <span class="n">limits</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+        <span class="n">digraph</span> <span class="o">=</span> <span class="n">small_world_digraph</span><span class="p">(</span><span class="n">num_agents</span><span class="o">=</span><span class="n">num_agents</span><span class="p">,</span> <span class="n">topology_signature</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="o">-</span><span class="mi">5</span><span class="p">],</span>
+                                      <span class="n">change_probability</span><span class="o">=</span><span class="n">random_numbers</span><span class="p">,</span>
+                                      <span class="n">positive_edge_ratio</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">digraph</span>
+
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">digraph</span> <span class="o">=</span> <span class="n">ring_digraph</span><span class="p">()</span>
+
+        <span class="k">return</span> <span class="n">digraph</span></div>
+
+
+<div class="viewcode-block" id="complete_digraph"><a class="viewcode-back" href="../../src.html#src.digraph_creation.complete_digraph">[docs]</a><span class="k">def</span> <span class="nf">complete_digraph</span><span class="p">(</span><span class="n">num_agents</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">row_stochastic</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">positive_edge_ratio</span><span class="o">=</span><span class="mf">1.0</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">    This is a function that returns a complete digraph</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    num_agents: Is the number of agents (and therefore vertices) of the digraph. By default, it is 100</span>
+<span class="sd">    row_stochastic: A boolean that determines if the returned digraph must have a row-stochastic matrix. By default,</span>
+<span class="sd">    this is False</span>
+<span class="sd">    positive_edge_ratio: A floating number between 0 and 1 that determines the ratio of positive edges in the digraph.</span>
+<span class="sd">    By default, it is 1</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    The adjacency matrix of the corresponding generalised ring digraph</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c1"># First, create the topology</span>
+    <span class="c1"># Initialise an array of zeros</span>
+    <span class="n">adjacency_matrix</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="n">num_agents</span><span class="p">,</span> <span class="n">num_agents</span><span class="p">))</span>
+
+    <span class="c1"># Now, if it is row-stochastic, add the weights</span>
+    <span class="k">if</span> <span class="n">row_stochastic</span><span class="p">:</span>
+        <span class="n">add_rs_weights2matrix</span><span class="p">(</span><span class="n">adjacency_matrix</span><span class="p">)</span>
+
+    <span class="c1"># If the matrix is signed, add the negative edges</span>
+    <span class="k">if</span> <span class="n">positive_edge_ratio</span> <span class="o">&lt;</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="n">add_signs2matrix</span><span class="p">(</span><span class="n">adjacency_matrix</span><span class="p">,</span> <span class="n">positive_edge_ratio</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">adjacency_matrix</span></div>
+
+
+<div class="viewcode-block" id="ring_digraph"><a class="viewcode-back" href="../../src.html#src.digraph_creation.ring_digraph">[docs]</a><span class="k">def</span> <span class="nf">ring_digraph</span><span class="p">(</span><span class="n">num_agents</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">topology_signature</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">row_stochastic</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">positive_edge_ratio</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span>
+                 <span class="n">num_random_edges_it</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">    This is a function that returns a ring digraph</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    num_agents: Is the number of agents (and therefore vertices) of the digraph. By default, it is 100</span>
+<span class="sd">    topology_signature: Is a list with the relative indices of the vertices that influence each agent. By default, it</span>
+<span class="sd">    is [0, 1]</span>
+<span class="sd">    row_stochastic: A boolean that determines if the returned digraph must have a row-stochastic matrix. By default,</span>
+<span class="sd">    this is False</span>
+<span class="sd">    positive_edge_ratio: A floating number between 0 and 1 that determines the ratio of positive edges in the digraph.</span>
+<span class="sd">    By default, it is 1</span>
+<span class="sd">    num_random_edges_it: number of iterations to add random edges</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    The adjacency matrix of the corresponding generalised ring digraph</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c1"># First, create the topology</span>
+    <span class="c1"># Initialise an array of zeros</span>
+    <span class="n">adjacency_matrix</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">num_agents</span><span class="p">,</span> <span class="n">num_agents</span><span class="p">))</span>
+
+    <span class="c1"># If the topology_signature is None then it is a simple ring digraph</span>
+    <span class="k">if</span> <span class="n">topology_signature</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">topology_signature</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span>
+
+    <span class="c1"># All the vertices have a self-loop, if it is not included in the</span>
+    <span class="c1"># signature, include it</span>
+    <span class="k">if</span> <span class="mi">0</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">topology_signature</span><span class="p">:</span>
+        <span class="n">topology_signature</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">((</span><span class="n">topology_signature</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">])))</span>
+
+    <span class="c1"># Go row by row applying the topology_signature</span>
+    <span class="k">for</span> <span class="n">id_row</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">num_agents</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">relative_neighbour</span> <span class="ow">in</span> <span class="n">topology_signature</span><span class="p">:</span>
+            <span class="n">absolute_neighbour</span> <span class="o">=</span> <span class="p">(</span><span class="n">id_row</span> <span class="o">+</span> <span class="n">relative_neighbour</span><span class="p">)</span>
+            <span class="k">while</span> <span class="n">num_agents</span> <span class="o">&lt;=</span> <span class="n">absolute_neighbour</span><span class="p">:</span>
+                <span class="n">absolute_neighbour</span> <span class="o">=</span> <span class="n">absolute_neighbour</span> <span class="o">-</span> <span class="n">num_agents</span>
+            <span class="k">while</span> <span class="mi">0</span> <span class="o">&gt;</span> <span class="n">absolute_neighbour</span><span class="p">:</span>
+                <span class="n">absolute_neighbour</span> <span class="o">=</span> <span class="n">absolute_neighbour</span> <span class="o">+</span> <span class="n">num_agents</span>
+            <span class="n">adjacency_matrix</span><span class="p">[</span><span class="n">id_row</span><span class="p">,</span> <span class="n">absolute_neighbour</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
+
+    <span class="c1"># If necessary, add random edges</span>
+    <span class="k">if</span> <span class="n">num_random_edges_it</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">add_random_edges</span><span class="p">(</span><span class="n">adjacency_matrix</span><span class="o">=</span><span class="n">adjacency_matrix</span><span class="p">,</span> <span class="n">num_iterations</span><span class="o">=</span><span class="n">num_random_edges_it</span><span class="p">)</span>
+
+    <span class="c1"># Now, if it is row-stochastic, add the weights</span>
+    <span class="k">if</span> <span class="n">row_stochastic</span><span class="p">:</span>
+        <span class="n">add_rs_weights2matrix</span><span class="p">(</span><span class="n">adjacency_matrix</span><span class="p">)</span>
+
+    <span class="c1"># If the matrix is signed, add the negative edges</span>
+    <span class="k">if</span> <span class="n">positive_edge_ratio</span> <span class="o">&lt;</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="n">add_signs2matrix</span><span class="p">(</span><span class="n">adjacency_matrix</span><span class="p">,</span> <span class="n">positive_edge_ratio</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">adjacency_matrix</span></div>
+
+
+<div class="viewcode-block" id="small_world_digraph"><a class="viewcode-back" href="../../src.html#src.digraph_creation.small_world_digraph">[docs]</a><span class="k">def</span> <span class="nf">small_world_digraph</span><span class="p">(</span><span class="n">num_agents</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">topology_signature</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">row_stochastic</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">positive_edge_ratio</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span>
+                        <span class="n">change_probability</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">reverse_probability</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">bidirectional_probability</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span>
+                        <span class="n">num_random_edges_it</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">    This is a function that creates a digraph with small-world topology</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    num_agents: number of agents, by default 100</span>
+<span class="sd">    topology_signature: the topology signature of the underlying ring digraph</span>
+<span class="sd">    row_stochastic: whether the adjacency matrix is row-stochastic, by default False</span>
+<span class="sd">    positive_edge_ratio: the positive edge ratio, by default 1</span>
+<span class="sd">    change_probability: the probability of edges changing target, it accepts a number between 0.0 and 1.0 or a</span>
+<span class="sd">    list of &#39;num_agents&#39; numbers between 0.0 and 1.0. Each element in the list corresponds to the change probability</span>
+<span class="sd">    of the corresponding vertex</span>
+<span class="sd">    reverse_probability: the probability of edges reversing target, it accepts a number between 0.0 and 1.0 or a</span>
+<span class="sd">    list of &#39;num_agents&#39; numbers between 0.0 and 1.0. Each element in the list corresponds to the reverse</span>
+<span class="sd">    probability of the corresponding vertex</span>
+<span class="sd">    bidirectional_probability: the probability of edges being bidirectional, it accepts a number between 0.0 and</span>
+<span class="sd">    1.0 or a list of &#39;num_agents&#39; numbers between 0.0 and 1.0. Each element in the list corresponds to the</span>
+<span class="sd">    probability of the corresponding vertex being bidirectional</span>
+<span class="sd">    num_random_edges_it: number of iterations to add random edges</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    The adjacency matrix associated with the corresponding small-world digraph</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c1"># Preparation:</span>
+    <span class="c1"># If the &#39;change_probability&#39;, &#39;reverse_probability&#39;, or &#39;bidirectional_probability&#39; parameters are single numbers,</span>
+    <span class="c1"># transform them into an array</span>
+    <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">change_probability</span><span class="p">)</span> <span class="ow">is</span> <span class="nb">float</span><span class="p">:</span>
+        <span class="n">change_probability</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="mi">1</span><span class="p">,</span> <span class="n">num_agents</span><span class="p">))</span><span class="o">*</span><span class="n">change_probability</span>
+        <span class="n">change_probability</span> <span class="o">=</span> <span class="n">change_probability</span><span class="o">.</span><span class="n">squeeze</span><span class="p">()</span>
+
+    <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">reverse_probability</span><span class="p">)</span> <span class="ow">is</span> <span class="nb">float</span><span class="p">:</span>
+        <span class="n">reverse_probability</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="mi">1</span><span class="p">,</span> <span class="n">num_agents</span><span class="p">))</span><span class="o">*</span><span class="n">reverse_probability</span>
+        <span class="n">reverse_probability</span> <span class="o">=</span> <span class="n">reverse_probability</span><span class="o">.</span><span class="n">squeeze</span><span class="p">()</span>
+
+    <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">bidirectional_probability</span><span class="p">)</span> <span class="ow">is</span> <span class="nb">float</span><span class="p">:</span>
+        <span class="n">bidirectional_probability</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="mi">1</span><span class="p">,</span> <span class="n">num_agents</span><span class="p">))</span><span class="o">*</span><span class="n">bidirectional_probability</span>
+        <span class="n">bidirectional_probability</span> <span class="o">=</span> <span class="n">bidirectional_probability</span><span class="o">.</span><span class="n">squeeze</span><span class="p">()</span>
+
+    <span class="c1"># First, create the corresponding Ring topology (at this moment we do not care about the signs or weights)</span>
+    <span class="n">adjacency_matrix</span> <span class="o">=</span> <span class="n">ring_digraph</span><span class="p">(</span><span class="n">num_agents</span><span class="o">=</span><span class="n">num_agents</span><span class="p">,</span> <span class="n">topology_signature</span><span class="o">=</span><span class="n">topology_signature</span><span class="p">,</span>
+                                    <span class="n">num_random_edges_it</span><span class="o">=</span><span class="n">num_random_edges_it</span><span class="p">)</span>
+
+    <span class="c1"># Now, go edge by edge and with a certain probability move it to another vertex</span>
+    <span class="c1"># List all the non self-loop edges</span>
+    <span class="n">edges</span> <span class="o">=</span> <span class="p">[[</span><span class="n">id_row</span><span class="p">,</span> <span class="n">id_col</span><span class="p">]</span> <span class="k">for</span> <span class="n">id_row</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_agents</span><span class="p">)</span> <span class="k">for</span> <span class="n">id_col</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_agents</span><span class="p">)</span>
+             <span class="k">if</span> <span class="p">(</span><span class="n">id_row</span> <span class="o">!=</span> <span class="n">id_col</span> <span class="ow">and</span> <span class="n">adjacency_matrix</span><span class="p">[</span><span class="n">id_row</span><span class="p">,</span> <span class="n">id_col</span><span class="p">]</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">)]</span>
+
+    <span class="k">for</span> <span class="n">edge</span> <span class="ow">in</span> <span class="n">edges</span><span class="p">:</span>
+        <span class="c1"># Select the source vertex</span>
+        <span class="n">source_vertex</span> <span class="o">=</span> <span class="n">edge</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+
+        <span class="c1"># Select the old target vertex</span>
+        <span class="n">target_vertex</span> <span class="o">=</span> <span class="n">edge</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+        <span class="c1"># Only allow for an edge change if it is not the self-loop</span>
+        <span class="k">if</span> <span class="n">source_vertex</span> <span class="o">!=</span> <span class="n">target_vertex</span><span class="p">:</span>
+
+            <span class="n">local_change_probability</span> <span class="o">=</span> <span class="n">change_probability</span><span class="p">[</span><span class="n">source_vertex</span><span class="p">]</span>
+            <span class="n">local_bidirectional_probability</span> <span class="o">=</span> <span class="n">bidirectional_probability</span><span class="p">[</span><span class="n">source_vertex</span><span class="p">]</span>
+            <span class="n">local_reverse_probability</span> <span class="o">=</span> <span class="n">reverse_probability</span><span class="p">[</span><span class="n">source_vertex</span><span class="p">]</span>
+
+            <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="n">low</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">high</span><span class="o">=</span><span class="mf">1.0</span><span class="p">)</span> <span class="o">&lt;</span> <span class="n">local_change_probability</span><span class="p">:</span>
+                <span class="c1"># Rewire that edge</span>
+
+                <span class="c1"># Get all the vertices that the source vertex does not influence</span>
+                <span class="n">possible_vertices</span> <span class="o">=</span> <span class="p">(</span><span class="n">adjacency_matrix</span><span class="p">[:,</span> <span class="n">source_vertex</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">nonzero</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span>
+
+                <span class="c1"># Get a random vertex from these available vertices</span>
+                <span class="n">array_length</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">possible_vertices</span><span class="p">)</span> <span class="c1"># :=</span>
+                <span class="k">if</span> <span class="n">array_length</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+                    <span class="c1"># If the list of possible new vertices is not empty</span>
+                    <span class="c1"># the new vertex is one of the possible vertices chosen at random</span>
+                    <span class="n">new_vertex</span> <span class="o">=</span> <span class="n">possible_vertices</span><span class="p">[</span><span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">array_length</span><span class="o">-</span><span class="mi">1</span><span class="p">)]</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="c1"># If the list of possible new vertices is empty, do not change</span>
+                    <span class="n">new_vertex</span> <span class="o">=</span> <span class="n">target_vertex</span>
+
+                <span class="c1"># Now, modify the adjacency matrix</span>
+                <span class="c1"># Erase the previous vertex from the adjacency matrix</span>
+                <span class="n">adjacency_matrix</span><span class="p">[</span><span class="n">target_vertex</span><span class="p">,</span> <span class="n">source_vertex</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.0</span>
+
+                <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="n">low</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">high</span><span class="o">=</span><span class="mf">1.0</span><span class="p">)</span> <span class="o">&lt;</span> <span class="n">local_bidirectional_probability</span><span class="p">:</span>
+                    <span class="c1"># The edge is bidirectional</span>
+                    <span class="c1"># Add the new vertices</span>
+                    <span class="n">adjacency_matrix</span><span class="p">[</span><span class="n">source_vertex</span><span class="p">,</span> <span class="n">new_vertex</span><span class="p">]</span> <span class="o">=</span> <span class="mf">1.0</span>
+                    <span class="n">adjacency_matrix</span><span class="p">[</span><span class="n">new_vertex</span><span class="p">,</span> <span class="n">source_vertex</span><span class="p">]</span> <span class="o">=</span> <span class="mf">1.0</span>
+
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="c1"># The edge is not bidirectional</span>
+                    <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="n">low</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">high</span><span class="o">=</span><span class="mf">1.0</span><span class="p">)</span> <span class="o">&lt;</span> <span class="n">local_reverse_probability</span><span class="p">:</span>
+                        <span class="c1"># The edge is reversed, reverse the edge</span>
+                        <span class="c1"># Add the new vertex</span>
+                        <span class="n">adjacency_matrix</span><span class="p">[</span><span class="n">source_vertex</span><span class="p">,</span> <span class="n">new_vertex</span><span class="p">]</span> <span class="o">=</span> <span class="mf">1.0</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="c1"># The edge is not reversed</span>
+                        <span class="c1"># Add the new vertex</span>
+                        <span class="n">adjacency_matrix</span><span class="p">[</span><span class="n">new_vertex</span><span class="p">,</span> <span class="n">source_vertex</span><span class="p">]</span> <span class="o">=</span> <span class="mf">1.0</span>
+
+    <span class="c1"># Now that the topology is ready, add the signs and weights if necessary</span>
+
+    <span class="c1"># If the digraph is row-stochastic, add the weights</span>
+    <span class="k">if</span> <span class="n">row_stochastic</span><span class="p">:</span>
+        <span class="n">add_rs_weights2matrix</span><span class="p">(</span><span class="n">adjacency_matrix</span><span class="p">)</span>
+
+    <span class="c1"># If the matrix is signed, add the negative edges</span>
+    <span class="k">if</span> <span class="n">positive_edge_ratio</span> <span class="o">&lt;</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="n">add_signs2matrix</span><span class="p">(</span><span class="n">adjacency_matrix</span><span class="p">,</span> <span class="n">positive_edge_ratio</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">adjacency_matrix</span></div>
+
+
+<div class="viewcode-block" id="random_digraph"><a class="viewcode-back" href="../../src.html#src.digraph_creation.random_digraph">[docs]</a><span class="k">def</span> <span class="nf">random_digraph</span><span class="p">(</span><span class="n">num_agents</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">row_stochastic</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">positive_edge_ratio</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">edge_probability</span><span class="o">=</span><span class="mf">0.5</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">    This function creates a digraph with random topology. Note that not all the edges are random. The resulting</span>
+<span class="sd">    adjacency matrix always has non-zero elements in the diagonal, indicating the self-loop</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    num_agents: number of agents of the digraph, by default 100</span>
+<span class="sd">    row_stochastic: boolean indicating if the adjacency matrix is row-stochastic</span>
+<span class="sd">    positive_edge_ratio: the positive edge ratio</span>
+<span class="sd">    edge_probability: the probability that an edge will exist</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    the adjacency matrix</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c1"># First, create the topology</span>
+    <span class="c1"># Initialise an identity matrix</span>
+    <span class="n">adjacency_matrix</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="n">num_agents</span><span class="p">)</span>
+
+    <span class="n">num_possible_edges</span> <span class="o">=</span> <span class="n">num_agents</span><span class="o">*</span><span class="p">(</span><span class="n">num_agents</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>  <span class="c1"># *0.5  # The number of possible edges, excluding self-loops</span>
+    <span class="n">num_edges</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">floor</span><span class="p">(</span><span class="n">edge_probability</span> <span class="o">*</span> <span class="n">num_possible_edges</span><span class="p">))</span>  <span class="c1"># Number of requested edges</span>
+    <span class="n">num_edges</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">maximum</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">num_edges</span><span class="o">-</span><span class="n">num_agents</span><span class="p">)</span>  <span class="c1"># Subtract the number of self-loops, and it cannot be less than 0</span>
+
+    <span class="c1"># There are two methods to allocate the random edges, one is better for low probabilities</span>
+    <span class="k">if</span> <span class="n">edge_probability</span> <span class="o">&lt;</span> <span class="mf">0.4</span><span class="p">:</span>
+        <span class="c1"># Randomly sample the adjacency matrix, if the sampled edge does not exist, make create it</span>
+        <span class="k">while</span> <span class="n">num_edges</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+
+            <span class="c1"># Select a random edge</span>
+            <span class="n">id_row</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">num_agents</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
+            <span class="n">id_col</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">num_agents</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="n">adjacency_matrix</span><span class="p">[</span><span class="n">id_row</span><span class="p">][</span><span class="n">id_col</span><span class="p">]</span> <span class="o">==</span> <span class="mf">0.0</span><span class="p">:</span>
+                <span class="n">adjacency_matrix</span><span class="p">[</span><span class="n">id_row</span><span class="p">][</span><span class="n">id_col</span><span class="p">]</span> <span class="o">=</span> <span class="mf">1.0</span>
+                <span class="n">num_edges</span> <span class="o">-=</span> <span class="mi">1</span>
+
+    <span class="k">else</span><span class="p">:</span>
+        <span class="c1"># List all possible edges, shuffle them and select the first &#39;num_edges&#39;</span>
+        <span class="n">edges</span> <span class="o">=</span> <span class="p">[[</span><span class="n">id_row</span><span class="p">,</span> <span class="n">id_col</span><span class="p">]</span> <span class="k">for</span> <span class="n">id_row</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_agents</span><span class="p">)</span> <span class="k">for</span> <span class="n">id_col</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_agents</span><span class="p">)</span>
+                 <span class="k">if</span> <span class="n">adjacency_matrix</span><span class="p">[</span><span class="n">id_row</span><span class="p">][</span><span class="n">id_col</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">]</span>
+
+        <span class="c1"># Sort the edges randomly</span>
+        <span class="n">rng</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">default_rng</span><span class="p">()</span>
+        <span class="n">rng</span><span class="o">.</span><span class="n">shuffle</span><span class="p">(</span><span class="n">edges</span><span class="p">)</span>
+
+        <span class="c1"># Take the first &#39;num_edges&#39; ones</span>
+        <span class="n">edges</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">edges</span><span class="p">)[:</span><span class="n">num_edges</span><span class="p">,</span> <span class="p">:]</span>
+
+        <span class="c1"># Change add the edge to the adjacency matrix</span>
+        <span class="k">for</span> <span class="n">id_row</span><span class="p">,</span> <span class="n">id_col</span> <span class="ow">in</span> <span class="n">edges</span><span class="p">:</span>
+            <span class="n">adjacency_matrix</span><span class="p">[</span><span class="n">id_row</span><span class="p">,</span> <span class="n">id_col</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
+
+    <span class="c1"># Now if necessary add the weights and the signs</span>
+
+    <span class="c1"># If it is row-stochastic, add the weights</span>
+    <span class="k">if</span> <span class="n">row_stochastic</span><span class="p">:</span>
+        <span class="n">add_rs_weights2matrix</span><span class="p">(</span><span class="n">adjacency_matrix</span><span class="p">)</span>
+
+    <span class="c1"># If the matrix is signed, add the negative edges</span>
+    <span class="k">if</span> <span class="n">positive_edge_ratio</span> <span class="o">&lt;</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="n">add_signs2matrix</span><span class="p">(</span><span class="n">adjacency_matrix</span><span class="p">,</span> <span class="n">positive_edge_ratio</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">adjacency_matrix</span></div>
+
+
+
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, Carlos Andres Devia.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

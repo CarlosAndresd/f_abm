@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>src.code_test &mdash; Agent Based Model for Opinion Formation 0.1 documentation</title>
+      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/sphinx_highlight.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            Agent Based Model for Opinion Formation
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../src.html">src package</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">Agent Based Model for Opinion Formation</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">src.code_test</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for src.code_test</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">==============================================================</span>
+<span class="sd">Code Test, (:mod:`f_abm.src.code_test`)</span>
+<span class="sd">==============================================================</span>
+
+<span class="sd">Description</span>
+<span class="sd">-----------</span>
+
+<span class="sd">	This module contains example functions aimed at showing newcomers how to use some of the functions in the program</span>
+
+<span class="sd">Functions</span>
+<span class="sd">---------</span>
+
+<span class="sd">	- example_1</span>
+<span class="sd">	- example_2</span>
+<span class="sd">	- example_3</span>
+<span class="sd">	- example_4</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">from</span> <span class="nn">.basic_creation</span> <span class="kn">import</span> <span class="n">a_random_initial_opinion_distribution</span><span class="p">,</span> <span class="n">a_random_inner_trait_assignation</span><span class="p">,</span> <span class="n">a_random_digraph</span>
+<span class="kn">from</span> <span class="nn">.plot_functions</span> <span class="kn">import</span> <span class="p">(</span><span class="n">plot_histogram</span><span class="p">,</span> <span class="n">plot_opinions</span><span class="p">,</span> <span class="n">plot_digraph</span><span class="p">)</span>
+<span class="kn">from</span> <span class="nn">.model_functions</span> <span class="kn">import</span> <span class="p">(</span><span class="n">model_evolution</span><span class="p">,</span> <span class="n">cb_model_step</span><span class="p">)</span>
+<span class="kn">from</span> <span class="nn">.data_analysis_functions</span> <span class="kn">import</span> <span class="n">gather_data</span>
+
+
+<div class="viewcode-block" id="example_1"><a class="viewcode-back" href="../../src.html#src.code_test.example_1">[docs]</a><span class="k">def</span> <span class="nf">example_1</span><span class="p">(</span><span class="n">num_agents</span><span class="o">=</span><span class="mi">100</span><span class="p">):</span>
+<span class="w">	</span><span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">	Example 1, which plots the histogram of some opinion distribution created at random</span>
+
+<span class="sd">	Parameters</span>
+<span class="sd">	----------</span>
+<span class="sd">	num_agents: number of agents of the initial opinion distribution, by default 100</span>
+
+<span class="sd">	Returns</span>
+<span class="sd">	-------</span>
+<span class="sd">	Nothing</span>
+
+<span class="sd">	&quot;&quot;&quot;</span>
+
+	<span class="n">opinions</span> <span class="o">=</span> <span class="n">a_random_initial_opinion_distribution</span><span class="p">(</span><span class="n">num_agents</span><span class="o">=</span><span class="n">num_agents</span><span class="p">)</span>
+	<span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">7</span><span class="p">))</span>
+	<span class="n">ax1</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">111</span><span class="p">)</span>
+	<span class="n">plot_histogram</span><span class="p">(</span><span class="n">ax1</span><span class="p">,</span> <span class="n">opinions</span><span class="p">)</span>
+	<span class="n">plt</span><span class="o">.</span><span class="n">gcf</span><span class="p">()</span><span class="o">.</span><span class="n">canvas</span><span class="o">.</span><span class="n">draw</span><span class="p">()</span>
+	<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="example_2"><a class="viewcode-back" href="../../src.html#src.code_test.example_2">[docs]</a><span class="k">def</span> <span class="nf">example_2</span><span class="p">(</span><span class="n">num_agents</span><span class="o">=</span><span class="mi">10</span><span class="p">):</span>
+<span class="w">	</span><span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">	Example 2. It shows the opinion evolution of &#39;num_agents&#39; agents according to the Classification-based model. The</span>
+<span class="sd">	initial opinions, agent parameters, and underlying digraph are created at random.</span>
+
+<span class="sd">	Parameters</span>
+<span class="sd">	----------</span>
+<span class="sd">	num_agents: number of agents in the simulation.</span>
+
+<span class="sd">	Returns</span>
+<span class="sd">	-------</span>
+<span class="sd">	Nothing</span>
+
+<span class="sd">	&quot;&quot;&quot;</span>
+
+	<span class="n">initial_opinions</span> <span class="o">=</span> <span class="n">a_random_initial_opinion_distribution</span><span class="p">(</span><span class="n">num_agents</span><span class="o">=</span><span class="n">num_agents</span><span class="p">)</span>
+	<span class="n">agent_parameters</span> <span class="o">=</span> <span class="n">a_random_inner_trait_assignation</span><span class="p">(</span><span class="n">num_agents</span><span class="o">=</span><span class="n">num_agents</span><span class="p">)</span>
+	<span class="n">adjacency_matrix</span> <span class="o">=</span> <span class="n">a_random_digraph</span><span class="p">(</span><span class="n">num_agents</span><span class="o">=</span><span class="n">num_agents</span><span class="p">)</span>
+	<span class="n">model_parameters</span> <span class="o">=</span> <span class="p">[</span><span class="mf">0.4</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">5</span><span class="p">]</span>
+	<span class="n">opinion_evolution</span> <span class="o">=</span> <span class="n">model_evolution</span><span class="p">(</span><span class="n">initial_opinions</span><span class="o">=</span><span class="n">initial_opinions</span><span class="p">,</span> <span class="n">adjacency_matrix</span><span class="o">=</span><span class="n">adjacency_matrix</span><span class="p">,</span>
+										<span class="n">agent_parameters</span><span class="o">=</span><span class="n">adjacency_matrix</span><span class="p">,</span> <span class="n">model_parameters</span><span class="o">=</span><span class="n">model_parameters</span><span class="p">,</span>
+										<span class="n">model_function</span><span class="o">=</span><span class="n">cb_model_step</span><span class="p">,</span> <span class="n">num_steps</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">default_type</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+
+	<span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">7</span><span class="p">))</span>
+	<span class="n">ax1</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">111</span><span class="p">)</span>
+	<span class="n">plot_opinions</span><span class="p">(</span><span class="n">opinion_evolution</span><span class="p">,</span> <span class="n">agent_parameters</span><span class="p">,</span> <span class="n">cb_model_step</span><span class="p">,</span> <span class="n">axes</span><span class="o">=</span><span class="n">ax1</span><span class="p">)</span>
+	<span class="n">plt</span><span class="o">.</span><span class="n">gcf</span><span class="p">()</span><span class="o">.</span><span class="n">canvas</span><span class="o">.</span><span class="n">draw</span><span class="p">()</span>
+	<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="example_3"><a class="viewcode-back" href="../../src.html#src.code_test.example_3">[docs]</a><span class="k">def</span> <span class="nf">example_3</span><span class="p">():</span>
+<span class="w">	</span><span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">	Example 3. This example simply plots a digraph, it is better to make it more interesting, such as plotting various</span>
+<span class="sd">	digraphs with different topologies and colors.</span>
+
+<span class="sd">	Returns</span>
+<span class="sd">	-------</span>
+<span class="sd">	Nothing</span>
+
+<span class="sd">	&quot;&quot;&quot;</span>
+	<span class="n">plot_digraph</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="example_4"><a class="viewcode-back" href="../../src.html#src.code_test.example_4">[docs]</a><span class="k">def</span> <span class="nf">example_4</span><span class="p">():</span>
+<span class="w">	</span><span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">	Example 4. This is for data analysis, needs to be improved</span>
+
+<span class="sd">	Returns</span>
+<span class="sd">	-------</span>
+<span class="sd">	Nothing</span>
+
+<span class="sd">	&quot;&quot;&quot;</span>
+	<span class="n">gather_data</span><span class="p">(</span><span class="n">num_agents</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">num_iterations</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">global_name</span><span class="o">=</span><span class="s1">&#39;Gather_data_example&#39;</span><span class="p">)</span></div>
+
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, Carlos Andres Devia.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

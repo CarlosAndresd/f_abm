@@ -1,0 +1,585 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>src.basic_creation &mdash; Agent Based Model for Opinion Formation 0.1 documentation</title>
+      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/sphinx_highlight.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            Agent Based Model for Opinion Formation
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../src.html">src package</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">Agent Based Model for Opinion Formation</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">src.basic_creation</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for src.basic_creation</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">==============================================================</span>
+<span class="sd">Basic Creation, (:mod:`f_abm.src.basic_creation`)</span>
+<span class="sd">==============================================================</span>
+
+<span class="sd">Description</span>
+<span class="sd">-----------</span>
+
+<span class="sd">    This module contains all the basic creation functions. It is primarily aimed at creating opinion distributions</span>
+<span class="sd">    and agent parameters, since for digraph creation there is a separate module</span>
+
+<span class="sd">Functions</span>
+<span class="sd">---------</span>
+
+<span class="sd">    - a_random_digraph</span>
+<span class="sd">    - a_random_initial_opinion_distribution</span>
+<span class="sd">    - a_random_inner_trait_assignation</span>
+<span class="sd">    - create_inner_traits_local</span>
+<span class="sd">    - create_many_opinions</span>
+<span class="sd">    - create_many_inner_traits</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+
+
+<span class="kn">import</span> <span class="nn">random</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">from</span> <span class="nn">.auxiliary_functions</span> <span class="kn">import</span> <span class="p">(</span><span class="n">create_random_numbers</span><span class="p">,</span> <span class="n">modify_opinions_method_1</span><span class="p">,</span> <span class="n">modify_opinions_method_2</span><span class="p">,</span>
+                                     <span class="n">modify_mean</span><span class="p">,</span> <span class="n">make_row_stochastic</span><span class="p">,</span> <span class="n">histogram_classification</span><span class="p">)</span>
+<span class="kn">from</span> <span class="nn">.digraph_creation</span> <span class="kn">import</span> <span class="n">small_world_digraph</span>
+<span class="kn">from</span> <span class="nn">.plot_functions</span> <span class="kn">import</span> <span class="n">plot_inner_traits</span>
+
+
+<div class="viewcode-block" id="a_random_digraph"><a class="viewcode-back" href="../../src.html#src.basic_creation.a_random_digraph">[docs]</a><span class="k">def</span> <span class="nf">a_random_digraph</span><span class="p">(</span><span class="n">num_agents</span><span class="o">=</span><span class="mi">10</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">    This function returns a random digraph, NOT a digraph with random topology, but a random digraph</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    num_agents: number of agents, by default 10</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    a random digraph</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">opinion_param_1</span> <span class="o">=</span> <span class="p">[[</span><span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]]</span>
+    <span class="n">opinion_param_2</span> <span class="o">=</span> <span class="p">[[</span><span class="mi">0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]]</span>
+    <span class="n">opinion_param_3</span> <span class="o">=</span> <span class="p">[[</span><span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]]</span>
+    <span class="n">opinion_param_4</span> <span class="o">=</span> <span class="p">[[</span><span class="mi">1</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]]</span>
+    <span class="n">opinion_param_5</span> <span class="o">=</span> <span class="p">[[</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mi">1</span><span class="p">]]</span>
+    <span class="n">opinion_param_6</span> <span class="o">=</span> <span class="p">[[</span><span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mf">1.0</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.5</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]]</span>
+    <span class="n">opinion_param_7</span> <span class="o">=</span> <span class="p">[[</span><span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mf">1.0</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.7</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mi">1</span><span class="p">]]</span>
+    <span class="n">opinion_param_8</span> <span class="o">=</span> <span class="p">[[</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mf">0.7</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]]</span>
+    <span class="n">opinion_param_9</span> <span class="o">=</span> <span class="p">[[</span><span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mf">1.0</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.7</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.2</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mf">0.7</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]]</span>
+    <span class="n">all_param</span> <span class="o">=</span> <span class="p">[</span><span class="n">opinion_param_1</span><span class="p">,</span>
+                 <span class="n">opinion_param_2</span><span class="p">,</span>
+                 <span class="n">opinion_param_3</span><span class="p">,</span>
+                 <span class="n">opinion_param_4</span><span class="p">,</span>
+                 <span class="n">opinion_param_5</span><span class="p">,</span>
+                 <span class="n">opinion_param_6</span><span class="p">,</span>
+                 <span class="n">opinion_param_7</span><span class="p">,</span>
+                 <span class="n">opinion_param_8</span><span class="p">,</span>
+                 <span class="n">opinion_param_9</span><span class="p">]</span>
+
+    <span class="n">rng</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">default_rng</span><span class="p">()</span>  <span class="c1"># this is for the random numbers creation</span>
+
+    <span class="c1"># Topology signature</span>
+    <span class="n">all_signatures</span> <span class="o">=</span> <span class="p">[[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="o">-</span><span class="mi">5</span><span class="p">],</span>
+                      <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">20</span><span class="p">],</span>
+                      <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="mi">9</span><span class="p">,</span> <span class="mi">10</span><span class="p">],</span>
+                      <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">12</span><span class="p">,</span> <span class="mi">14</span><span class="p">,</span> <span class="o">-</span><span class="mi">2</span><span class="p">,</span> <span class="o">-</span><span class="mi">4</span><span class="p">,</span> <span class="o">-</span><span class="mi">6</span><span class="p">,</span> <span class="o">-</span><span class="mi">8</span><span class="p">,</span> <span class="o">-</span><span class="mi">10</span><span class="p">,</span> <span class="o">-</span><span class="mi">12</span><span class="p">,</span> <span class="o">-</span><span class="mi">14</span><span class="p">],</span>
+                      <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">15</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="mi">25</span><span class="p">,</span> <span class="o">-</span><span class="mi">5</span><span class="p">,</span> <span class="o">-</span><span class="mi">10</span><span class="p">,</span> <span class="o">-</span><span class="mi">15</span><span class="p">,</span> <span class="o">-</span><span class="mi">20</span><span class="p">,</span> <span class="o">-</span><span class="mi">25</span><span class="p">],</span>
+                      <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="o">-</span><span class="mi">5</span><span class="p">,</span> <span class="o">-</span><span class="mi">10</span><span class="p">,</span> <span class="o">-</span><span class="mi">15</span><span class="p">,</span> <span class="o">-</span><span class="mi">20</span><span class="p">,</span> <span class="o">-</span><span class="mi">25</span><span class="p">]</span>
+                      <span class="p">]</span>
+
+    <span class="k">if</span> <span class="n">rng</span><span class="o">.</span><span class="n">random</span><span class="p">(</span><span class="mi">1</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&lt;</span> <span class="mf">0.5</span><span class="p">:</span>
+        <span class="n">topology_sig</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">all_signatures</span><span class="p">[</span><span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">all_signatures</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span><span class="p">)])</span> <span class="o">+</span> <span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="o">-</span><span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">topology_sig</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">all_signatures</span><span class="p">[</span><span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">all_signatures</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)])</span> <span class="o">+</span> <span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="o">-</span><span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">)</span>
+
+    <span class="c1"># Change probability</span>
+    <span class="k">if</span> <span class="n">rng</span><span class="o">.</span><span class="n">random</span><span class="p">(</span><span class="mi">1</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&lt;</span> <span class="mf">0.4</span><span class="p">:</span>
+        <span class="n">change_prob</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">rng</span><span class="o">.</span><span class="n">random</span><span class="p">(</span><span class="mi">1</span><span class="p">)[</span><span class="mi">0</span><span class="p">])</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">random_param</span> <span class="o">=</span> <span class="n">all_param</span><span class="p">[</span><span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">8</span><span class="p">)]</span>
+        <span class="n">change_prob</span> <span class="o">=</span> <span class="n">create_random_numbers</span><span class="p">(</span><span class="n">num_agents</span><span class="o">=</span><span class="n">num_agents</span><span class="p">,</span> <span class="n">number_parameters</span><span class="o">=</span><span class="n">random_param</span><span class="p">,</span> <span class="n">limits</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+
+    <span class="c1"># Reverse probability</span>
+    <span class="k">if</span> <span class="n">rng</span><span class="o">.</span><span class="n">random</span><span class="p">(</span><span class="mi">1</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&lt;</span> <span class="mf">0.4</span><span class="p">:</span>
+        <span class="n">reverse_prob</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">rng</span><span class="o">.</span><span class="n">random</span><span class="p">(</span><span class="mi">1</span><span class="p">)[</span><span class="mi">0</span><span class="p">])</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">random_param</span> <span class="o">=</span> <span class="n">all_param</span><span class="p">[</span><span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">8</span><span class="p">)]</span>
+        <span class="n">reverse_prob</span> <span class="o">=</span> <span class="n">create_random_numbers</span><span class="p">(</span><span class="n">num_agents</span><span class="o">=</span><span class="n">num_agents</span><span class="p">,</span> <span class="n">number_parameters</span><span class="o">=</span><span class="n">random_param</span><span class="p">,</span> <span class="n">limits</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+
+    <span class="c1"># Bidirectional probability</span>
+    <span class="k">if</span> <span class="n">rng</span><span class="o">.</span><span class="n">random</span><span class="p">(</span><span class="mi">1</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&lt;</span> <span class="mf">0.4</span><span class="p">:</span>
+        <span class="n">bidirectional_prob</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">rng</span><span class="o">.</span><span class="n">random</span><span class="p">(</span><span class="mi">1</span><span class="p">)[</span><span class="mi">0</span><span class="p">])</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">random_param</span> <span class="o">=</span> <span class="n">all_param</span><span class="p">[</span><span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">8</span><span class="p">)]</span>
+        <span class="n">bidirectional_prob</span> <span class="o">=</span> <span class="n">create_random_numbers</span><span class="p">(</span><span class="n">num_agents</span><span class="o">=</span><span class="n">num_agents</span><span class="p">,</span> <span class="n">number_parameters</span><span class="o">=</span><span class="n">random_param</span><span class="p">,</span> <span class="n">limits</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+
+    <span class="c1"># Number random edges iterations</span>
+
+    <span class="n">digraph</span> <span class="o">=</span> <span class="n">small_world_digraph</span><span class="p">(</span><span class="n">num_agents</span><span class="o">=</span><span class="n">num_agents</span><span class="p">,</span>
+                                  <span class="n">topology_signature</span><span class="o">=</span><span class="n">topology_sig</span><span class="p">,</span>
+                                  <span class="n">positive_edge_ratio</span><span class="o">=</span><span class="mf">0.5</span><span class="o">+</span><span class="p">(</span><span class="mf">0.5</span><span class="o">*</span><span class="n">rng</span><span class="o">.</span><span class="n">random</span><span class="p">(</span><span class="mi">1</span><span class="p">)[</span><span class="mi">0</span><span class="p">]),</span>
+                                  <span class="n">change_probability</span><span class="o">=</span><span class="n">change_prob</span><span class="p">,</span>
+                                  <span class="n">reverse_probability</span><span class="o">=</span><span class="n">reverse_prob</span><span class="p">,</span>
+                                  <span class="n">bidirectional_probability</span><span class="o">=</span><span class="n">bidirectional_prob</span><span class="p">,</span>
+                                  <span class="n">num_random_edges_it</span><span class="o">=</span><span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">int</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="mf">0.4</span><span class="o">*</span><span class="n">num_agents</span><span class="o">*</span><span class="n">num_agents</span><span class="p">))))</span>
+
+    <span class="k">return</span> <span class="n">digraph</span></div>
+
+
+<div class="viewcode-block" id="a_random_initial_opinion_distribution"><a class="viewcode-back" href="../../src.html#src.basic_creation.a_random_initial_opinion_distribution">[docs]</a><span class="k">def</span> <span class="nf">a_random_initial_opinion_distribution</span><span class="p">(</span><span class="n">num_agents</span><span class="o">=</span><span class="mi">10</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">    This function returns a random initial opinion distribution</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    num_agents: number of agents, by default 10</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    A random initial opinion distribution</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">rng</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">default_rng</span><span class="p">()</span>  <span class="c1"># this is for the random numbers creation</span>
+
+    <span class="n">opinion_param_1</span> <span class="o">=</span> <span class="p">[[</span><span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]]</span>
+    <span class="n">opinion_param_2</span> <span class="o">=</span> <span class="p">[[</span><span class="mi">0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]]</span>
+    <span class="n">opinion_param_3</span> <span class="o">=</span> <span class="p">[[</span><span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]]</span>
+    <span class="n">opinion_param_4</span> <span class="o">=</span> <span class="p">[[</span><span class="mi">1</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]]</span>
+    <span class="n">opinion_param_5</span> <span class="o">=</span> <span class="p">[[</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mi">1</span><span class="p">]]</span>
+    <span class="n">opinion_param_6</span> <span class="o">=</span> <span class="p">[[</span><span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mf">1.0</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.5</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]]</span>
+    <span class="n">opinion_param_7</span> <span class="o">=</span> <span class="p">[[</span><span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mf">1.0</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.7</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mi">1</span><span class="p">]]</span>
+    <span class="n">opinion_param_8</span> <span class="o">=</span> <span class="p">[[</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mf">0.7</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]]</span>
+    <span class="n">opinion_param_9</span> <span class="o">=</span> <span class="p">[[</span><span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mf">1.0</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.7</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.2</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mf">0.7</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]]</span>
+    <span class="n">all_param</span> <span class="o">=</span> <span class="p">[</span><span class="n">opinion_param_1</span><span class="p">,</span>
+                 <span class="n">opinion_param_2</span><span class="p">,</span>
+                 <span class="n">opinion_param_3</span><span class="p">,</span>
+                 <span class="n">opinion_param_4</span><span class="p">,</span>
+                 <span class="n">opinion_param_5</span><span class="p">,</span>
+                 <span class="n">opinion_param_6</span><span class="p">,</span>
+                 <span class="n">opinion_param_7</span><span class="p">,</span>
+                 <span class="n">opinion_param_8</span><span class="p">,</span>
+                 <span class="n">opinion_param_9</span><span class="p">]</span>
+
+    <span class="n">local_des_abs_mean</span> <span class="o">=</span> <span class="n">rng</span><span class="o">.</span><span class="n">random</span><span class="p">(</span><span class="mi">1</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">local_des_mean</span> <span class="o">=</span> <span class="n">rng</span><span class="o">.</span><span class="n">random</span><span class="p">(</span><span class="mi">1</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span><span class="o">*</span><span class="n">local_des_abs_mean</span>
+
+    <span class="n">initial_opinions</span> <span class="o">=</span> <span class="n">create_random_numbers</span><span class="p">(</span><span class="n">num_agents</span><span class="o">=</span><span class="n">num_agents</span><span class="p">,</span> <span class="n">number_parameters</span><span class="o">=</span><span class="n">all_param</span><span class="p">[</span><span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">8</span><span class="p">)])</span>
+
+    <span class="k">if</span> <span class="n">rng</span><span class="o">.</span><span class="n">random</span><span class="p">(</span><span class="mi">1</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mf">0.5</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">modify_opinions_method_1</span><span class="p">(</span><span class="n">initial_opinions</span><span class="p">,</span> <span class="n">des_mean</span><span class="o">=</span><span class="n">local_des_mean</span><span class="p">,</span>
+                                        <span class="n">des_abs_mean</span><span class="o">=</span><span class="n">local_des_abs_mean</span><span class="p">,</span> <span class="n">epsilon</span><span class="o">=</span><span class="mf">0.02</span><span class="p">)</span>
+
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">modify_opinions_method_2</span><span class="p">(</span><span class="n">initial_opinions</span><span class="p">,</span> <span class="n">des_mean</span><span class="o">=</span><span class="n">local_des_mean</span><span class="p">,</span>
+                                        <span class="n">des_abs_mean</span><span class="o">=</span><span class="n">local_des_abs_mean</span><span class="p">,</span> <span class="n">epsilon</span><span class="o">=</span><span class="mf">0.02</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="a_random_inner_trait_assignation"><a class="viewcode-back" href="../../src.html#src.basic_creation.a_random_inner_trait_assignation">[docs]</a><span class="k">def</span> <span class="nf">a_random_inner_trait_assignation</span><span class="p">(</span><span class="n">num_agents</span><span class="o">=</span><span class="mi">10</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">    This function returns a random inner trait assignation</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    num_agents: number of agents</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    Inner trait assignation</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">rng</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">default_rng</span><span class="p">()</span>  <span class="c1"># this is for the random numbers creation</span>
+
+    <span class="n">opinion_param_1</span> <span class="o">=</span> <span class="p">[[</span><span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]]</span>
+    <span class="n">opinion_param_2</span> <span class="o">=</span> <span class="p">[[</span><span class="mi">0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]]</span>
+    <span class="n">opinion_param_3</span> <span class="o">=</span> <span class="p">[[</span><span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]]</span>
+    <span class="n">opinion_param_4</span> <span class="o">=</span> <span class="p">[[</span><span class="mi">1</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]]</span>
+    <span class="n">opinion_param_5</span> <span class="o">=</span> <span class="p">[[</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mi">1</span><span class="p">]]</span>
+    <span class="n">opinion_param_6</span> <span class="o">=</span> <span class="p">[[</span><span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mf">1.0</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.5</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]]</span>
+    <span class="n">opinion_param_7</span> <span class="o">=</span> <span class="p">[[</span><span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mf">1.0</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.7</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mi">1</span><span class="p">]]</span>
+    <span class="n">opinion_param_8</span> <span class="o">=</span> <span class="p">[[</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mf">0.7</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]]</span>
+    <span class="n">opinion_param_9</span> <span class="o">=</span> <span class="p">[[</span><span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mf">1.0</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.7</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.2</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mf">0.7</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]]</span>
+    <span class="n">all_param</span> <span class="o">=</span> <span class="p">[</span><span class="n">opinion_param_1</span><span class="p">,</span>
+                 <span class="n">opinion_param_2</span><span class="p">,</span>
+                 <span class="n">opinion_param_3</span><span class="p">,</span>
+                 <span class="n">opinion_param_4</span><span class="p">,</span>
+                 <span class="n">opinion_param_5</span><span class="p">,</span>
+                 <span class="n">opinion_param_6</span><span class="p">,</span>
+                 <span class="n">opinion_param_7</span><span class="p">,</span>
+                 <span class="n">opinion_param_8</span><span class="p">,</span>
+                 <span class="n">opinion_param_9</span><span class="p">]</span>  <span class="c1"># All parameters for the creation of the inner traits</span>
+
+    <span class="c1"># Create and modify three sets of numbers which will correspond to the three types of weights</span>
+    <span class="n">weights_1</span> <span class="o">=</span> <span class="n">create_random_numbers</span><span class="p">(</span><span class="n">num_agents</span><span class="o">=</span><span class="n">num_agents</span><span class="p">,</span> <span class="n">number_parameters</span><span class="o">=</span><span class="n">all_param</span><span class="p">[</span><span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">8</span><span class="p">)],</span>
+                                      <span class="n">limits</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+    <span class="n">weights_1</span> <span class="o">=</span> <span class="n">modify_mean</span><span class="p">(</span><span class="n">weights_1</span><span class="p">,</span> <span class="n">rng</span><span class="o">.</span><span class="n">random</span><span class="p">(</span><span class="mi">1</span><span class="p">)[</span><span class="mi">0</span><span class="p">],</span> <span class="n">max_counter</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">epsilon</span><span class="o">=</span><span class="mf">0.05</span><span class="p">,</span> <span class="n">limits</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+
+    <span class="n">weights_2</span> <span class="o">=</span> <span class="n">create_random_numbers</span><span class="p">(</span><span class="n">num_agents</span><span class="o">=</span><span class="n">num_agents</span><span class="p">,</span> <span class="n">number_parameters</span><span class="o">=</span><span class="n">all_param</span><span class="p">[</span><span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">8</span><span class="p">)],</span>
+                                      <span class="n">limits</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+    <span class="n">weights_2</span> <span class="o">=</span> <span class="n">modify_mean</span><span class="p">(</span><span class="n">weights_2</span><span class="p">,</span> <span class="n">rng</span><span class="o">.</span><span class="n">random</span><span class="p">(</span><span class="mi">1</span><span class="p">)[</span><span class="mi">0</span><span class="p">],</span> <span class="n">max_counter</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">epsilon</span><span class="o">=</span><span class="mf">0.05</span><span class="p">,</span> <span class="n">limits</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+
+    <span class="n">weights_3</span> <span class="o">=</span> <span class="n">create_random_numbers</span><span class="p">(</span><span class="n">num_agents</span><span class="o">=</span><span class="n">num_agents</span><span class="p">,</span> <span class="n">number_parameters</span><span class="o">=</span><span class="n">all_param</span><span class="p">[</span><span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">8</span><span class="p">)],</span>
+                                      <span class="n">limits</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+    <span class="n">weights_3</span> <span class="o">=</span> <span class="n">modify_mean</span><span class="p">(</span><span class="n">weights_3</span><span class="p">,</span> <span class="n">rng</span><span class="o">.</span><span class="n">random</span><span class="p">(</span><span class="mi">1</span><span class="p">)[</span><span class="mi">0</span><span class="p">],</span> <span class="n">max_counter</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">epsilon</span><span class="o">=</span><span class="mf">0.05</span><span class="p">,</span> <span class="n">limits</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+
+    <span class="n">random_choice</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span>
+
+    <span class="c1"># Combine the three weights in all possible configurations and make them row-stochastic, then append only</span>
+    <span class="c1"># the first two columns, as a reminder, the first column is the conformist weight, and the second column is</span>
+    <span class="c1"># the radical weight. The truncation is added to make sure that the numbers are indeed between 0 and 1</span>
+    <span class="k">if</span> <span class="n">random_choice</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+
+        <span class="n">inner_traits</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">((</span><span class="n">weights_1</span><span class="p">,</span> <span class="n">weights_2</span><span class="p">,</span> <span class="n">weights_3</span><span class="p">),</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">make_row_stochastic</span><span class="p">(</span><span class="n">inner_traits</span><span class="p">)</span>
+        <span class="n">inner_traits</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">maximum</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">minimum</span><span class="p">(</span><span class="n">inner_traits</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">inner_traits</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">:</span><span class="mi">2</span><span class="p">]</span>
+
+    <span class="k">elif</span> <span class="n">random_choice</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+
+        <span class="n">inner_traits</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">((</span><span class="n">weights_1</span><span class="p">,</span> <span class="n">weights_3</span><span class="p">,</span> <span class="n">weights_2</span><span class="p">),</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">make_row_stochastic</span><span class="p">(</span><span class="n">inner_traits</span><span class="p">)</span>
+        <span class="n">inner_traits</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">maximum</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">minimum</span><span class="p">(</span><span class="n">inner_traits</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">inner_traits</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">:</span><span class="mi">2</span><span class="p">]</span>
+
+    <span class="k">elif</span> <span class="n">random_choice</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+
+        <span class="n">inner_traits</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">((</span><span class="n">weights_2</span><span class="p">,</span> <span class="n">weights_1</span><span class="p">,</span> <span class="n">weights_3</span><span class="p">),</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">make_row_stochastic</span><span class="p">(</span><span class="n">inner_traits</span><span class="p">)</span>
+        <span class="n">inner_traits</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">maximum</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">minimum</span><span class="p">(</span><span class="n">inner_traits</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">inner_traits</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">:</span><span class="mi">2</span><span class="p">]</span>
+
+    <span class="k">elif</span> <span class="n">random_choice</span> <span class="o">==</span> <span class="mi">3</span><span class="p">:</span>
+
+        <span class="n">inner_traits</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">((</span><span class="n">weights_2</span><span class="p">,</span> <span class="n">weights_3</span><span class="p">,</span> <span class="n">weights_1</span><span class="p">),</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">make_row_stochastic</span><span class="p">(</span><span class="n">inner_traits</span><span class="p">)</span>
+        <span class="n">inner_traits</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">maximum</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">minimum</span><span class="p">(</span><span class="n">inner_traits</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">inner_traits</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">:</span><span class="mi">2</span><span class="p">]</span>
+
+    <span class="k">elif</span> <span class="n">random_choice</span> <span class="o">==</span> <span class="mi">4</span><span class="p">:</span>
+
+        <span class="n">inner_traits</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">((</span><span class="n">weights_3</span><span class="p">,</span> <span class="n">weights_1</span><span class="p">,</span> <span class="n">weights_2</span><span class="p">),</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">make_row_stochastic</span><span class="p">(</span><span class="n">inner_traits</span><span class="p">)</span>
+        <span class="n">inner_traits</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">maximum</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">minimum</span><span class="p">(</span><span class="n">inner_traits</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">inner_traits</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">:</span><span class="mi">2</span><span class="p">]</span>
+
+    <span class="k">elif</span> <span class="n">random_choice</span> <span class="o">==</span> <span class="mi">5</span><span class="p">:</span>
+
+        <span class="n">inner_traits</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">((</span><span class="n">weights_3</span><span class="p">,</span> <span class="n">weights_2</span><span class="p">,</span> <span class="n">weights_1</span><span class="p">),</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">make_row_stochastic</span><span class="p">(</span><span class="n">inner_traits</span><span class="p">)</span>
+        <span class="n">inner_traits</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">maximum</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">minimum</span><span class="p">(</span><span class="n">inner_traits</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">inner_traits</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">:</span><span class="mi">2</span><span class="p">]</span></div>
+
+
+<div class="viewcode-block" id="create_inner_traits_local"><a class="viewcode-back" href="../../src.html#src.basic_creation.create_inner_traits_local">[docs]</a><span class="k">def</span> <span class="nf">create_inner_traits_local</span><span class="p">(</span><span class="n">num_agents</span><span class="o">=</span><span class="mi">100</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">    Function to create randomly inner trait assignations, these are the agent parameters of the Classification-based</span>
+<span class="sd">    model</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    num_agents: number of agents, by default 100</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    inner traits, it is a list of lists, the first element is alpha, the second is beta (the weights of the conformist</span>
+<span class="sd">    and radical trait, respectively)</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">inner_traits</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">num_agents</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span>
+    <span class="n">rng</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">default_rng</span><span class="p">()</span>
+
+    <span class="k">for</span> <span class="n">id_agent</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">num_agents</span><span class="p">):</span>
+        <span class="n">alpha</span> <span class="o">=</span> <span class="n">rng</span><span class="o">.</span><span class="n">random</span><span class="p">()</span>
+        <span class="n">beta</span> <span class="o">=</span> <span class="n">rng</span><span class="o">.</span><span class="n">random</span><span class="p">()</span>
+        <span class="n">gamma</span> <span class="o">=</span> <span class="n">rng</span><span class="o">.</span><span class="n">random</span><span class="p">()</span>
+
+        <span class="n">total</span> <span class="o">=</span> <span class="n">alpha</span> <span class="o">+</span> <span class="n">beta</span> <span class="o">+</span> <span class="n">gamma</span>
+
+        <span class="n">alpha</span> <span class="o">=</span> <span class="n">alpha</span><span class="o">/</span><span class="n">total</span>
+        <span class="n">beta</span> <span class="o">=</span> <span class="n">beta</span> <span class="o">/</span> <span class="n">total</span>
+
+        <span class="n">inner_traits</span><span class="p">[</span><span class="n">id_agent</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">alpha</span>
+        <span class="n">inner_traits</span><span class="p">[</span><span class="n">id_agent</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">beta</span>
+
+    <span class="k">return</span> <span class="n">inner_traits</span></div>
+
+
+<div class="viewcode-block" id="create_many_opinions"><a class="viewcode-back" href="../../src.html#src.basic_creation.create_many_opinions">[docs]</a><span class="k">def</span> <span class="nf">create_many_opinions</span><span class="p">(</span><span class="n">num_agents</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">file_name</span><span class="o">=</span><span class="s1">&#39;standard_initial_opinions&#39;</span><span class="p">,</span> <span class="n">grid</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">show_result</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">    This function creates and saves many initial opinions to be used later</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    num_agents: the number of agents, by default 100</span>
+<span class="sd">    file_name: name of the file created, by default &#39;standard_initial_opinions&#39;</span>
+<span class="sd">    grid: it is the reference grid to create the initial opinions</span>
+<span class="sd">    show_result: show the Agreement Plot of the resulting opinions. By default, it is false</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">if</span> <span class="n">grid</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">grid</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">]</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">41</span><span class="p">)</span> <span class="k">for</span> <span class="n">y</span> <span class="ow">in</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">41</span><span class="p">)</span>  <span class="c1"># 11 and 21</span>
+                         <span class="k">if</span> <span class="p">(((</span><span class="n">y</span><span class="o">-</span><span class="n">x</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mf">0.000001</span><span class="p">)</span> <span class="ow">and</span> <span class="p">((</span><span class="n">y</span><span class="o">+</span><span class="n">x</span><span class="p">)</span> <span class="o">&gt;</span> <span class="o">-</span><span class="mf">0.000001</span><span class="p">))])</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">decimals</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+
+    <span class="c1"># opinion_param_1 = [[0, -0.5, 0.0, 1], [1, 0.9, 0.5, 2], [1, -0.5, 0.2, 10]]</span>
+    <span class="c1"># opinion_param_2 = [[0, -0.5, 0.0, 1]]</span>
+    <span class="c1"># opinion_param_3 = [[0, -0.5, 0.0, 1], [1, -0.9, 0.5, 10]]</span>
+    <span class="n">opinion_param_1</span> <span class="o">=</span> <span class="p">[[</span><span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]]</span>
+    <span class="n">opinion_param_2</span> <span class="o">=</span> <span class="p">[[</span><span class="mi">0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]]</span>
+    <span class="n">opinion_param_3</span> <span class="o">=</span> <span class="p">[[</span><span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]]</span>
+    <span class="n">opinion_param_4</span> <span class="o">=</span> <span class="p">[[</span><span class="mi">1</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]]</span>
+    <span class="n">opinion_param_5</span> <span class="o">=</span> <span class="p">[[</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mi">1</span><span class="p">]]</span>
+    <span class="n">opinion_param_6</span> <span class="o">=</span> <span class="p">[[</span><span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mf">1.0</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.5</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]]</span>
+    <span class="n">opinion_param_7</span> <span class="o">=</span> <span class="p">[[</span><span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mf">1.0</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.7</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mi">1</span><span class="p">]]</span>
+    <span class="n">opinion_param_8</span> <span class="o">=</span> <span class="p">[[</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mf">0.7</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]]</span>
+    <span class="n">opinion_param_9</span> <span class="o">=</span> <span class="p">[[</span><span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mf">1.0</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.7</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.2</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mf">0.7</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]]</span>
+    <span class="n">all_param</span> <span class="o">=</span> <span class="p">[</span><span class="n">opinion_param_1</span><span class="p">,</span>
+                 <span class="n">opinion_param_2</span><span class="p">,</span>
+                 <span class="n">opinion_param_3</span><span class="p">,</span>
+                 <span class="n">opinion_param_4</span><span class="p">,</span>
+                 <span class="n">opinion_param_5</span><span class="p">,</span>
+                 <span class="n">opinion_param_6</span><span class="p">,</span>
+                 <span class="n">opinion_param_7</span><span class="p">,</span>
+                 <span class="n">opinion_param_8</span><span class="p">,</span>
+                 <span class="n">opinion_param_9</span><span class="p">]</span>
+
+    <span class="n">all_opinions</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">local_des_abs_mean</span><span class="p">,</span> <span class="n">local_des_mean</span> <span class="ow">in</span> <span class="n">grid</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">oi_param</span> <span class="ow">in</span> <span class="n">all_param</span><span class="p">:</span>
+            <span class="n">initial_opinions</span> <span class="o">=</span> <span class="n">create_random_numbers</span><span class="p">(</span><span class="n">num_agents</span><span class="o">=</span><span class="n">num_agents</span><span class="p">,</span> <span class="n">number_parameters</span><span class="o">=</span><span class="n">oi_param</span><span class="p">)</span>
+            <span class="n">new_opinions</span> <span class="o">=</span> <span class="n">modify_opinions_method_1</span><span class="p">(</span><span class="n">initial_opinions</span><span class="p">,</span> <span class="n">des_mean</span><span class="o">=</span><span class="n">local_des_mean</span><span class="p">,</span>
+                                                    <span class="n">des_abs_mean</span><span class="o">=</span><span class="n">local_des_abs_mean</span><span class="p">,</span> <span class="n">epsilon</span><span class="o">=</span><span class="mf">0.02</span><span class="p">)</span>
+            <span class="n">all_opinions</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">new_opinions</span><span class="p">)</span>
+
+            <span class="n">new_opinions</span> <span class="o">=</span> <span class="n">modify_opinions_method_2</span><span class="p">(</span><span class="n">initial_opinions</span><span class="p">,</span> <span class="n">des_mean</span><span class="o">=</span><span class="n">local_des_mean</span><span class="p">,</span>
+                                                    <span class="n">des_abs_mean</span><span class="o">=</span><span class="n">local_des_abs_mean</span><span class="p">,</span> <span class="n">epsilon</span><span class="o">=</span><span class="mf">0.02</span><span class="p">)</span>
+            <span class="n">all_opinions</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">new_opinions</span><span class="p">)</span>
+
+    <span class="n">np</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">file_name</span><span class="p">,</span> <span class="n">all_opinions</span><span class="p">)</span>  <span class="c1"># save the file as &quot;file_name.npy&quot;</span>
+    <span class="c1"># to recover, use</span>
+    <span class="c1"># all_opinions = np.load(&#39;file_name.npy&#39;)  # loads your saved array into variable all_opinions</span>
+    <span class="c1"># https://stackoverflow.com/questions/37996295/how-to-save-numpy-array-into-computer-for-later-use-in-python</span>
+
+    <span class="k">if</span> <span class="n">show_result</span><span class="p">:</span>
+
+        <span class="n">point_colors</span> <span class="o">=</span> <span class="p">[(</span><span class="mf">0.16862745</span><span class="p">,</span> <span class="mf">0.34901961</span><span class="p">,</span> <span class="mf">0.76470588</span><span class="p">),</span>
+                        <span class="p">(</span><span class="mf">0.32941176</span><span class="p">,</span> <span class="mf">0.54901961</span><span class="p">,</span> <span class="mf">0.18431373</span><span class="p">),</span>
+                        <span class="p">(</span><span class="mf">0.82745098</span><span class="p">,</span> <span class="mf">0.39607843</span><span class="p">,</span> <span class="mf">0.50980392</span><span class="p">),</span>
+                        <span class="p">(</span><span class="mf">0.94509804</span><span class="p">,</span> <span class="mf">0.56078431</span><span class="p">,</span> <span class="mf">0.00392157</span><span class="p">),</span>
+                        <span class="p">(</span><span class="mf">0.39607843</span><span class="p">,</span> <span class="mf">0.05098039</span><span class="p">,</span> <span class="mf">0.10588235</span><span class="p">)]</span>
+
+        <span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">7</span><span class="p">))</span>
+        <span class="n">ax</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">111</span><span class="p">)</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="p">(</span><span class="mf">0.2</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.8</span><span class="p">))</span>
+        <span class="k">for</span> <span class="n">opinion_distribution</span> <span class="ow">in</span> <span class="n">all_opinions</span><span class="p">:</span>
+            <span class="n">classification</span> <span class="o">=</span> <span class="n">histogram_classification</span><span class="p">(</span><span class="n">opinion_distribution</span><span class="p">)</span>
+            <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">absolute</span><span class="p">(</span><span class="n">opinion_distribution</span><span class="p">)</span><span class="o">.</span><span class="n">mean</span><span class="p">(),</span> <span class="n">opinion_distribution</span><span class="o">.</span><span class="n">mean</span><span class="p">(),</span> <span class="s1">&#39;o&#39;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mf">1.5</span><span class="p">,</span>
+                    <span class="n">markersize</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">point_colors</span><span class="p">[</span><span class="n">classification</span><span class="p">])</span>
+        <span class="c1"># for local_des_abs_mean, local_des_mean in grid:</span>
+        <span class="c1">#     ax.plot(local_des_abs_mean, local_des_mean, &#39;s&#39;,</span>
+        <span class="c1">#             color=(0.9, 0.1, 0.3))</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">grid</span><span class="p">()</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+
+    <span class="k">return</span> <span class="n">all_opinions</span></div>
+
+
+<div class="viewcode-block" id="create_many_inner_traits"><a class="viewcode-back" href="../../src.html#src.basic_creation.create_many_inner_traits">[docs]</a><span class="k">def</span> <span class="nf">create_many_inner_traits</span><span class="p">(</span><span class="n">num_agents</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">file_name</span><span class="o">=</span><span class="s1">&#39;standard_inner_traits&#39;</span><span class="p">,</span> <span class="n">grid</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">show_result</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">    This function creates and saves many inner traits to be used later</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    num_agents: the number of agents</span>
+<span class="sd">    file_name: name of the file created</span>
+<span class="sd">    grid: it is the reference grid to create the inner traits</span>
+<span class="sd">    show_result: a boolean determining of the resulting inner traits are shown</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    A list of numpy arrays with &#39;num_agents&#39; rows and 2 columns</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">all_inner_traits</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">if</span> <span class="n">grid</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="c1"># Create the standard grid</span>
+        <span class="n">grid</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">]</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">41</span><span class="p">)</span> <span class="k">for</span> <span class="n">y</span> <span class="ow">in</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">41</span><span class="p">)</span>
+                         <span class="k">if</span> <span class="p">((</span><span class="n">y</span><span class="o">+</span><span class="n">x</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mf">1.000001</span><span class="p">)])</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">decimals</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+
+    <span class="n">opinion_param_1</span> <span class="o">=</span> <span class="p">[[</span><span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]]</span>
+    <span class="n">opinion_param_2</span> <span class="o">=</span> <span class="p">[[</span><span class="mi">0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]]</span>
+    <span class="n">opinion_param_3</span> <span class="o">=</span> <span class="p">[[</span><span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]]</span>
+    <span class="n">opinion_param_4</span> <span class="o">=</span> <span class="p">[[</span><span class="mi">1</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]]</span>
+    <span class="n">opinion_param_5</span> <span class="o">=</span> <span class="p">[[</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mi">1</span><span class="p">]]</span>
+    <span class="n">opinion_param_6</span> <span class="o">=</span> <span class="p">[[</span><span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mf">1.0</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.5</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]]</span>
+    <span class="n">opinion_param_7</span> <span class="o">=</span> <span class="p">[[</span><span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mf">1.0</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.7</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mi">1</span><span class="p">]]</span>
+    <span class="n">opinion_param_8</span> <span class="o">=</span> <span class="p">[[</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mf">0.7</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]]</span>
+    <span class="n">opinion_param_9</span> <span class="o">=</span> <span class="p">[[</span><span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mf">1.0</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.7</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.2</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mf">0.7</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]]</span>
+    <span class="n">all_param</span> <span class="o">=</span> <span class="p">[</span><span class="n">opinion_param_1</span><span class="p">,</span>
+                 <span class="n">opinion_param_2</span><span class="p">,</span>
+                 <span class="n">opinion_param_3</span><span class="p">,</span>
+                 <span class="n">opinion_param_4</span><span class="p">,</span>
+                 <span class="n">opinion_param_5</span><span class="p">,</span>
+                 <span class="n">opinion_param_6</span><span class="p">,</span>
+                 <span class="n">opinion_param_7</span><span class="p">,</span>
+                 <span class="n">opinion_param_8</span><span class="p">,</span>
+                 <span class="n">opinion_param_9</span><span class="p">]</span>  <span class="c1"># All parameters for the creation of the inner traits</span>
+
+    <span class="k">for</span> <span class="n">w1_des</span><span class="p">,</span> <span class="n">w2_des</span> <span class="ow">in</span> <span class="n">grid</span><span class="p">:</span>  <span class="c1"># For all the weights in the grid</span>
+        <span class="n">w3_des</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">-</span> <span class="p">(</span><span class="n">w1_des</span> <span class="o">+</span> <span class="n">w2_des</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">oi_param</span> <span class="ow">in</span> <span class="n">all_param</span><span class="p">:</span>  <span class="c1"># for all the parameters</span>
+
+            <span class="c1"># Create and modify three sets of numbers which will correspond to the three types of weights</span>
+            <span class="n">weights_1</span> <span class="o">=</span> <span class="n">create_random_numbers</span><span class="p">(</span><span class="n">num_agents</span><span class="o">=</span><span class="n">num_agents</span><span class="p">,</span> <span class="n">number_parameters</span><span class="o">=</span><span class="n">oi_param</span><span class="p">,</span> <span class="n">limits</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+            <span class="n">weights_1</span> <span class="o">=</span> <span class="n">modify_mean</span><span class="p">(</span><span class="n">weights_1</span><span class="p">,</span> <span class="n">w1_des</span><span class="p">,</span> <span class="n">max_counter</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">epsilon</span><span class="o">=</span><span class="mf">0.05</span><span class="p">,</span> <span class="n">limits</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+
+            <span class="n">weights_2</span> <span class="o">=</span> <span class="n">create_random_numbers</span><span class="p">(</span><span class="n">num_agents</span><span class="o">=</span><span class="n">num_agents</span><span class="p">,</span> <span class="n">number_parameters</span><span class="o">=</span><span class="n">oi_param</span><span class="p">,</span> <span class="n">limits</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+            <span class="n">weights_2</span> <span class="o">=</span> <span class="n">modify_mean</span><span class="p">(</span><span class="n">weights_2</span><span class="p">,</span> <span class="n">w2_des</span><span class="p">,</span> <span class="n">max_counter</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">epsilon</span><span class="o">=</span><span class="mf">0.05</span><span class="p">,</span> <span class="n">limits</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+
+            <span class="n">weights_3</span> <span class="o">=</span> <span class="n">create_random_numbers</span><span class="p">(</span><span class="n">num_agents</span><span class="o">=</span><span class="n">num_agents</span><span class="p">,</span> <span class="n">number_parameters</span><span class="o">=</span><span class="n">oi_param</span><span class="p">,</span> <span class="n">limits</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+            <span class="n">weights_3</span> <span class="o">=</span> <span class="n">modify_mean</span><span class="p">(</span><span class="n">weights_3</span><span class="p">,</span> <span class="n">w3_des</span><span class="p">,</span> <span class="n">max_counter</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">epsilon</span><span class="o">=</span><span class="mf">0.05</span><span class="p">,</span> <span class="n">limits</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+
+            <span class="c1"># Combine the three weights in all possible configurations and make them row-stochastic, then append only</span>
+            <span class="c1"># the first two columns, as a reminder, the first column is the conformist weight, and the second column is</span>
+            <span class="c1"># the radical weight. The truncation is added to make sure that the numbers are indeed between 0 and 1</span>
+            <span class="n">inner_traits</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">((</span><span class="n">weights_1</span><span class="p">,</span> <span class="n">weights_2</span><span class="p">,</span> <span class="n">weights_3</span><span class="p">),</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+            <span class="n">make_row_stochastic</span><span class="p">(</span><span class="n">inner_traits</span><span class="p">)</span>
+            <span class="n">inner_traits</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">maximum</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">minimum</span><span class="p">(</span><span class="n">inner_traits</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="mi">0</span><span class="p">)</span>
+            <span class="n">all_inner_traits</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">inner_traits</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">:</span><span class="mi">2</span><span class="p">])</span>
+
+            <span class="n">inner_traits</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">((</span><span class="n">weights_1</span><span class="p">,</span> <span class="n">weights_3</span><span class="p">,</span> <span class="n">weights_2</span><span class="p">),</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+            <span class="n">make_row_stochastic</span><span class="p">(</span><span class="n">inner_traits</span><span class="p">)</span>
+            <span class="n">inner_traits</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">maximum</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">minimum</span><span class="p">(</span><span class="n">inner_traits</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="mi">0</span><span class="p">)</span>
+            <span class="n">all_inner_traits</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">inner_traits</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">:</span><span class="mi">2</span><span class="p">])</span>
+
+            <span class="n">inner_traits</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">((</span><span class="n">weights_2</span><span class="p">,</span> <span class="n">weights_1</span><span class="p">,</span> <span class="n">weights_3</span><span class="p">),</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+            <span class="n">make_row_stochastic</span><span class="p">(</span><span class="n">inner_traits</span><span class="p">)</span>
+            <span class="n">inner_traits</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">maximum</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">minimum</span><span class="p">(</span><span class="n">inner_traits</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="mi">0</span><span class="p">)</span>
+            <span class="n">all_inner_traits</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">inner_traits</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">:</span><span class="mi">2</span><span class="p">])</span>
+
+            <span class="n">inner_traits</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">((</span><span class="n">weights_2</span><span class="p">,</span> <span class="n">weights_3</span><span class="p">,</span> <span class="n">weights_1</span><span class="p">),</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+            <span class="n">make_row_stochastic</span><span class="p">(</span><span class="n">inner_traits</span><span class="p">)</span>
+            <span class="n">inner_traits</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">maximum</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">minimum</span><span class="p">(</span><span class="n">inner_traits</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="mi">0</span><span class="p">)</span>
+            <span class="n">all_inner_traits</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">inner_traits</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">:</span><span class="mi">2</span><span class="p">])</span>
+
+            <span class="n">inner_traits</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">((</span><span class="n">weights_3</span><span class="p">,</span> <span class="n">weights_1</span><span class="p">,</span> <span class="n">weights_2</span><span class="p">),</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+            <span class="n">make_row_stochastic</span><span class="p">(</span><span class="n">inner_traits</span><span class="p">)</span>
+            <span class="n">inner_traits</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">maximum</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">minimum</span><span class="p">(</span><span class="n">inner_traits</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="mi">0</span><span class="p">)</span>
+            <span class="n">all_inner_traits</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">inner_traits</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">:</span><span class="mi">2</span><span class="p">])</span>
+
+            <span class="n">inner_traits</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">((</span><span class="n">weights_3</span><span class="p">,</span> <span class="n">weights_2</span><span class="p">,</span> <span class="n">weights_1</span><span class="p">),</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+            <span class="n">make_row_stochastic</span><span class="p">(</span><span class="n">inner_traits</span><span class="p">)</span>
+            <span class="n">inner_traits</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">maximum</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">minimum</span><span class="p">(</span><span class="n">inner_traits</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="mi">0</span><span class="p">)</span>
+            <span class="n">all_inner_traits</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">inner_traits</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">:</span><span class="mi">2</span><span class="p">])</span>
+
+    <span class="n">np</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">file_name</span><span class="p">,</span> <span class="n">all_inner_traits</span><span class="p">)</span>  <span class="c1"># save the file as &quot;file_name.npy&quot;</span>
+    <span class="c1"># to recover, use</span>
+    <span class="c1"># all_opinions = np.load(&#39;file_name.npy&#39;)  # loads your saved array into variable all_opinions</span>
+    <span class="c1"># https://stackoverflow.com/questions/37996295/how-to-save-numpy-array-into-computer-for-later-use-in-python</span>
+
+    <span class="k">if</span> <span class="n">show_result</span><span class="p">:</span>
+        <span class="n">plot_inner_traits</span><span class="p">(</span><span class="n">file_name</span><span class="o">=</span><span class="n">file_name</span> <span class="o">+</span> <span class="s1">&#39;.npy&#39;</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">all_inner_traits</span></div>
+
+
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, Carlos Andres Devia.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

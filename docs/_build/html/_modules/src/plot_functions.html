@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>src.plot_functions &mdash; Agent Based Model for Opinion Formation 0.1 documentation</title>
+      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/sphinx_highlight.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            Agent Based Model for Opinion Formation
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../src.html">src package</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">Agent Based Model for Opinion Formation</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">src.plot_functions</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for src.plot_functions</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">==============================================================</span>
+<span class="sd">Functions for Plotting, (:mod:`f_abm.src.plot_functions`)</span>
+<span class="sd">==============================================================</span>
+
+<span class="sd">Description</span>
+<span class="sd">-----------</span>
+
+<span class="sd">    This is the module that takes care of all the plotting, whether it is for opinion distributions (histograms), or</span>
+<span class="sd">    digraphs, or whatever it is required.</span>
+
+<span class="sd">Functions</span>
+<span class="sd">---------</span>
+
+<span class="sd">    - plot_digraph</span>
+<span class="sd">    - plot_opinions</span>
+<span class="sd">    - plot_histogram</span>
+<span class="sd">    - plot_inner_traits</span>
+<span class="sd">    - plot_all_opinions</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+
+
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">import</span> <span class="nn">igraph</span> <span class="k">as</span> <span class="nn">ig</span>
+<span class="kn">from</span> <span class="nn">.auxiliary_functions</span> <span class="kn">import</span> <span class="p">(</span><span class="n">matrix2digraph</span><span class="p">,</span> <span class="n">opinion2color</span><span class="p">,</span> <span class="n">histogram_classification</span><span class="p">)</span>
+<span class="kn">from</span> <span class="nn">.digraph_creation</span> <span class="kn">import</span> <span class="n">default_digraph</span>
+
+
+<div class="viewcode-block" id="plot_digraph"><a class="viewcode-back" href="../../src.html#src.plot_functions.plot_digraph">[docs]</a><span class="k">def</span> <span class="nf">plot_digraph</span><span class="p">(</span><span class="n">digraph</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">file_name</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">visual_style</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">    Function to plot the digraph</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    digraph: Digraph to be plotted, by default it is a simple ring digraph</span>
+<span class="sd">    file_name: string that is the name of the file to be plotted</span>
+<span class="sd">    visual_style: optional visual style</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">if</span> <span class="n">digraph</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">digraph</span> <span class="o">=</span> <span class="n">matrix2digraph</span><span class="p">(</span><span class="n">default_digraph</span><span class="p">(</span><span class="n">default_type</span><span class="o">=</span><span class="mi">0</span><span class="p">))</span>
+
+    <span class="k">if</span> <span class="n">visual_style</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="c1"># Get the edge weights</span>
+        <span class="n">edge_weights</span> <span class="o">=</span> <span class="n">digraph</span><span class="o">.</span><span class="n">es</span><span class="p">[</span><span class="s2">&quot;weight&quot;</span><span class="p">]</span>
+        <span class="n">color_dict</span> <span class="o">=</span> <span class="p">{</span><span class="mf">1.0</span><span class="p">:</span> <span class="s2">&quot;blue&quot;</span><span class="p">,</span> <span class="o">-</span><span class="mf">1.0</span><span class="p">:</span> <span class="s2">&quot;red&quot;</span><span class="p">}</span>
+        <span class="n">digraph</span><span class="o">.</span><span class="n">es</span><span class="p">[</span><span class="s2">&quot;color&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">color_dict</span><span class="p">[</span><span class="n">edge_weight</span><span class="p">]</span> <span class="k">for</span> <span class="n">edge_weight</span> <span class="ow">in</span> <span class="n">edge_weights</span><span class="p">]</span>
+        <span class="n">visual_style</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;vertex_size&quot;</span><span class="p">:</span> <span class="mf">0.1</span><span class="p">}</span>
+
+    <span class="k">if</span> <span class="n">file_name</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">ig</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">digraph</span><span class="p">,</span> <span class="n">target</span><span class="o">=</span><span class="n">file_name</span> <span class="o">+</span> <span class="s2">&quot;.pdf&quot;</span><span class="p">,</span> <span class="o">**</span><span class="n">visual_style</span><span class="p">)</span>
+
+    <span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">()</span>
+    <span class="n">ig</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">digraph</span><span class="p">,</span> <span class="n">target</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span> <span class="o">**</span><span class="n">visual_style</span><span class="p">,</span> <span class="n">layout</span><span class="o">=</span><span class="s2">&quot;circle&quot;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="plot_opinions"><a class="viewcode-back" href="../../src.html#src.plot_functions.plot_opinions">[docs]</a><span class="k">def</span> <span class="nf">plot_opinions</span><span class="p">(</span><span class="n">opinion_evolution</span><span class="p">,</span> <span class="n">agent_parameters</span><span class="p">,</span> <span class="n">opinion_model</span><span class="p">,</span> <span class="n">axes</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">    Function to plot the opinion evolution</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    opinion_evolution: matrix with the opinion evolution data</span>
+<span class="sd">    agent_parameters: parameters for each agent</span>
+<span class="sd">    opinion_model: the label of the opinion model</span>
+<span class="sd">    axes: the axes for the plot</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    Nothing</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c1"># Get the number of agents</span>
+    <span class="n">num_agents</span> <span class="o">=</span> <span class="n">opinion_evolution</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">num_steps</span> <span class="o">=</span> <span class="n">opinion_evolution</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+    <span class="k">if</span> <span class="n">axes</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
+        <span class="n">ax</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">ax</span> <span class="o">=</span> <span class="n">axes</span>
+    <span class="k">for</span> <span class="n">id_agent</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_agents</span><span class="p">):</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">opinion_evolution</span><span class="p">[</span><span class="n">id_agent</span><span class="p">],</span> <span class="n">color</span><span class="o">=</span><span class="n">opinion2color</span><span class="p">(</span><span class="n">opinion_model</span><span class="p">,</span> <span class="n">agent_parameters</span><span class="p">[</span><span class="n">id_agent</span><span class="p">]))</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="n">num_steps</span><span class="p">])</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">([</span><span class="o">-</span><span class="mf">1.1</span><span class="p">,</span> <span class="mf">1.1</span><span class="p">])</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;Opinion evolution&#39;</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">axes</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">grid</span><span class="p">()</span>
+        <span class="c1"># display the plot</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">grid</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="plot_histogram"><a class="viewcode-back" href="../../src.html#src.plot_functions.plot_histogram">[docs]</a><span class="k">def</span> <span class="nf">plot_histogram</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="n">opinions</span><span class="p">,</span> <span class="n">num_bins</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">histogram_title</span><span class="o">=</span><span class="s1">&#39;Opinions&#39;</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">    This function creates and plots the histogram for a set of opinions</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    ax: the axis where the histogram is plotted</span>
+<span class="sd">    opinions: the set of opinions</span>
+<span class="sd">    num_bins: the number of bins of the histogram, by default it is 10</span>
+<span class="sd">    histogram_title: title of the histogram</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    Nothing</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">ax</span><span class="o">.</span><span class="n">grid</span><span class="p">()</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">hist</span><span class="p">(</span><span class="n">opinions</span><span class="p">,</span> <span class="n">bins</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="o">-</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="n">num_bins</span><span class="o">+</span><span class="mi">1</span><span class="p">),</span> <span class="n">edgecolor</span><span class="o">=</span><span class="s1">&#39;black&#39;</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">([</span><span class="o">-</span><span class="mf">1.1</span><span class="p">,</span> <span class="mf">1.1</span><span class="p">])</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="n">opinions</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]])</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="n">histogram_title</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_axisbelow</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="plot_inner_traits"><a class="viewcode-back" href="../../src.html#src.plot_functions.plot_inner_traits">[docs]</a><span class="k">def</span> <span class="nf">plot_inner_traits</span><span class="p">(</span><span class="n">file_name</span><span class="o">=</span><span class="s1">&#39;standard_inner_traits.npy&#39;</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">    Function to plot the inner traits for the Classification-based model</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    file_name: name of the file that contains the inner traits</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    Nothing</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">all_inner_traits</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">file_name</span><span class="p">)</span>  <span class="c1"># loads your saved array into variable all_opinions</span>
+    <span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
+    <span class="n">ax</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+
+    <span class="k">for</span> <span class="n">inner_traits</span> <span class="ow">in</span> <span class="n">all_inner_traits</span><span class="p">:</span>
+        <span class="n">av_con</span><span class="p">,</span> <span class="n">av_rad</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">maximum</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">minimum</span><span class="p">(</span><span class="n">inner_traits</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">),</span> <span class="mi">1</span><span class="p">),</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="c1"># Truncation is necessary to avoid problems with negative averages that produce non-existent colours</span>
+        <span class="c1"># These negative averages may be produced by small numerical errors</span>
+        <span class="n">av_stb</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">-</span> <span class="p">(</span><span class="n">av_con</span> <span class="o">+</span> <span class="n">av_rad</span><span class="p">)</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">av_con</span><span class="p">,</span> <span class="n">av_stb</span><span class="p">,</span> <span class="s1">&#39;o&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">opinion2color</span><span class="p">(</span><span class="n">opinion_model</span><span class="o">=</span><span class="s1">&#39;CB&#39;</span><span class="p">,</span> <span class="n">agent_parameter</span><span class="o">=</span><span class="p">[</span><span class="n">av_con</span><span class="p">,</span> <span class="n">av_rad</span><span class="p">]))</span>
+
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">([</span><span class="o">-</span><span class="mf">0.1</span><span class="p">,</span> <span class="mf">1.1</span><span class="p">])</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">([</span><span class="o">-</span><span class="mf">0.1</span><span class="p">,</span> <span class="mf">1.1</span><span class="p">])</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;All Inner Traits&#39;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">grid</span><span class="p">()</span>
+    <span class="c1"># display the plot</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="plot_all_opinions"><a class="viewcode-back" href="../../src.html#src.plot_functions.plot_all_opinions">[docs]</a><span class="k">def</span> <span class="nf">plot_all_opinions</span><span class="p">(</span><span class="n">file_name</span><span class="o">=</span><span class="s1">&#39;standard_initial_opinions.npy&#39;</span><span class="p">,</span> <span class="n">color_by_type</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">    Function to plot a set of opinion distributions in the Agreement Plot</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    file_name: name of the file that contains all the initial opinion distributions</span>
+<span class="sd">    color_by_type: boolean specifying how to color the plot</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    Nothing</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">all_opinions</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">file_name</span><span class="p">)</span>  <span class="c1"># loads your saved array into variable all_opinions</span>
+    <span class="k">if</span> <span class="n">color_by_type</span><span class="p">:</span>
+        <span class="n">point_colors</span> <span class="o">=</span> <span class="p">[(</span><span class="mf">0.16862745</span><span class="p">,</span> <span class="mf">0.34901961</span><span class="p">,</span> <span class="mf">0.76470588</span><span class="p">),</span>
+                        <span class="p">(</span><span class="mf">0.32941176</span><span class="p">,</span> <span class="mf">0.54901961</span><span class="p">,</span> <span class="mf">0.18431373</span><span class="p">),</span>
+                        <span class="p">(</span><span class="mf">0.82745098</span><span class="p">,</span> <span class="mf">0.39607843</span><span class="p">,</span> <span class="mf">0.50980392</span><span class="p">),</span>
+                        <span class="p">(</span><span class="mf">0.94509804</span><span class="p">,</span> <span class="mf">0.56078431</span><span class="p">,</span> <span class="mf">0.00392157</span><span class="p">),</span>
+                        <span class="p">(</span><span class="mf">0.39607843</span><span class="p">,</span> <span class="mf">0.05098039</span><span class="p">,</span> <span class="mf">0.10588235</span><span class="p">)]</span>
+
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">point_colors</span> <span class="o">=</span> <span class="p">[(</span><span class="mf">0.16862745</span><span class="p">,</span> <span class="mf">0.54901961</span><span class="p">,</span> <span class="mf">0.10588235</span><span class="p">),</span>
+                        <span class="p">(</span><span class="mf">0.16862745</span><span class="p">,</span> <span class="mf">0.54901961</span><span class="p">,</span> <span class="mf">0.10588235</span><span class="p">),</span>
+                        <span class="p">(</span><span class="mf">0.16862745</span><span class="p">,</span> <span class="mf">0.54901961</span><span class="p">,</span> <span class="mf">0.10588235</span><span class="p">),</span>
+                        <span class="p">(</span><span class="mf">0.16862745</span><span class="p">,</span> <span class="mf">0.54901961</span><span class="p">,</span> <span class="mf">0.10588235</span><span class="p">),</span>
+                        <span class="p">(</span><span class="mf">0.16862745</span><span class="p">,</span> <span class="mf">0.54901961</span><span class="p">,</span> <span class="mf">0.10588235</span><span class="p">)]</span>
+
+    <span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">7</span><span class="p">))</span>
+    <span class="n">ax</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">111</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="p">(</span><span class="mf">0.2</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.8</span><span class="p">))</span>
+    <span class="n">counters</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="mi">5</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+    <span class="k">for</span> <span class="n">opinion_distribution</span> <span class="ow">in</span> <span class="n">all_opinions</span><span class="p">:</span>
+        <span class="n">classification</span> <span class="o">=</span> <span class="n">histogram_classification</span><span class="p">(</span><span class="n">opinion_distribution</span><span class="p">)</span>
+        <span class="n">counters</span><span class="p">[</span><span class="n">classification</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">absolute</span><span class="p">(</span><span class="n">opinion_distribution</span><span class="p">)</span><span class="o">.</span><span class="n">mean</span><span class="p">(),</span> <span class="n">opinion_distribution</span><span class="o">.</span><span class="n">mean</span><span class="p">(),</span> <span class="s1">&#39;o&#39;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mf">1.5</span><span class="p">,</span>
+                <span class="n">markersize</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">point_colors</span><span class="p">[</span><span class="n">classification</span><span class="p">])</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">grid</span><span class="p">()</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;number PC = </span><span class="si">{</span><span class="n">counters</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;number Co = </span><span class="si">{</span><span class="n">counters</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;number Po = </span><span class="si">{</span><span class="n">counters</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;number Cl = </span><span class="si">{</span><span class="n">counters</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;number Di = </span><span class="si">{</span><span class="n">counters</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span></div>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, Carlos Andres Devia.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

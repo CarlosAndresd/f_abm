@@ -107,5 +107,3 @@ def example_4():
 	gather_data(num_agents=100, num_iterations=20, global_name='Gather_data_example')
 
 
-example_1()
-
