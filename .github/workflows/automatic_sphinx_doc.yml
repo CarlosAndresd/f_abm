@@ -6,6 +6,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - run: pip install sphinx
-      - run: sphinx-apidoc -o docs src/
+      - run: sphinx-apidoc -o ./docs ./src/
       - run: cd docs
       - run: make clean html
