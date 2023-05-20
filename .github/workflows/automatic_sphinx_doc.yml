@@ -6,6 +6,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - run: pip install sphinx
+      - uses: actions/checkout@v2
       - run: pwd
       - run: ls -la
       - run: sphinx-apidoc -o ./docs ./src/
