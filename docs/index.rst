@@ -53,7 +53,7 @@ used, and self-contained tools for analysis of opinion formation.
 What can you do now?
 ____________________
 
-There are many things you can do:
+There are many (four) things you can do:
 
 - If you are interested in reading more about the theory behind agent-based opinion formation models, and in particular the one that inspires the functioning of this package, you can :ref:`read here <theory_page>`.
 - If you want to start seeing some simulations you can download the GUI and follow some examples.
