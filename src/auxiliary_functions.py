@@ -219,7 +219,9 @@ def create_random_numbers(num_agents=100, number_parameters=None, limits=(-1, 1)
     """
 
     This function creates and returns a list of random 'num_agents' numbers. This function is used to create initial
-    opinions and also to create agent parameters. Its default use is to create initial opinions
+    opinions and also to create agent parameters. Its default use is to create initial opinions.
+
+    This function can also be used for the creation of agent parameters.
 
     Parameters
     ----------
