@@ -1,0 +1,34 @@
+.. _theory_page:
+
+More about Agent-Based Opinion Formation Models
+==============================================
+
+Here we will explain more in detail what an agent-based opinion formation model is, and how it relates to the package.
+First we will start with an example of a very known model called the Friedkin-Johnsen model.
+
+Example: Friedkin-Johnsen model
+-------------------------------
+
+Explain here the example
+
+Basic components of an Agent-Based Opinion Formation Model
+----------------------------------------------------------
+
+Parts of the model: In order to simulate the model you need seven things:
+
+- **A set of initial opinions**
+- **A initial opinion allocation**
+- **A set of agent parameters**
+- **An agent parameter allocation**
+- **A initial underlying digraph**
+- **An opinion update law**
+- **A digraph update law**
+
+Why is this important?
+----------------------
+
+
+
+
+
+
