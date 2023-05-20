@@ -25,7 +25,7 @@ population changes over time. There are many types of opinion formation models. 
 where the opinions are unidimensional.
 
 What is an agent-based opinion formation model?
-----------------------------------------------
+-----------------------------------------------
 
 Imagine a population of 100 individuals, and a statement that cannot be proven true or false (for instance: *cooking*
 *should be taught in school*). Each agent can *agree* or *disagree* to some extent. For simplicity, assume that the
@@ -55,19 +55,20 @@ ____________________
 
 There are many things you can do:
 
-- If you are interested in reading more about the theory behind agent-based opinion formation models, and in particular
-the one that inspires the functioning of this package, you can :ref:`read here <theory_page>`.
+- If you are interested in reading more about the theory behind agent-based opinion formation models, and in particular the one that inspires the functioning of this package, you can :ref:`read here <theory_page>`.
 - If you want to start seeing some simulations you can download the GUI and follow some examples.
-- If you want to learn about the functioning of the program and the details of the functions you can go to the
-documentation.
-- If you want to contribute, even with something as simple as comments to this first introduction feel free to send a
-comment here.
+- If you want to learn about the functioning of the program and the details of the functions you can go to the documentation.
+- If you want to contribute, even with something as simple as comments to this first introduction feel free to send a comment here.
+
+
 
 
 
 .. toctree::
    :maxdepth: 2
    :caption: Theory:
+
+   docs_theory.rst
 
 
 

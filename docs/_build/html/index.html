@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Welcome to Agent Based Model for Opinion Formation’s documentation! &mdash; Agent Based Model for Opinion Formation 0.1 documentation</title>
+  <title>Welcome to Agent Based Model for Opinion Formation documentation! &mdash; Agent Based Model for Opinion Formation 0.1 documentation</title>
       <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
@@ -17,7 +17,7 @@
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="src package" href="src.html" /> 
+    <link rel="next" title="More about Agent-Based Opinion Formation Models" href="docs_theory.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -39,7 +39,11 @@
   </form>
 </div>
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
-              <ul>
+              <p class="caption" role="heading"><span class="caption-text">Theory:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="docs_theory.html">More about Agent-Based Opinion Formation Models</a></li>
+</ul>
+<ul>
 <li class="toctree-l1"><a class="reference internal" href="src.html">src package</a></li>
 </ul>
 
@@ -57,7 +61,7 @@
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
       <li><a href="#" class="icon icon-home" aria-label="Home"></a></li>
-      <li class="breadcrumb-item active">Welcome to Agent Based Model for Opinion Formation’s documentation!</li>
+      <li class="breadcrumb-item active">Welcome to Agent Based Model for Opinion Formation documentation!</li>
       <li class="wy-breadcrumbs-aside">
             <a href="_sources/index.rst.txt" rel="nofollow"> View page source</a>
       </li>
@@ -67,8 +71,65 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <section id="welcome-to-agent-based-model-for-opinion-formation-s-documentation">
-<h1>Welcome to Agent Based Model for Opinion Formation’s documentation!<a class="headerlink" href="#welcome-to-agent-based-model-for-opinion-formation-s-documentation" title="Permalink to this heading"></a></h1>
+  <section id="welcome-to-agent-based-model-for-opinion-formation-documentation">
+<h1>Welcome to Agent Based Model for Opinion Formation documentation!<a class="headerlink" href="#welcome-to-agent-based-model-for-opinion-formation-documentation" title="Permalink to this heading"></a></h1>
+<p>Welcome to the documentation for <em>Agent Based Model for Opinion Formation</em>. This is (or hopefully will be) a
+self-contained package that allows anyone to simulate and analyse different agent-based opinion formation models.</p>
+<section id="what-is-an-agent-based-model">
+<h2>What is an agent-based model?<a class="headerlink" href="#what-is-an-agent-based-model" title="Permalink to this heading"></a></h2>
+<p>In an agent-based model there is a set of agents or individuals that have certain <strong>behaviour</strong> and <strong>communicate</strong>
+with each other in a certain way. Think for example of a classroom. The students are the agents, each has a particular
+individual behaviour. They also interact with each other. Their actions are determined by their individual personality
+and the interaction with other students.</p>
+</section>
+<section id="what-is-an-opinion-formation-model">
+<h2>What is an opinion formation model?<a class="headerlink" href="#what-is-an-opinion-formation-model" title="Permalink to this heading"></a></h2>
+<p>It is a model that aims to reproduce at least in part the dynamics of opinion formation, that is, how the opinion of a
+population changes over time. There are many types of opinion formation models. Here we focus on agent-based models
+where the opinions are unidimensional.</p>
+</section>
+<section id="what-is-an-agent-based-opinion-formation-model">
+<h2>What is an agent-based opinion formation model?<a class="headerlink" href="#what-is-an-agent-based-opinion-formation-model" title="Permalink to this heading"></a></h2>
+<p>Imagine a population of 100 individuals, and a statement that cannot be proven true or false (for instance: <em>cooking</em>
+<em>should be taught in school</em>). Each agent can <em>agree</em> or <em>disagree</em> to some extent. For simplicity, assume that the
+opinion of each agent can be represented by a single number between -1 and 1. If the opinion is -1 then the agent
+completely disagrees, if the opinion is 1 then the agent completely agrees, if the opinion is 0 then the agent is
+indifferent and any value in between -1 and 1 represents a degree of agreement or disagreement.</p>
+<p>Here each agent has a single opinion, that is why in this model the opinions are unidimensional.</p>
+<p>Now, people can speak with each other. If one person tells another person its opinion is equivalent to an agent
+‘showing’ or ‘sharing’ its opinion with another agent. In this way, at any give time a singe agent can ‘perceive’ the
+opinion of some other agents in the population. When this happens, the agent will most likely change its opinion.</p>
+<p>In this way, as agents exchange opinions and change their own opinions, the opinion of the complete population changes.
+This is what is called <strong>opinion dynamics</strong>. This is what is studied with this package.</p>
+</section>
+<section id="who-is-this-package-for">
+<h2>Who is this package for?<a class="headerlink" href="#who-is-this-package-for" title="Permalink to this heading"></a></h2>
+<p>It is for anyone that is curious about opinion formation. From someone that just now learns what opinion formation is,
+to a researcher with extensive knowledge of opinion formation models. The idea is that this package will contain an easy
+to use GUI that allows anyone to ‘explore’ and ‘play’ with opinion dynamics, functions that can be easily modified and
+used, and self-contained tools for analysis of opinion formation.</p>
+<section id="what-can-you-do-now">
+<h3>What can you do now?<a class="headerlink" href="#what-can-you-do-now" title="Permalink to this heading"></a></h3>
+<p>There are many things you can do:</p>
+<ul class="simple">
+<li><p>If you are interested in reading more about the theory behind agent-based opinion formation models, and in particular the one that inspires the functioning of this package, you can <a class="reference internal" href="docs_theory.html#theory-page"><span class="std std-ref">read here</span></a>.</p></li>
+<li><p>If you want to start seeing some simulations you can download the GUI and follow some examples.</p></li>
+<li><p>If you want to learn about the functioning of the program and the details of the functions you can go to the documentation.</p></li>
+<li><p>If you want to contribute, even with something as simple as comments to this first introduction feel free to send a comment here.</p></li>
+</ul>
+<div class="toctree-wrapper compound">
+<p class="caption" role="heading"><span class="caption-text">Theory:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="docs_theory.html">More about Agent-Based Opinion Formation Models</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="docs_theory.html#example-friedkin-johnsen-model">Example: Friedkin-Johnsen model</a></li>
+<li class="toctree-l2"><a class="reference internal" href="docs_theory.html#basic-components-of-an-agent-based-opinion-formation-model">Basic components of an Agent-Based Opinion Formation Model</a></li>
+<li class="toctree-l2"><a class="reference internal" href="docs_theory.html#why-is-this-important">Why is this important?</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</section>
+</section>
 </section>
 <section id="src">
 <h1>src<a class="headerlink" href="#src" title="Permalink to this heading"></a></h1>
@@ -207,7 +268,7 @@
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="src.html" class="btn btn-neutral float-right" title="src package" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="docs_theory.html" class="btn btn-neutral float-right" title="More about Agent-Based Opinion Formation Models" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>
