@@ -5,8 +5,10 @@ jobs:
   update-sphinx-documentation:
     runs-on: ubuntu-latest
     steps:
-      - run: pip install sphinx
-      - run: pip install sphinx_rtd_theme
+      - run: | 
+          pip install sphinx
+          pip install sphinx_rtd_theme
+          pip install -r requirements.txt
       - uses: actions/checkout@v2
       - run: |
           pwd
