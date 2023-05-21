@@ -134,6 +134,8 @@ def add_rs_weights2matrix(adjacency_matrix):
 
     The result is a row-stochastic matrix
 
+    A row stochastic matrix is one with all non-negative weights and the sum of elements along a row is always 1
+
     Parameters
     ----------
     adjacency_matrix: original adjacency matrix
