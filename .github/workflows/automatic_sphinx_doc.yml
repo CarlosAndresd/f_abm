@@ -7,10 +7,11 @@ jobs:
     steps:
       - run: pip install sphinx
       - uses: actions/checkout@v2
-      - run: pwd
-      - run: ls -la
-      - run: sphinx-apidoc -o ./docs ./src/
-      - run: cd docs
-      - run: pwd
-      - run: ls -la
-      - run: make clean html
+      - run: |
+          pwd
+          ls -la
+          sphinx-apidoc -o ./docs ./src/
+          cd docs
+          pwd
+          ls -la
+          make clean html
