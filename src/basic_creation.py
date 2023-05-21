@@ -35,7 +35,10 @@ from .plot_functions import plot_inner_traits
 def a_random_digraph(num_agents=10):
     """
 
-    This function returns a random digraph, NOT a digraph with random topology, but a random digraph
+    This function returns a random digraph, NOT a digraph with random topology, but digraph with a topology chosen at
+    random, currently the possible topologies include.
+
+    Update: currently, this function only returns digraphs with the small-world topology.
 
     Parameters
     ----------
