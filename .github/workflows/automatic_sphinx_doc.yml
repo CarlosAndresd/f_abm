@@ -6,12 +6,23 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - run: pip install sphinx
+      - run: pip install sphinx_rtd_theme
       - uses: actions/checkout@v2
       - run: |
+          echo
           pwd
+          echo
           ls -la
+          echo
           sphinx-apidoc -o ./docs ./src/
+          echo
           cd docs
+          echo
+          rm src.rst
+          rm modules.rst
+          echo
           pwd
+          echo
           ls -la
+          echo
           make clean html
