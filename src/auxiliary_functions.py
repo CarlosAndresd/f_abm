@@ -132,6 +132,8 @@ def add_rs_weights2matrix(adjacency_matrix):
 
     Function that adds the stochastic weights to an adjacency matrix
 
+    The result is a row-stochastic matrix
+
     Parameters
     ----------
     adjacency_matrix: original adjacency matrix
@@ -498,6 +500,7 @@ def modify_opinions_method_2(opinions, des_mean, des_abs_mean, epsilon=0.05, max
         mean_abs_difference = np.absolute(opinion_abs_mean - des_abs_mean)
 
     return opinions
+
 
 def histogram_classification(opinion_distribution, classification_parameters=(10, 3, 4, 6, 50, 12, 40)):
     """
