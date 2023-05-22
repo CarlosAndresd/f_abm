@@ -44,11 +44,11 @@ To activate the conda virtual environment type `conda activate f_abm`, to deacti
 
 ### Installation instructions with pip and venv
 
-**Note 1:** for this to work you need to make sure you have `pip` and `venv` installed in your computer.
+**Note 1:** for this to work you need to make sure you have `pip` and `venv` installed in your computer. You can find [here](https://packaging.python.org/en/latest/guides/installing-using-pip-and-virtual-environments/#creating-a-virtual-environment) more information about `pip` and virtual environments.
 
 **Note 2:** these instructions assume you have `Python 3` installed in your computer. 
 
-If you are unsure your computer has these requirements, please follow the recommended installation instructions.
+If you are unsure your computer has these requirements, please follow the recommended installation instructions. 
 
 
 1. Fork and clone this repository
