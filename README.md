@@ -8,7 +8,7 @@ by Carlos Andres Devia
 ## Computational Environment:
 
 - Programming language: Python
-- Packages and libraries: see the `requirements.txt` file
+- Packages and libraries: see the `requirements.txt` file or the `environment.yml` file
 
 ## How to use this code repository
 
@@ -44,11 +44,18 @@ To activate the conda virtual environment type `conda activate f_abm`, to deacti
 
 ### Installation instructions with pip and venv
 
+**Note 1:** for this to work you need to make sure you have `pip` and `venv` installed in your computer.
+
+**Note 2:** these instructions assume you have `Python 3` installed in your computer. 
+
+If you are unsure your computer has these requirements, please follow the recommended installation instructions.
+
+
 1. Fork and clone this repository
 2. Create a virtual environtment and install the rependencies usign the following commands (if you face any problems, see the [official documentation](https://docs.python.org/3/library/venv.html)):
 
 ```
-python3 -m venv ./f_abm_env  % Use 'venv' create a virual environment called 'f_abm_env'
+python3 -m venv ./f_abm_env  % Use 'venv' to create a virual environment called 'f_abm_env'
 source ./f_abm_env/bin/activate  % Activate the virtual environment
 pip install -r requirements.txt  % Install the dependencies from the requirements.txt
 ```
