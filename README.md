@@ -3,8 +3,8 @@
 
 by Carlos Andres Devia
 
-[Documentation](https://f-abm.readthedocs.io/en/latest/)
-[Code of Conduct](https://github.com/CarlosAndresd/f_abm/blob/main/CODE_OF_CONDUCT.md)
+- [Documentation](https://f-abm.readthedocs.io/en/latest/)
+- [Code of Conduct](https://github.com/CarlosAndresd/f_abm/blob/main/CODE_OF_CONDUCT.md)
 
 ## Computational Environment:
 
