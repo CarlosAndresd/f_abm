@@ -18,14 +18,40 @@ Great! You are helping us create a more clear and improved repository. Simply ra
 
 ## You have found a bug
 
+Please, let us know what happened with the [corresponding issue](https://github.com/CarlosAndresd/f_abm/issues/new?assignees=&labels=bug&projects=&template=bug_report_template.yml&title=Bug+Report).
+
 ## You want to write or improve some code
+
+Thanks! when writing new code please keep in mind the [following guidelines](#guidelines-when-adding-new-code)
+
 
 ## You want to add examples or tests
 
+Thanks! Please follow the [guidelines to add new code](#guidelines-when-adding-new-code), and in addition to that do the following:
+
+- If you are adding tests, make sure that they are run automatically.
+- If you are adding examples, please document well the examples and the use of functions in them.
+- In both cases, make sure to add the tests or examples in the correct directory.
+
 ## You have an idea for new functionality 
+
+All new ideas are welcome, please provide details for your idea with the following issue
 
 ## You want to implement new functionality 
 
+Thanks! Please follow the [guidelines to add new code](#guidelines-when-adding-new-code). If the functionality was suggested in an issue, please make sure to reply or close the issue. If the functionality was not suggested in an issue, please make an issue and then reply or close it.
+
 ## You want to contribute with documentation 
+
+Great! In this repository documentation is made automatically using Sphinx and HTML webpages, so please make sure to follow that convention.
+
+## Guidelines when adding new code
+
+- The prefered docstrings style is [Numpy-Style Docstrings](https://numpydoc.readthedocs.io/en/latest/format.html).
+- Follow the code style guidelines of [PEP8](https://peps.python.org/pep-0008/). This is easily done if you write code using an IDE like PyCharm
+- When defining new functions and variables, please use the [PEP8](https://peps.python.org/pep-0008/) standard. In a nutshell:
+	- Function names should be lowercase.
+	- Variable names should be lowercase.
+- Whenever possible, add in the function docstrins a simple example of how to use the function. Also, make use of default parameters to be able to use the functions in a simple way.
 
 
