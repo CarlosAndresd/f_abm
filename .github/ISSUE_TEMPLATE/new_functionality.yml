@@ -1,0 +1,57 @@
+name: New Functionality Idea
+description: Describe a new possible functionality
+title: "New Functionality"
+labels: ["enhancement"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for your idea!
+  - type: dropdown
+    id: idea_type
+    attributes:
+      label: How would you categorise the new functionality?
+      multiple: true
+      options:
+        - A new model
+        - New metrics
+        - Data visualisation
+        - Other
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: Functionality description
+      description: Please provide a clear and simple description of your idea, it can be anything from new models, to different ways to visualise data.
+      placeholder: Here goes your idea
+    validations:
+      required: true
+  - type: textarea
+    id: references
+    attributes:
+      label: References
+      description: If the new functionality is inspired by a paper or other code, feel free to reference them here, so we can take a look.
+      render: shell
+  - type: checkboxes
+    id: further_communication
+    attributes:
+      label: Further communication
+      description: Do you agree to being contacted to provide further details for this new functionality? If so, please provide your email below.
+      options:
+        - label: Yes, I agree.
+          required: false
+  - type: input
+    id: contact
+    attributes:
+      label: Contact Details
+      description: How can we get in touch with you if we need more info?
+      placeholder: ex. email@example.com
+    validations:
+      required: false
+  - type: checkboxes
+    id: terms
+    attributes:
+      label: Code of Conduct
+      description: By submitting this suggestion, you agree to follow our [Code of Conduct](https://example.com)
+      options:
+        - label: I agree to follow this project's Code of Conduct
+          required: true
