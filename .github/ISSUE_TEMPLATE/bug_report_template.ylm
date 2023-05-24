@@ -1,0 +1,54 @@
+name: Bug Report
+description: Describe a bug you found
+title: "Bug Report"
+labels: ["bug"]
+body:
+- type: markdown
+  attributes:
+    value: Thanks you for taking the time to subit this bug report
+- type: textarea
+  id: what-happened
+  attributes:
+    label: What happened?
+    description: Please provide a clear and simple description of what happened
+    placeholder: Be as specific as possible
+  validations:
+    required: true
+- type: textarea
+  id: steps
+  attributes:
+    label: How can the bug be reproduced?
+    description: If possible and relevant, please provide the steps to reproduce the bug.
+    placeholder:  1. Go to '...' 2. Click on '....' 3. Scroll down to '....' 4. See error
+  validations:
+    required: false
+- type: textarea
+  id: more
+  attributes:
+    label: Other comments
+    description: If there is something else you would like to mention, feel free to add it here.
+    render: shell
+- type: checkboxes
+  id: further_communication
+  attributes:
+    label: Further communication
+    description: Do you agree to being contacted to provide further details for this bug? If so, please provide your email below.
+    options:
+      - label: Yes, I agree.
+        required: false
+- type: input
+  id: contact
+  attributes:
+    label: Contact Details
+    description: How can we get in touch with you if we need more info?
+    placeholder: ex. email@example.com
+  validations:
+    required: false
+- type: checkboxes
+  id: terms
+  attributes:
+    label: Code of Conduct
+    description: By submitting this report, you agree to follow our [Code of Conduct](https://example.com)
+    options:
+      - label: I agree to follow this project's Code of Conduct
+        required: true
