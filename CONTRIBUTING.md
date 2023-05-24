@@ -35,7 +35,7 @@ Thanks! Please follow the [guidelines to add new code](#guidelines-when-adding-n
 
 ## You have an idea for new functionality 
 
-All new ideas are welcome, please provide details for your idea with the following issue
+All new ideas are welcome, please provide details for your idea with the [following issue](https://github.com/CarlosAndresd/f_abm/issues/new?assignees=&labels=enhancement&projects=&template=new_functionality.yml&title=New+Functionality)
 
 ## You want to implement new functionality 
 
