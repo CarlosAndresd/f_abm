@@ -43,7 +43,16 @@ Thanks! Please follow the [guidelines to add new code](#guidelines-when-adding-n
 
 ### You want to contribute with documentation 
 
-Great! In this repository documentation is made automatically using Sphinx and HTML webpages, so please make sure to follow that convention.
+Great! 
+
+You can contribute to the documentation in a number of ways:
+
++ reading the current documentation and making sure that it is clear and error-free;
++ adding diagrams or figures when you feel can make the explantion more clear;
++ adding explanations on theoretical parts of the documentation;
++ making sure that all functions and modules have complete docstrings.
+
+In this repository documentation for the code is made automatically using Sphinx and HTML webpages, so there is no need to manually document the code in the HTML webpage.
 
 # Guidelines when adding new code
 
@@ -54,5 +63,6 @@ Great! In this repository documentation is made automatically using Sphinx and H
 	- Variable names should be lowercase.
 - Whenever possible, add in the function docstrings a simple example of how to use the function. Also, make use of default parameters to be able to use the functions in a simple way.
 - When adding functions to a module remenber to list them in the docstrings of the module.
+- When importing functions from other modules explicitly mention them in the import statement.
 
 
