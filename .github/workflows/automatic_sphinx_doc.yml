@@ -6,9 +6,17 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
+      - uses: docker://pandoc/core:2.9
+        with:
+          args: >-  # allows you to break string into multiple lines
+            --from=markdown 
+            --to=rst 
+            --output=docs/CONTRIBUTING.rst 
+            CONTRIBUTING.md
       - run: | 
           pip install sphinx
           pip install sphinx_rtd_theme
+          pip install myst-parser
           pip install -r requirements.txt
       - run: |
           pwd
@@ -16,7 +24,6 @@ jobs:
           rm docs/src.rst
           rm docs/modules.rst
           sphinx-apidoc -o ./docs ./src/
-          pandoc --from=markdown --to=rst --output=docs/CONTRIBUTING.rst CONTRIBUTING.md
           cd docs
           pwd
           ls -la
