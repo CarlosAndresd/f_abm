@@ -16,6 +16,7 @@ jobs:
           rm docs/src.rst
           rm docs/modules.rst
           sphinx-apidoc -o ./docs ./src/
+          pandoc --from=markdown --to=rst --output=docs/CONTRIBUTING.rst CONTRIBUTING.md
           cd docs
           pwd
           ls -la

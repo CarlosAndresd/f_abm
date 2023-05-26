@@ -41,6 +41,14 @@
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../docs_theory.html">More about Agent-Based Opinion Formation Models</a></li>
 </ul>
+<p class="caption" role="heading"><span class="caption-text">About this project:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../README.html">Agent-Based Model for Opinion Formation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../CONTRIBUTING.html">Guideline on how to contribute</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../CONTRIBUTING.html#guidelines-when-adding-new-code">Guidelines when adding new code</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../CODE_OF_CONDUCT.html">Code of Conduct</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Code:</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../src.html">src package</a></li>
 </ul>
@@ -107,7 +115,10 @@
 <div class="viewcode-block" id="a_random_digraph"><a class="viewcode-back" href="../../src.html#src.basic_creation.a_random_digraph">[docs]</a><span class="k">def</span> <span class="nf">a_random_digraph</span><span class="p">(</span><span class="n">num_agents</span><span class="o">=</span><span class="mi">10</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 
-<span class="sd">    This function returns a random digraph, NOT a digraph with random topology, but a random digraph</span>
+<span class="sd">    This function returns a random digraph, NOT a digraph with random topology, but digraph with a topology chosen at</span>
+<span class="sd">    random, currently the possible topologies include.</span>
+
+<span class="sd">    Update: currently, this function only returns digraphs with the small-world topology.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>

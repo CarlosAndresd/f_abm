@@ -70,11 +70,20 @@ There are many (four) things you can do:
 
    docs_theory.rst
 
-.. include:: ../README.md
+.. toctree::
+   :maxdepth: 2
+   :caption: About this project:
+
+   README.md
+   CONTRIBUTING.rst
+   CODE_OF_CONDUCT.md
 
 
+.. toctree::
+   :maxdepth: 2
+   :caption: Code:
 
-.. include:: modules.rst
+   src.rst
 
 
 
