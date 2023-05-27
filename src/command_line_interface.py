@@ -83,16 +83,18 @@ def create_new_simulations():
 		file_name = default_input
 
 	# Number of agents
+	# Options:
+	# - number of agents (num_ag)
 	default_input = '100'
 	message = 'Enter number of agents'
 	num_agents = read_positive_integer(message, default_input)
 
 	# Initial opinion characterisation
 	# Options:
-	# - location (loc)
-	# - tolerance
-	# - method
-	# - print histogram
+	# - location (io_loc)
+	# - tolerance (io_tol) [optional]
+	# - method (io_met) [optional]
+	# - print histogram (io_prt) [optional]
 
 	default_input = 'loc=(0.5, 0.1), print=True'
 	initial_opinion_char = input('Enter initial opinion characterisation [' + default_input + ']: ')
@@ -101,8 +103,8 @@ def create_new_simulations():
 
 	# Model
 	# Options:
-	# - model label
-	# - model parameters
+	# - model label (mod_lab)
+	# - model parameters (mod_par) [optional]
 	default_input = 'model_label=CB'
 	model_id = input('Enter model [' + default_input + ']: ')
 	while not model_id:
@@ -110,10 +112,10 @@ def create_new_simulations():
 
 	# Agent parameter characterisation
 	# Options:
-	# - parameter representation
-	# - tolerance
-	# - method
-	# - print histogram or alternative representation
+	# - parameter representation (par_rep)
+	# - tolerance (par_tol) [optional]
+	# - method (par_met) [optional]
+	# - print histogram or alternative representation (par_prt) [optional]
 	default_input = 'par_rep=(0.2, 0.3, 0.5), print=True'
 	agent_parameter_char = input('Enter agent parameter characterisation [' + default_input + ']: ')
 	while not agent_parameter_char:
@@ -121,14 +123,17 @@ def create_new_simulations():
 
 	# Underlying digraph characterisation
 	# Options:
-	# - digraph label
-	# - digraph parameters (depending on the type)
+	# - digraph label (dig_lab)
+	# - digraph parameters (depending on the type) (dig_par) [optional]
+	# - print digraph representation (dig_prt) [optional]
 	default_input = 'digraph_label=sw, sig=(0, 1, 1, 1), alp=0.5, print=True'
 	underlying_digraph_char = input('Enter underlying digraph characterisation [' + default_input + '] ')
 	while not underlying_digraph_char:
 		underlying_digraph_char = default_input
 
 	# Number of steps
+	# Options:
+	# - number of time steps (num_ts)
 	default_input = '50'
 	message = 'Enter number of time-step'
 	num_time_steps = read_positive_integer(message, default_input)
