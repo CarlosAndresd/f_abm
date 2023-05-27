@@ -65,7 +65,8 @@ def create_new_simulations():
 
 	Returns
 	-------
-	Nothing
+	A dictionary with information on how to run the desired simulation. The dictionary contains the following
+	information:
 
 	"""
 
@@ -87,24 +88,41 @@ def create_new_simulations():
 	num_agents = read_positive_integer(message, default_input)
 
 	# Initial opinion characterisation
+	# Options:
+	# - location (loc)
+	# - tolerance
+	# - method
+	# - print histogram
+
 	default_input = 'loc=(0.5, 0.1), print=True'
 	initial_opinion_char = input('Enter initial opinion characterisation [' + default_input + ']: ')
 	while not initial_opinion_char:
 		initial_opinion_char = default_input
 
 	# Model
+	# Options:
+	# - model label
+	# - model parameters
 	default_input = 'model_label=CB'
 	model_id = input('Enter model [' + default_input + ']: ')
 	while not model_id:
 		model_id = default_input
 
 	# Agent parameter characterisation
+	# Options:
+	# - parameter representation
+	# - tolerance
+	# - method
+	# - print histogram or alternative representation
 	default_input = 'par_rep=(0.2, 0.3, 0.5), print=True'
 	agent_parameter_char = input('Enter agent parameter characterisation [' + default_input + ']: ')
 	while not agent_parameter_char:
 		agent_parameter_char = default_input
 
 	# Underlying digraph characterisation
+	# Options:
+	# - digraph label
+	# - digraph parameters (depending on the type)
 	default_input = 'digraph_label=sw, sig=(0, 1, 1, 1), alp=0.5, print=True'
 	underlying_digraph_char = input('Enter underlying digraph characterisation [' + default_input + '] ')
 	while not underlying_digraph_char:
