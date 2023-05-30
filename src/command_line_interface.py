@@ -98,9 +98,17 @@ def get_parameter_value(all_parameters, parameter_name):
 
 	"""
 
+	print('\n'*2)
+
+	print('all_parameters = ' + all_parameters)
+	print('parameter_name = ' + parameter_name)
+
+	print('\n')
+
 	first_index = all_parameters.find(parameter_name)
 	if first_index == -1:
 		print('return None')
+		print('\n' * 2)
 		return None
 	first_part = all_parameters[first_index:]
 	last_index = first_part.find(';')
@@ -110,6 +118,7 @@ def get_parameter_value(all_parameters, parameter_name):
 		parameter_value = first_part[first_part.find('=') + 1:first_part.find(';')]
 
 	print('return ' + parameter_value)
+	print('\n' * 2)
 	return literal_eval(parameter_value)
 
 
@@ -176,8 +185,8 @@ def create_new_simulations():
 	while not model_id:
 		model_id = default_input
 
-	simulation_data['mod_lab'] = get_parameter_value(initial_opinion_char, 'mod_lab')
-	simulation_data['mod_par'] = get_parameter_value(initial_opinion_char, 'mod_par')
+	simulation_data['mod_lab'] = get_parameter_value(model_id, 'mod_lab')
+	simulation_data['mod_par'] = get_parameter_value(model_id, 'mod_par')
 
 	# Agent parameter characterisation
 	# Options:
@@ -190,10 +199,10 @@ def create_new_simulations():
 	while not agent_parameter_char:
 		agent_parameter_char = default_input
 
-	simulation_data['par_rep'] = get_parameter_value(initial_opinion_char, 'par_rep')
-	simulation_data['par_tol'] = get_parameter_value(initial_opinion_char, 'par_tol')
-	simulation_data['par_met'] = get_parameter_value(initial_opinion_char, 'par_met')
-	simulation_data['par_prt'] = get_parameter_value(initial_opinion_char, 'par_prt')
+	simulation_data['par_rep'] = get_parameter_value(agent_parameter_char, 'par_rep')
+	simulation_data['par_tol'] = get_parameter_value(agent_parameter_char, 'par_tol')
+	simulation_data['par_met'] = get_parameter_value(agent_parameter_char, 'par_met')
+	simulation_data['par_prt'] = get_parameter_value(agent_parameter_char, 'par_prt')
 
 	# Underlying digraph characterisation
 	# Options:
@@ -205,9 +214,9 @@ def create_new_simulations():
 	while not underlying_digraph_char:
 		underlying_digraph_char = default_input
 
-	simulation_data['dig_lab'] = get_parameter_value(initial_opinion_char, 'dig_lab')
-	simulation_data['dig_par'] = get_parameter_value(initial_opinion_char, 'dig_par')
-	simulation_data['dig_prt'] = get_parameter_value(initial_opinion_char, 'dig_prt')
+	simulation_data['dig_lab'] = get_parameter_value(underlying_digraph_char, 'dig_lab')
+	simulation_data['dig_par'] = get_parameter_value(underlying_digraph_char, 'dig_par')
+	simulation_data['dig_prt'] = get_parameter_value(underlying_digraph_char, 'dig_prt')
 
 	# Number of steps
 	# Options:
