@@ -317,7 +317,7 @@ def opinion2color(opinion_model, agent_parameter):
         return r_value.round(7), g_value.round(7), b_value.round(7)
 
 
-def modify_opinions_method_1(opinions, des_mean, des_abs_mean, epsilon=0.05, max_counter=100, show_process=False,
+def modify_opinions_method_1(opinions, des_mean, des_abs_mean, epsilon=None, max_counter=100, show_process=False,
                              limits=(-1, 1)):
     """
 
@@ -339,6 +339,9 @@ def modify_opinions_method_1(opinions, des_mean, des_abs_mean, epsilon=0.05, max
     the new, modified opinions
 
     """
+
+    if epsilon is None:
+        epsilon=0.05
 
     if show_process:
         fig = plt.figure(figsize=(10, 7))
@@ -407,7 +410,7 @@ def modify_opinions_method_1(opinions, des_mean, des_abs_mean, epsilon=0.05, max
     return opinions
 
 
-def modify_opinions_method_2(opinions, des_mean, des_abs_mean, epsilon=0.05, max_counter=100, show_process=False,
+def modify_opinions_method_2(opinions, des_mean, des_abs_mean, epsilon=None, max_counter=100, show_process=False,
                              limits=(-1, 1)):
     """
 
@@ -429,6 +432,9 @@ def modify_opinions_method_2(opinions, des_mean, des_abs_mean, epsilon=0.05, max
     the new, modified opinions
 
     """
+
+    if epsilon is None:
+        epsilon=0.05
 
     if show_process:
         fig = plt.figure(figsize=(10, 7))

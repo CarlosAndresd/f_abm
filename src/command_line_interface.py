@@ -19,6 +19,9 @@ Functions
 
 
 from ast import literal_eval
+from .model_functions import model_evolution
+from .auxiliary_functions import modify_opinions_method_1, modify_opinions_method_2, create_random_numbers
+import numpy as np
 
 
 def read_positive_integer(message, default_input):
@@ -123,6 +126,51 @@ def get_parameter_value(all_parameters, parameter_name):
 
 
 def create_new_simulations():
+	simulation_parameters = read_user_input()
+
+	# Now that all the information is gathered, we can proceed to execute the simulation
+
+	num_agents = simulation_parameters['num_ag']
+
+	# 1. Create the initial opinions
+	abs_mean_op, mean_op = simulation_parameters['io_loc']
+	io_tolerance = simulation_parameters['io_tol']
+	io_method = simulation_parameters['io_met']
+	io_initial_distribution = simulation_parameters['io_dis']
+	io_print = simulation_parameters['io_prt']
+
+	initial_opinions = create_random_numbers(num_agents=num_agents, number_parameters=io_initial_distribution)
+
+	if io_method is None:
+
+		rng = np.random.default_rng()  # this is for the random numbers creation
+
+		if rng.random(1)[0] > 0.5:
+			initial_opinions = modify_opinions_method_1(initial_opinions, des_mean=mean_op,
+											des_abs_mean=abs_mean_op, epsilon=io_tolerance)
+
+		else:
+			initial_opinions = modify_opinions_method_2(initial_opinions, des_mean=mean_op,
+											des_abs_mean=abs_mean_op, epsilon=io_tolerance)
+
+	else:
+
+		if io_method == 1:
+			initial_opinions = modify_opinions_method_1(initial_opinions, des_mean=mean_op,
+														des_abs_mean=abs_mean_op, epsilon=io_tolerance)
+
+		else:
+			if not io_method == 2:
+				print("The method should be a number between 1 and 2")
+			initial_opinions = modify_opinions_method_2(initial_opinions, des_mean=mean_op,
+														des_abs_mean=abs_mean_op, epsilon=io_tolerance)
+
+
+	# model_evolution(initial_opinions=None, adjacency_matrix=None, agent_parameters=None, model_parameters=None,
+	# 				model_function=None, num_steps=50, default_type=0)
+
+
+def read_user_input():
 	"""
 
 	This function reads all the necessary input from the user to create a new simulation and returns a dictionary with
@@ -164,9 +212,10 @@ def create_new_simulations():
 	# - location (io_loc)
 	# - tolerance (io_tol) [optional]
 	# - method (io_met) [optional]
+	# - initial_distribution (io_dis) [optional]
 	# - print histogram (io_prt) [optional]
 
-	default_input = 'io_loc=(0.5, 0.1); io_prt=True'
+	default_input = 'io_loc=(0.5, 0.1); io_dis=[[0, -1.0, 1.0, 1]]; io_prt=True'
 	initial_opinion_char = input('Enter initial opinion characterisation [' + default_input + ']: ')
 	while not initial_opinion_char:
 		initial_opinion_char = default_input
@@ -174,6 +223,7 @@ def create_new_simulations():
 	simulation_data['io_loc'] = get_parameter_value(initial_opinion_char, 'io_loc')
 	simulation_data['io_tol'] = get_parameter_value(initial_opinion_char, 'io_tol')
 	simulation_data['io_met'] = get_parameter_value(initial_opinion_char, 'io_met')
+	simulation_data['io_dis'] = get_parameter_value(initial_opinion_char, 'io_dis')
 	simulation_data['io_prt'] = get_parameter_value(initial_opinion_char, 'io_prt')
 
 	# Model
