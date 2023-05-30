@@ -22,6 +22,7 @@ from ast import literal_eval
 from .model_functions import model_evolution
 from .auxiliary_functions import modify_opinions_method_1, modify_opinions_method_2, create_random_numbers
 import numpy as np
+from .digraph_creation import complete_digraph, ring_digraph, small_world_digraph, random_digraph
 
 
 def read_positive_integer(message, default_input):
@@ -165,6 +166,28 @@ def create_new_simulations():
 			initial_opinions = modify_opinions_method_2(initial_opinions, des_mean=mean_op,
 														des_abs_mean=abs_mean_op, epsilon=io_tolerance)
 
+	# 2. Create the adjacency matrix
+	dig_lab = simulation_parameters['dig_lab']
+	dig_par = simulation_parameters['dig_par']
+	dig_prt = simulation_parameters['dig_prt']
+
+	if dig_lab == 'cd':  # Complete digraph
+		complete_digraph(num_agents=num_agents, row_stochastic=False, positive_edge_ratio=1.0)
+
+	elif dig_lab == 'gr':  # Generalised ring
+		ring_digraph(num_agents=num_agents, topology_signature=None, row_stochastic=False, positive_edge_ratio=1.0,
+					 num_random_edges_it=0)
+
+	elif dig_lab == 'sw':  # Small-world
+		small_world_digraph(num_agents=num_agents, topology_signature=None, row_stochastic=False, positive_edge_ratio=1.0,
+							change_probability=0.0, reverse_probability=0.0, bidirectional_probability=0.0,
+							num_random_edges_it=0)
+
+	elif dig_lab == 'rd':  # Random digraph
+		random_digraph(num_agents=num_agents, row_stochastic=False, positive_edge_ratio=1.0, edge_probability=0.5)
+
+	else:
+		print("The selected digraph topology does not exits")
 
 	# model_evolution(initial_opinions=None, adjacency_matrix=None, agent_parameters=None, model_parameters=None,
 	# 				model_function=None, num_steps=50, default_type=0)
