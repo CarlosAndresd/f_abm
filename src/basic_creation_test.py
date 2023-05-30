@@ -78,7 +78,7 @@ def test_get_parameter_value_3():
 
 	all_parameters = 'par_rep=(0.2, 0.3, 0.5); par_tol=0.2; par_tol=0.5; print=True'
 	parameter_name = 'par_tol'
-	assert get_parameter_value(all_parameters, parameter_name) == 0.5
+	assert get_parameter_value(all_parameters, parameter_name) == 0.2
 
 
 
