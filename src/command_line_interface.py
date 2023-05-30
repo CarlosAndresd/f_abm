@@ -18,6 +18,9 @@ Functions
 """
 
 
+from ast import literal_eval
+
+
 def read_positive_integer(message, default_input):
 	"""
 
@@ -55,6 +58,57 @@ def read_positive_integer(message, default_input):
 			print("This is not an integer number, try again")
 
 	return number
+
+
+def get_parameter_value(all_parameters, parameter_name):
+	"""
+
+	This function receives two strings, the string 'all_parameters' contains parameters and parameter values separated
+	by a semicolon, the string 'parameter_name' contains the name of the parameter. The function returns the evaluation
+	of the variable related to the first appearance of the parameter name. See the examples.
+
+	Parameters
+	----------
+	all_parameters: string containing all the parameter names and parameter values, separated by semicolons
+	parameter_name: string containing the name of the parameter
+
+	Returns
+	-------
+	The first value of the parameter if it is contained in the string 'all_parameters', if it is not contained, then it
+	returns None
+
+	Examples
+	--------
+
+	all_parameters = 'par_rep=(0.2, 0.3, 0.5); par_tol=0.2; print=True'
+	parameter_name = 'par_rep'
+
+	returns (0.2, 0.3, 0.5)
+
+	all_parameters = 'par_rep=(0.2, 0.3, 0.5); par_tol=0.2; print=True'
+	parameter_name = 'model_name'
+
+	returns None because 'model_name' is not in all_parameters
+
+	all_parameters = 'par_rep=(0.2, 0.3, 0.5); par_tol=0.2; par_tol=0.5; print=True'
+	parameter_name = 'par_tol'
+
+	returns 0.5, because in its first appearance the value 0.2 was given instead of the value 0.5
+
+
+	"""
+
+	first_index = all_parameters.find(parameter_name)
+	if first_index == -1:
+		return None
+	first_part = all_parameters[first_index:]
+	last_index = first_part.find(';')
+	if last_index == -1:
+		parameter_value = first_part[first_part.find('=')+1:]
+	else:
+		parameter_value = first_part[first_part.find('=') + 1:first_part.find(';')]
+
+	return literal_eval(parameter_value)
 
 
 def create_new_simulations():
