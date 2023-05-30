@@ -100,6 +100,7 @@ def get_parameter_value(all_parameters, parameter_name):
 
 	first_index = all_parameters.find(parameter_name)
 	if first_index == -1:
+		print('return None')
 		return None
 	first_part = all_parameters[first_index:]
 	last_index = first_part.find(';')
@@ -108,6 +109,7 @@ def get_parameter_value(all_parameters, parameter_name):
 	else:
 		parameter_value = first_part[first_part.find('=') + 1:first_part.find(';')]
 
+	print('return ' + parameter_value)
 	return literal_eval(parameter_value)
 
 
@@ -125,10 +127,13 @@ def create_new_simulations():
 	"""
 
 	welcome_text = 'Creation of a new simulation'
+	print('\n'*10)
 	print('|' + '*' * (2+len(welcome_text)) + '|')
 	print('| ' + welcome_text + ' |')
 	print('|' + '*' * (2 + len(welcome_text)) + '|')
 	print(' ')
+
+	simulation_data = dict()
 
 	# File name
 	default_input = 'date'
@@ -136,12 +141,14 @@ def create_new_simulations():
 	while not file_name:
 		file_name = default_input
 
+	simulation_data['file_name'] = file_name
+
 	# Number of agents
 	# Options:
 	# - number of agents (num_ag)
 	default_input = '100'
 	message = 'Enter number of agents'
-	num_agents = read_positive_integer(message, default_input)
+	simulation_data['num_ag'] = read_positive_integer(message, default_input)
 
 	# Initial opinion characterisation
 	# Options:
@@ -150,19 +157,27 @@ def create_new_simulations():
 	# - method (io_met) [optional]
 	# - print histogram (io_prt) [optional]
 
-	default_input = 'loc=(0.5, 0.1), print=True'
+	default_input = 'io_loc=(0.5, 0.1); io_prt=True'
 	initial_opinion_char = input('Enter initial opinion characterisation [' + default_input + ']: ')
 	while not initial_opinion_char:
 		initial_opinion_char = default_input
+
+	simulation_data['io_loc'] = get_parameter_value(initial_opinion_char, 'io_loc')
+	simulation_data['io_tol'] = get_parameter_value(initial_opinion_char, 'io_tol')
+	simulation_data['io_met'] = get_parameter_value(initial_opinion_char, 'io_met')
+	simulation_data['io_prt'] = get_parameter_value(initial_opinion_char, 'io_prt')
 
 	# Model
 	# Options:
 	# - model label (mod_lab)
 	# - model parameters (mod_par) [optional]
-	default_input = 'model_label=CB'
+	default_input = 'mod_lab="CB"'
 	model_id = input('Enter model [' + default_input + ']: ')
 	while not model_id:
 		model_id = default_input
+
+	simulation_data['mod_lab'] = get_parameter_value(initial_opinion_char, 'mod_lab')
+	simulation_data['mod_par'] = get_parameter_value(initial_opinion_char, 'mod_par')
 
 	# Agent parameter characterisation
 	# Options:
@@ -170,27 +185,41 @@ def create_new_simulations():
 	# - tolerance (par_tol) [optional]
 	# - method (par_met) [optional]
 	# - print histogram or alternative representation (par_prt) [optional]
-	default_input = 'par_rep=(0.2, 0.3, 0.5), print=True'
+	default_input = 'par_rep=(0.2, 0.3, 0.5); par_prt=True'
 	agent_parameter_char = input('Enter agent parameter characterisation [' + default_input + ']: ')
 	while not agent_parameter_char:
 		agent_parameter_char = default_input
+
+	simulation_data['par_rep'] = get_parameter_value(initial_opinion_char, 'par_rep')
+	simulation_data['par_tol'] = get_parameter_value(initial_opinion_char, 'par_tol')
+	simulation_data['par_met'] = get_parameter_value(initial_opinion_char, 'par_met')
+	simulation_data['par_prt'] = get_parameter_value(initial_opinion_char, 'par_prt')
 
 	# Underlying digraph characterisation
 	# Options:
 	# - digraph label (dig_lab)
 	# - digraph parameters (depending on the type) (dig_par) [optional]
 	# - print digraph representation (dig_prt) [optional]
-	default_input = 'digraph_label=sw, sig=(0, 1, 1, 1), alp=0.5, print=True'
+	default_input = 'dig_lab="sw"; dig_par="sig=(0, 1, 1, 1), alp=0.5"; print=True'
 	underlying_digraph_char = input('Enter underlying digraph characterisation [' + default_input + '] ')
 	while not underlying_digraph_char:
 		underlying_digraph_char = default_input
+
+	simulation_data['dig_lab'] = get_parameter_value(initial_opinion_char, 'dig_lab')
+	simulation_data['dig_par'] = get_parameter_value(initial_opinion_char, 'dig_par')
+	simulation_data['dig_prt'] = get_parameter_value(initial_opinion_char, 'dig_prt')
 
 	# Number of steps
 	# Options:
 	# - number of time steps (num_ts)
 	default_input = '50'
 	message = 'Enter number of time-step'
-	num_time_steps = read_positive_integer(message, default_input)
+	simulation_data['num_ts'] = read_positive_integer(message, default_input)
+
+	print('\n'*5)
+	print(simulation_data)
+
+	return simulation_data
 
 
 if __name__ == '__main__':
