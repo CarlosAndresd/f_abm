@@ -19,10 +19,12 @@ Functions
 
 
 from ast import literal_eval
-from .model_functions import model_evolution
-from .auxiliary_functions import modify_opinions_method_1, modify_opinions_method_2, create_random_numbers
+from .model_functions import model_evolution, cb_model_step
+from .auxiliary_functions import (modify_opinions_method_1, modify_opinions_method_2, create_random_numbers, modify_mean,
+                                                    make_row_stochastic)
 import numpy as np
 from .digraph_creation import complete_digraph, ring_digraph, small_world_digraph, random_digraph
+from .plot_functions import plot_histogram, plot_digraph, plot_opinions
 
 
 def read_positive_integer(message, default_input):
@@ -61,7 +63,7 @@ def read_positive_integer(message, default_input):
 		except ValueError:
 			print("This is not an integer number, try again")
 
-	return number
+	return int(number)
 
 
 def get_parameter_value(all_parameters, parameter_name):
@@ -102,17 +104,8 @@ def get_parameter_value(all_parameters, parameter_name):
 
 	"""
 
-	print('\n'*2)
-
-	print('all_parameters = ' + all_parameters)
-	print('parameter_name = ' + parameter_name)
-
-	print('\n')
-
 	first_index = all_parameters.find(parameter_name)
 	if first_index == -1:
-		print('return None')
-		print('\n' * 2)
 		return None
 	first_part = all_parameters[first_index:]
 	last_index = first_part.find(';')
@@ -121,8 +114,6 @@ def get_parameter_value(all_parameters, parameter_name):
 	else:
 		parameter_value = first_part[first_part.find('=') + 1:first_part.find(';')]
 
-	print('return ' + parameter_value)
-	print('\n' * 2)
 	return literal_eval(parameter_value)
 
 
@@ -134,6 +125,7 @@ def create_new_simulations():
 	num_agents = simulation_parameters['num_ag']
 
 	# 1. Create the initial opinions
+	print('\n\n\tCreating initial opinions')
 	abs_mean_op, mean_op = simulation_parameters['io_loc']
 	io_tolerance = simulation_parameters['io_tol']
 	io_method = simulation_parameters['io_met']
@@ -166,7 +158,13 @@ def create_new_simulations():
 			initial_opinions = modify_opinions_method_2(initial_opinions, des_mean=mean_op,
 														des_abs_mean=abs_mean_op, epsilon=io_tolerance)
 
+	if io_print:
+		plot_histogram(ax=None, opinions=initial_opinions, num_bins=10, histogram_title='Opinions')
+
+	print('\tInitial opinions created')
 	# 2. Create the adjacency matrix
+
+	print('\n\n\tCreating adjacency matrix')
 	dig_lab = simulation_parameters['dig_lab']
 
 	dig_res = simulation_parameters['dig_res']  # row_stochastic
@@ -202,26 +200,78 @@ def create_new_simulations():
 	dig_prt = simulation_parameters['dig_prt']
 
 	if dig_lab == 'cd':  # Complete digraph
-		complete_digraph(num_agents=num_agents, row_stochastic=dig_res, positive_edge_ratio=dig_per)
+		adjacency_matrix = complete_digraph(num_agents=num_agents, row_stochastic=dig_res, positive_edge_ratio=dig_per)
 
 	elif dig_lab == 'gr':  # Generalised ring
-		ring_digraph(num_agents=num_agents, topology_signature=dig_tsi, row_stochastic=dig_res,
+		adjacency_matrix = ring_digraph(num_agents=num_agents, topology_signature=dig_tsi, row_stochastic=dig_res,
 					 positive_edge_ratio=dig_per, num_random_edges_it=0)
 
 	elif dig_lab == 'sw':  # Small-world
-		small_world_digraph(num_agents=num_agents, topology_signature=dig_tsi, row_stochastic=dig_res,
+		adjacency_matrix = small_world_digraph(num_agents=num_agents, topology_signature=dig_tsi, row_stochastic=dig_res,
 							positive_edge_ratio=dig_per, change_probability=dig_cpr, reverse_probability=dig_rpr,
 							bidirectional_probability=dig_bpr, num_random_edges_it=dig_rei)
 
 	elif dig_lab == 'rd':  # Random digraph
-		random_digraph(num_agents=num_agents, row_stochastic=dig_res, positive_edge_ratio=dig_per, edge_probability=dig_epr)
+		adjacency_matrix = random_digraph(num_agents=num_agents, row_stochastic=dig_res, positive_edge_ratio=dig_per, edge_probability=dig_epr)
 
 	else:
 		print("The selected digraph topology does not exits")
 
-	# model_evolution(initial_opinions=None, adjacency_matrix=None, agent_parameters=None, model_parameters=None,
-	# 				model_function=None, num_steps=50, default_type=0)
+	if dig_prt:
+		plot_digraph(digraph=adjacency_matrix, file_name=None, visual_style=None)
 
+	print('\tAdjacency matrix created')
+
+	# 3. Create agent parameters
+
+	print('\n\n\tCreating agent parameters')
+
+	w1_des, w2_des, w3_des = simulation_parameters['par_rep']
+	par_tol = simulation_parameters['par_tol']
+	par_dis = simulation_parameters['par_dis']
+	par_prt = simulation_parameters['par_prt']
+
+	if par_dis is None:
+		par_dis = [[0, -1.0, 1.0, 1]]
+
+	if par_tol is None:
+		par_tol = 0.05
+
+	weights_1 = create_random_numbers(num_agents=num_agents, number_parameters=par_dis, limits=(0, 1))
+	weights_1 = modify_mean(weights_1, w1_des, max_counter=15, epsilon=par_tol, limits=(0, 1))
+
+	weights_2 = create_random_numbers(num_agents=num_agents, number_parameters=par_dis, limits=(0, 1))
+	weights_2 = modify_mean(weights_2, w2_des, max_counter=15, epsilon=par_tol, limits=(0, 1))
+
+	weights_3 = create_random_numbers(num_agents=num_agents, number_parameters=par_dis, limits=(0, 1))
+	weights_3 = modify_mean(weights_3, w3_des, max_counter=15, epsilon=par_tol, limits=(0, 1))
+
+	inner_traits = np.concatenate((weights_1, weights_2, weights_3), axis=1)
+	make_row_stochastic(inner_traits)
+	inner_traits = np.maximum(np.minimum(inner_traits, 1), 0)
+	inner_traits = inner_traits[:, 0:2]
+
+	print('\tAgent parameters created')
+
+	# 4. Run the model
+
+	print('\n\n\tRunning the model')
+
+	mod_lab = simulation_parameters['mod_lab']
+	mod_par = simulation_parameters['mod_par']
+
+	if mod_lab == 'CB':
+		model_evolution_function = cb_model_step
+
+	num_ts = simulation_parameters['num_ts']
+
+	opinion_evolution = model_evolution(initial_opinions=initial_opinions, adjacency_matrix=adjacency_matrix,
+										agent_parameters=inner_traits, model_parameters=mod_par,
+										model_function=model_evolution_function, num_steps=num_ts, default_type=0)
+
+	plot_opinions(opinion_evolution, inner_traits, mod_lab, axes=None)
+
+	print('\tSimulation complete')
 
 def read_user_input():
 	"""
@@ -268,10 +318,10 @@ def read_user_input():
 	# - initial_distribution (io_dis) [optional]
 	# - print histogram (io_prt) [optional]
 
-	default_input = 'io_loc=(0.5, 0.1); io_dis=[[0, -1.0, 1.0, 1]]; io_prt=True'
+	# default_input = 'io_loc=(0.5, 0.1); io_dis=[[0, -1.0, 1.0, 1]]; io_prt=True'
+	default_input = 'io_loc=(0.5, 0.1); io_prt=True'
 	initial_opinion_char = input('Enter initial opinion characterisation [' + default_input + ']: ')
-	while not initial_opinion_char:
-		initial_opinion_char = default_input
+	initial_opinion_char = initial_opinion_char + '; ' + default_input
 
 	simulation_data['io_loc'] = get_parameter_value(initial_opinion_char, 'io_loc')
 	simulation_data['io_tol'] = get_parameter_value(initial_opinion_char, 'io_tol')
@@ -285,8 +335,7 @@ def read_user_input():
 	# - model parameters (mod_par) [optional]
 	default_input = 'mod_lab="CB"'
 	model_id = input('Enter model [' + default_input + ']: ')
-	while not model_id:
-		model_id = default_input
+	model_id = model_id + '; ' + default_input
 
 	simulation_data['mod_lab'] = get_parameter_value(model_id, 'mod_lab')
 	simulation_data['mod_par'] = get_parameter_value(model_id, 'mod_par')
@@ -295,16 +344,15 @@ def read_user_input():
 	# Options:
 	# - parameter representation (par_rep)
 	# - tolerance (par_tol) [optional]
-	# - method (par_met) [optional]
+	# - initial distribution (par_dis) [optional]
 	# - print histogram or alternative representation (par_prt) [optional]
 	default_input = 'par_rep=(0.2, 0.3, 0.5); par_prt=True'
 	agent_parameter_char = input('Enter agent parameter characterisation [' + default_input + ']: ')
-	while not agent_parameter_char:
-		agent_parameter_char = default_input
+	agent_parameter_char = agent_parameter_char + '; ' + default_input
 
 	simulation_data['par_rep'] = get_parameter_value(agent_parameter_char, 'par_rep')
 	simulation_data['par_tol'] = get_parameter_value(agent_parameter_char, 'par_tol')
-	simulation_data['par_met'] = get_parameter_value(agent_parameter_char, 'par_met')
+	simulation_data['par_dis'] = get_parameter_value(agent_parameter_char, 'par_dis')
 	simulation_data['par_prt'] = get_parameter_value(agent_parameter_char, 'par_prt')
 
 	# Underlying digraph characterisation
@@ -314,8 +362,7 @@ def read_user_input():
 	# - print digraph representation (dig_prt) [optional]
 	default_input = 'dig_lab="sw"; dig_tsi=[0, 1, 1, 1]; dig_cpr=0.5; dig_prt=True'
 	underlying_digraph_char = input('Enter underlying digraph characterisation [' + default_input + '] ')
-	while not underlying_digraph_char:
-		underlying_digraph_char = default_input
+	underlying_digraph_char = underlying_digraph_char + '; ' + default_input
 
 	simulation_data['dig_lab'] = get_parameter_value(underlying_digraph_char, 'dig_lab')
 	# simulation_data['dig_par'] = get_parameter_value(underlying_digraph_char, 'dig_par')

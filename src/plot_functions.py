@@ -121,6 +121,10 @@ def plot_histogram(ax, opinions, num_bins=10, histogram_title='Opinions'):
 
     """
 
+    if ax is None:
+        fig = plt.figure(figsize=(10, 7))
+        ax = fig.add_subplot(111)
+
     ax.grid()
     ax.hist(opinions, bins=np.linspace(-1.0, 1.0, num_bins+1), edgecolor='black')
     ax.set_xlim([-1.1, 1.1])

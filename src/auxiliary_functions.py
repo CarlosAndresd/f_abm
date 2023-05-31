@@ -256,6 +256,14 @@ def create_random_numbers(num_agents=100, number_parameters=None, limits=(-1, 1)
     # fractions
     fractions = number_parameters[:, 3]
     fractions = fractions/fractions.sum()
+    fractions = fractions[0]
+
+    # print(num_agents)
+    # print(type(num_agents))
+    # print(fractions)
+    # print(type(fractions))
+    # print(fractions*num_agents)
+
     sub_num_agents = np.floor(fractions*num_agents)  # compute the number of agents this assignation corresponds to
     missing_agents = num_agents-sub_num_agents.sum()  # number of agents that are left to assign
     while missing_agents > 0:
