@@ -21,7 +21,7 @@ Functions
 from ast import literal_eval
 from .model_functions import model_evolution, cb_model_step
 from .auxiliary_functions import (modify_opinions_method_1, modify_opinions_method_2, create_random_numbers, modify_mean,
-                                                    make_row_stochastic)
+                                                    make_row_stochastic, matrix2digraph)
 import numpy as np
 from .digraph_creation import complete_digraph, ring_digraph, small_world_digraph, random_digraph
 from .plot_functions import plot_histogram, plot_digraph, plot_opinions
@@ -218,7 +218,7 @@ def create_new_simulations():
 		print("The selected digraph topology does not exits")
 
 	if dig_prt:
-		plot_digraph(digraph=adjacency_matrix, file_name=None, visual_style=None)
+		plot_digraph(digraph=matrix2digraph(adjacency_matrix), file_name=None, visual_style=None)
 
 	print('\tAdjacency matrix created')
 
