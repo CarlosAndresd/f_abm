@@ -168,23 +168,53 @@ def create_new_simulations():
 
 	# 2. Create the adjacency matrix
 	dig_lab = simulation_parameters['dig_lab']
-	dig_par = simulation_parameters['dig_par']
+
+	dig_res = simulation_parameters['dig_res']  # row_stochastic
+	dig_per = simulation_parameters['dig_per']  # positive_edge_ratio
+	dig_tsi = simulation_parameters['dig_tsi']  # topology_signature
+	dig_cpr = simulation_parameters['dig_cpr']  # change_probability
+	dig_rpr = simulation_parameters['dig_rpr']  # reverse_probability
+	dig_bpr = simulation_parameters['dig_bpr']  # bidirectional_probability
+	dig_rei = simulation_parameters['dig_rei']  # num_random_edges_it
+	dig_epr = simulation_parameters['dig_epr']  # edge_probability
+
+	if dig_res is None:
+		dig_res = False
+
+	if dig_per is None:
+		dig_per = 1.0
+
+	if dig_cpr is None:
+		dig_cpr = 0.0
+
+	if dig_rpr is None:
+		dig_rpr = 0.0
+
+	if dig_bpr is None:
+		dig_bpr = 0.0
+
+	if dig_rei is None:
+		dig_rei = 0
+
+	if dig_epr is None:
+		dig_epr = 0.5
+
 	dig_prt = simulation_parameters['dig_prt']
 
 	if dig_lab == 'cd':  # Complete digraph
-		complete_digraph(num_agents=num_agents, row_stochastic=False, positive_edge_ratio=1.0)
+		complete_digraph(num_agents=num_agents, row_stochastic=dig_res, positive_edge_ratio=dig_per)
 
 	elif dig_lab == 'gr':  # Generalised ring
-		ring_digraph(num_agents=num_agents, topology_signature=None, row_stochastic=False, positive_edge_ratio=1.0,
-					 num_random_edges_it=0)
+		ring_digraph(num_agents=num_agents, topology_signature=dig_tsi, row_stochastic=dig_res,
+					 positive_edge_ratio=dig_per, num_random_edges_it=0)
 
 	elif dig_lab == 'sw':  # Small-world
-		small_world_digraph(num_agents=num_agents, topology_signature=None, row_stochastic=False, positive_edge_ratio=1.0,
-							change_probability=0.0, reverse_probability=0.0, bidirectional_probability=0.0,
-							num_random_edges_it=0)
+		small_world_digraph(num_agents=num_agents, topology_signature=dig_tsi, row_stochastic=dig_res,
+							positive_edge_ratio=dig_per, change_probability=dig_cpr, reverse_probability=dig_rpr,
+							bidirectional_probability=dig_bpr, num_random_edges_it=dig_rei)
 
 	elif dig_lab == 'rd':  # Random digraph
-		random_digraph(num_agents=num_agents, row_stochastic=False, positive_edge_ratio=1.0, edge_probability=0.5)
+		random_digraph(num_agents=num_agents, row_stochastic=dig_res, positive_edge_ratio=dig_per, edge_probability=dig_epr)
 
 	else:
 		print("The selected digraph topology does not exits")
@@ -282,13 +312,23 @@ def read_user_input():
 	# - digraph label (dig_lab)
 	# - digraph parameters (depending on the type) (dig_par) [optional]
 	# - print digraph representation (dig_prt) [optional]
-	default_input = 'dig_lab="sw"; dig_par="sig=(0, 1, 1, 1), alp=0.5"; print=True'
+	default_input = 'dig_lab="sw"; dig_tsi=[0, 1, 1, 1]; dig_cpr=0.5; dig_prt=True'
 	underlying_digraph_char = input('Enter underlying digraph characterisation [' + default_input + '] ')
 	while not underlying_digraph_char:
 		underlying_digraph_char = default_input
 
 	simulation_data['dig_lab'] = get_parameter_value(underlying_digraph_char, 'dig_lab')
-	simulation_data['dig_par'] = get_parameter_value(underlying_digraph_char, 'dig_par')
+	# simulation_data['dig_par'] = get_parameter_value(underlying_digraph_char, 'dig_par')
+
+	simulation_data['dig_res'] = get_parameter_value(underlying_digraph_char, 'dig_res')  # row_stochastic
+	simulation_data['dig_per'] = get_parameter_value(underlying_digraph_char, 'dig_per')  # positive_edge_ratio
+	simulation_data['dig_tsi'] = get_parameter_value(underlying_digraph_char, 'dig_tsi')  # topology_signature
+	simulation_data['dig_cpr'] = get_parameter_value(underlying_digraph_char, 'dig_cpr')  # change_probability
+	simulation_data['dig_rpr'] = get_parameter_value(underlying_digraph_char, 'dig_rpr')  # reverse_probability
+	simulation_data['dig_bpr'] = get_parameter_value(underlying_digraph_char, 'dig_bpr')  # bidirectional_probability
+	simulation_data['dig_rei'] = get_parameter_value(underlying_digraph_char, 'dig_rei')  # num_random_edges_it
+	simulation_data['dig_epr'] = get_parameter_value(underlying_digraph_char, 'dig_epr')  # edge_probability
+
 	simulation_data['dig_prt'] = get_parameter_value(underlying_digraph_char, 'dig_prt')
 
 	# Number of steps
