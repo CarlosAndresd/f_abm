@@ -168,7 +168,8 @@ def create_new_simulations():
 														des_abs_mean=abs_mean_op, epsilon=io_tolerance)
 
 	if io_print:
-		plot_histogram(ax=None, opinions=initial_opinions, num_bins=10, histogram_title='Opinions', close_figure=True, file_name=file_name + "_histogram")
+		plot_histogram(ax=None, opinions=initial_opinions, num_bins=10, histogram_title='Opinions', close_figure=True,
+					   file_name=file_name + "_histogram.png")
 
 	print('\tInitial opinions created')
 	# 2. Create the adjacency matrix
@@ -208,14 +209,16 @@ def create_new_simulations():
 							bidirectional_probability=dig_bpr, num_random_edges_it=dig_rei)
 
 	elif dig_lab == 'rd':  # Random digraph
-		adjacency_matrix = random_digraph(num_agents=num_agents, row_stochastic=dig_res, positive_edge_ratio=dig_per, edge_probability=dig_epr)
+		adjacency_matrix = random_digraph(num_agents=num_agents, row_stochastic=dig_res, positive_edge_ratio=dig_per,
+										  edge_probability=dig_epr)
 
 	else:
 		print("The selected digraph topology does not exits")
 		adjacency_matrix = complete_digraph(num_agents=num_agents, row_stochastic=dig_res, positive_edge_ratio=dig_per)
 
 	if dig_prt:
-		plot_digraph(digraph=matrix2digraph(adjacency_matrix), file_name=file_name + "_digraph", visual_style=None, close_figure=True)
+		plot_digraph(digraph=matrix2digraph(adjacency_matrix), file_name=file_name + "_digraph", visual_style=None,
+					 close_figure=True)
 
 	print('\tAdjacency matrix created')
 
@@ -266,7 +269,8 @@ def create_new_simulations():
 										agent_parameters=inner_traits, model_parameters=mod_par,
 										model_function=model_evolution_function, num_steps=num_ts, default_type=0)
 
-	plot_opinions(opinion_evolution, inner_traits, mod_lab, axes=None, close_figure=True, file_name=file_name + "_opinion_evolution")
+	plot_opinions(opinion_evolution, inner_traits, mod_lab, axes=None, close_figure=True,
+				  file_name=file_name + "_opinion_evolution.png")
 
 	print('\tSimulation complete')
 
