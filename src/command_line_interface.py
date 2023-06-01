@@ -26,6 +26,7 @@ import numpy as np
 from .digraph_creation import complete_digraph, ring_digraph, small_world_digraph, random_digraph
 from .plot_functions import plot_histogram, plot_digraph, plot_opinions
 from datetime import datetime
+from os import mkdir as make_new_directory
 
 
 def read_positive_integer(message, default_input):
@@ -129,8 +130,11 @@ def create_new_simulations():
 	simulation_parameters = read_user_input()
 
 	file_name = simulation_parameters['file_name']
-	directory_name = simulation_parameters['directory_name']
-	complete_name = './' + directory_name + '/' + file_name
+	root_directory_name = simulation_parameters['directory_name']
+
+	make_new_directory('./' + root_directory_name + '/' + file_name)
+
+	complete_name = './' + root_directory_name + '/' + file_name + '/' + file_name
 
 	# Now that all the information is gathered, we can proceed to execute the simulation
 	num_agents = simulation_parameters['num_ag']
