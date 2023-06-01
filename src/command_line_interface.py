@@ -25,6 +25,7 @@ from .auxiliary_functions import (modify_opinions_method_1, modify_opinions_meth
 import numpy as np
 from .digraph_creation import complete_digraph, ring_digraph, small_world_digraph, random_digraph
 from .plot_functions import plot_histogram, plot_digraph, plot_opinions
+from datetime import datetime
 
 
 def read_positive_integer(message, default_input):
@@ -117,11 +118,19 @@ def get_parameter_value(all_parameters, parameter_name):
 	return literal_eval(parameter_value)
 
 
+def none_2_default(variable, default_value):
+	if variable is None:
+		return default_value
+	else:
+		return variable
+
+
 def create_new_simulations():
 	simulation_parameters = read_user_input()
 
-	# Now that all the information is gathered, we can proceed to execute the simulation
+	file_name = simulation_parameters['file_name']
 
+	# Now that all the information is gathered, we can proceed to execute the simulation
 	num_agents = simulation_parameters['num_ag']
 
 	# 1. Create the initial opinions
@@ -176,26 +185,13 @@ def create_new_simulations():
 	dig_rei = simulation_parameters['dig_rei']  # num_random_edges_it
 	dig_epr = simulation_parameters['dig_epr']  # edge_probability
 
-	if dig_res is None:
-		dig_res = False
-
-	if dig_per is None:
-		dig_per = 1.0
-
-	if dig_cpr is None:
-		dig_cpr = 0.0
-
-	if dig_rpr is None:
-		dig_rpr = 0.0
-
-	if dig_bpr is None:
-		dig_bpr = 0.0
-
-	if dig_rei is None:
-		dig_rei = 0
-
-	if dig_epr is None:
-		dig_epr = 0.5
+	dig_res = none_2_default(dig_res, False)
+	dig_per = none_2_default(dig_per, 1.0)
+	dig_cpr = none_2_default(dig_cpr, 0.0)
+	dig_rpr = none_2_default(dig_rpr, 0.0)
+	dig_bpr = none_2_default(dig_bpr, 0.0)
+	dig_rei = none_2_default(dig_rei, 0)
+	dig_epr = none_2_default(dig_epr, 0.5)
 
 	dig_prt = simulation_parameters['dig_prt']
 
@@ -204,7 +200,7 @@ def create_new_simulations():
 
 	elif dig_lab == 'gr':  # Generalised ring
 		adjacency_matrix = ring_digraph(num_agents=num_agents, topology_signature=dig_tsi, row_stochastic=dig_res,
-					 positive_edge_ratio=dig_per, num_random_edges_it=0)
+					 positive_edge_ratio=dig_per, num_random_edges_it=dig_rei)
 
 	elif dig_lab == 'sw':  # Small-world
 		adjacency_matrix = small_world_digraph(num_agents=num_agents, topology_signature=dig_tsi, row_stochastic=dig_res,
@@ -216,6 +212,7 @@ def create_new_simulations():
 
 	else:
 		print("The selected digraph topology does not exits")
+		adjacency_matrix = complete_digraph(num_agents=num_agents, row_stochastic=dig_res, positive_edge_ratio=dig_per)
 
 	if dig_prt:
 		plot_digraph(digraph=matrix2digraph(adjacency_matrix), file_name=None, visual_style=None)
@@ -231,11 +228,8 @@ def create_new_simulations():
 	par_dis = simulation_parameters['par_dis']
 	par_prt = simulation_parameters['par_prt']
 
-	if par_dis is None:
-		par_dis = [[0, -1.0, 1.0, 1]]
-
-	if par_tol is None:
-		par_tol = 0.05
+	par_dis = none_2_default(par_dis, [[0, -1.0, 1.0, 1]])
+	par_tol = none_2_default(par_tol, 0.05)
 
 	weights_1 = create_random_numbers(num_agents=num_agents, number_parameters=par_dis, limits=(0, 1))
 	weights_1 = modify_mean(weights_1, w1_des, max_counter=15, epsilon=par_tol, limits=(0, 1))
@@ -262,6 +256,9 @@ def create_new_simulations():
 
 	if mod_lab == 'CB':
 		model_evolution_function = cb_model_step
+	else:
+		print('The selected mode does not exist')
+		model_evolution_function = cb_model_step
 
 	num_ts = simulation_parameters['num_ts']
 
@@ -272,6 +269,7 @@ def create_new_simulations():
 	plot_opinions(opinion_evolution, inner_traits, mod_lab, axes=None)
 
 	print('\tSimulation complete')
+
 
 def read_user_input():
 	"""
@@ -296,7 +294,7 @@ def read_user_input():
 	simulation_data = dict()
 
 	# File name
-	default_input = 'date'
+	default_input = datetime.today().strftime('Simulation-%Y-%m-%d-%H-%M-%S')
 	file_name = input('Enter name of the new simulation [' + default_input + ']: ')
 	while not file_name:
 		file_name = default_input
