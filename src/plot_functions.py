@@ -57,7 +57,12 @@ def plot_digraph(digraph=None, file_name=None, visual_style=None, close_figure=F
         visual_style = {"vertex_size": 0.1}
 
     if file_name is not None:
-        ig.plot(digraph, target=file_name + ".png", **visual_style)
+        fig, ax = plt.subplots()
+        ig.plot(digraph, target=ax, **visual_style, layout="circle")
+        plt.savefig(fname=file_name, format='png')
+        # ig.plot(digraph, target=file_name + ".png", **visual_style, layout="circle")
+        # digraph_plot = ig.plot(digraph, **visual_style, layout="circle")
+        # digraph_plot.save(file_name + ".png")
 
     # fig, ax = plt.subplots()
     # ig.plot(digraph, target=ax, **visual_style, layout="circle")

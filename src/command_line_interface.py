@@ -217,7 +217,7 @@ def create_new_simulations():
 		adjacency_matrix = complete_digraph(num_agents=num_agents, row_stochastic=dig_res, positive_edge_ratio=dig_per)
 
 	if dig_prt:
-		plot_digraph(digraph=matrix2digraph(adjacency_matrix), file_name=file_name + "_digraph", visual_style=None,
+		plot_digraph(digraph=matrix2digraph(adjacency_matrix), file_name=file_name + "_digraph.png", visual_style=None,
 					 close_figure=True)
 
 	print('\tAdjacency matrix created')
