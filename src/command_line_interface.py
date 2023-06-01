@@ -129,6 +129,8 @@ def create_new_simulations():
 	simulation_parameters = read_user_input()
 
 	file_name = simulation_parameters['file_name']
+	directory_name = simulation_parameters['directory_name']
+	complete_name = './' + directory_name + '/' + file_name
 
 	# Now that all the information is gathered, we can proceed to execute the simulation
 	num_agents = simulation_parameters['num_ag']
@@ -169,7 +171,7 @@ def create_new_simulations():
 
 	if io_print:
 		plot_histogram(ax=None, opinions=initial_opinions, num_bins=10, histogram_title='Opinions', close_figure=True,
-					   file_name=file_name + "_histogram.png")
+					   file_name=complete_name + "_histogram.png")
 
 	print('\tInitial opinions created')
 	# 2. Create the adjacency matrix
@@ -217,8 +219,8 @@ def create_new_simulations():
 		adjacency_matrix = complete_digraph(num_agents=num_agents, row_stochastic=dig_res, positive_edge_ratio=dig_per)
 
 	if dig_prt:
-		plot_digraph(digraph=matrix2digraph(adjacency_matrix), file_name=file_name + "_digraph.png", visual_style=None,
-					 close_figure=True)
+		plot_digraph(digraph=matrix2digraph(adjacency_matrix), file_name=complete_name + "_digraph.png",
+					 visual_style=None, close_figure=True)
 
 	print('\tAdjacency matrix created')
 
@@ -270,7 +272,7 @@ def create_new_simulations():
 										model_function=model_evolution_function, num_steps=num_ts, default_type=0)
 
 	plot_opinions(opinion_evolution, inner_traits, mod_lab, axes=None, close_figure=True,
-				  file_name=file_name + "_opinion_evolution.png")
+				  file_name=complete_name + "_opinion_evolution.png")
 
 	print('\tSimulation complete')
 
@@ -304,6 +306,14 @@ def read_user_input():
 		file_name = default_input
 
 	simulation_data['file_name'] = file_name
+
+	# Directory name
+	default_input = 'simulation_results'
+	directory_name = input('Enter directory where results are saved [' + default_input + ']: ')
+	while not directory_name:
+		directory_name = default_input
+
+	simulation_data['directory_name'] = directory_name
 
 	# Number of agents
 	# Options:
