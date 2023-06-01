@@ -57,14 +57,15 @@ def plot_digraph(digraph=None, file_name=None, visual_style=None, close_figure=F
         visual_style = {"vertex_size": 0.1}
 
     if file_name is not None:
-        ig.plot(digraph, target=file_name + ".pdf", **visual_style)
+        ig.plot(digraph, target=file_name + ".png", **visual_style)
 
-    fig, ax = plt.subplots()
-    ig.plot(digraph, target=ax, **visual_style, layout="circle")
-    plt.show()
+    # fig, ax = plt.subplots()
+    # ig.plot(digraph, target=ax, **visual_style, layout="circle")
+    # plt.show()
 
-    if close_figure:
-        plt.close()
+    # if close_figure:
+    #     print('Close digraph')
+    #     plt.close(fig)
 
 
 def plot_opinions(opinion_evolution, agent_parameters, opinion_model, axes=None, file_name=None, close_figure=False):
@@ -104,15 +105,15 @@ def plot_opinions(opinion_evolution, agent_parameters, opinion_model, axes=None,
     if axes is None:
         plt.grid()
         # display the plot
-        plt.show()
+        # plt.show()
     else:
         ax.grid()
 
     if file_name is not None:
-        plt.savefig(fname=file_name, format='.png')
+        plt.savefig(fname=file_name, format='png')
 
     if close_figure:
-        plt.close()
+        plt.close(fig)
 
 
 def plot_histogram(ax, opinions, num_bins=10, histogram_title='Opinions', file_name=None, close_figure=False):
@@ -147,10 +148,10 @@ def plot_histogram(ax, opinions, num_bins=10, histogram_title='Opinions', file_n
     ax.set_axisbelow(True)
 
     if file_name is not None:
-        plt.savefig(fname=file_name, format='.png')
+        plt.savefig(fname=file_name, format='png')
 
     if close_figure:
-        plt.close()
+        plt.close(fig)
 
 
 def plot_inner_traits(file_name='standard_inner_traits.npy'):

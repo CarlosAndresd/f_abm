@@ -168,7 +168,7 @@ def create_new_simulations():
 														des_abs_mean=abs_mean_op, epsilon=io_tolerance)
 
 	if io_print:
-		plot_histogram(ax=None, opinions=initial_opinions, num_bins=10, histogram_title='Opinions')
+		plot_histogram(ax=None, opinions=initial_opinions, num_bins=10, histogram_title='Opinions', close_figure=True, file_name=file_name + "_histogram")
 
 	print('\tInitial opinions created')
 	# 2. Create the adjacency matrix
@@ -215,7 +215,7 @@ def create_new_simulations():
 		adjacency_matrix = complete_digraph(num_agents=num_agents, row_stochastic=dig_res, positive_edge_ratio=dig_per)
 
 	if dig_prt:
-		plot_digraph(digraph=matrix2digraph(adjacency_matrix), file_name=None, visual_style=None)
+		plot_digraph(digraph=matrix2digraph(adjacency_matrix), file_name=file_name + "_digraph", visual_style=None, close_figure=True)
 
 	print('\tAdjacency matrix created')
 
@@ -266,7 +266,7 @@ def create_new_simulations():
 										agent_parameters=inner_traits, model_parameters=mod_par,
 										model_function=model_evolution_function, num_steps=num_ts, default_type=0)
 
-	plot_opinions(opinion_evolution, inner_traits, mod_lab, axes=None)
+	plot_opinions(opinion_evolution, inner_traits, mod_lab, axes=None, close_figure=True, file_name=file_name + "_opinion_evolution")
 
 	print('\tSimulation complete')
 
@@ -294,7 +294,7 @@ def read_user_input():
 	simulation_data = dict()
 
 	# File name
-	default_input = datetime.today().strftime('Simulation-%Y-%m-%d-%H-%M-%S')
+	default_input = datetime.today().strftime('Simulation-%Y%m%d%H%M%S')
 	file_name = input('Enter name of the new simulation [' + default_input + ']: ')
 	while not file_name:
 		file_name = default_input
