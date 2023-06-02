@@ -283,6 +283,7 @@ def create_new_simulations():
 				  file_name=complete_name + "_opinion_evolution.png")
 
 	print('\tSimulation complete')
+	print('\n' * 5)
 
 
 def read_user_input():

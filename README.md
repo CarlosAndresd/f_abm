@@ -10,7 +10,7 @@ If you want to install and get started please go to
 
 If you are very impatient you can get started in two ways:
 
-*Using Conda*
+**Using Conda**
 
 1. Fork and clone this repository.
 2. In a shell, move to the directory containing the repository.
@@ -18,9 +18,10 @@ If you are very impatient you can get started in two ways:
 4. Type `conda activate f_abm_env`
 5. Type `python start.py`, press enter to all the inputs to use the default values
 6. Go to `./f_abm/simulation_results`, there you should find a new directory with 3 images
+7. Type `conda deactivate`
 
 
-*Using venv*
+**Using venv**
 
 1. Fork and clone this repository.
 2. In a shell, move to the directory containing the repository.
@@ -29,6 +30,7 @@ If you are very impatient you can get started in two ways:
 5. Type `pip install -r requirements.txt`
 6. Type `python start.py`, press enter to all the inputs to use the default values
 7. Go to `./f_abm/simulation_results`, there you should find a new directory with 3 images
+8. Type `deactivate`
 
 Other useful links:
 
