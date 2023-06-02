@@ -1,9 +1,14 @@
-## Computational Environment:
+### Computational Environment:
 
 - Programming language: Python
 - Packages and libraries: see the `requirements.txt` file or the `environment.yml` file
 
 ## How to use this code repository
+
+To get started, you can follow two steps:
+
+1. Install the package, there are two options: with Conda (recommended), and with pip and venv.
+2. Execute the program
 
 ### Installation instructions with Conda (recommended)
 
@@ -32,7 +37,7 @@ conda info --f_abm_env
 ```
 
 
-To activate the conda virtual environment type `conda activate f_abm`, to deactivate it type `conda deactivate`.
+To activate the conda virtual environment type `conda activate f_abm_env`, to deactivate it type `conda deactivate`.
 
 
 ### Installation instructions with pip and venv
@@ -62,6 +67,35 @@ rm -r f_abm_env
 ```
 
 To activate the venv virtual environment type `source ./f_abm_env/bin/activate`, to deactivate it type `deactivate`.
+
+
+### Program execution
+
+1. Make sure you are in the main project directory, which is called `f_abm`
+
+2. In order to use the program, it is first necessary to activate the virtual environment, if the installation was done using Conda type:
+
+```
+conda activate f_abm_env
+```
+
+If the installation was done using `venv` type:
+
+```
+source ./f_abm_env/bin/activate
+```
+
+3. To start the program type 
+
+
+```
+python start.py
+```
+
+
+
+
+
 
 
 ### Tests
