@@ -5,7 +5,7 @@ labels: ["bug"]
 body:
 - type: markdown
   attributes:
-    value: Thanks you for taking the time to subit this bug report
+    value: Thanks you for taking the time to submit this bug report
 - type: textarea
   id: what-happened
   attributes:
@@ -26,7 +26,7 @@ body:
   id: more
   attributes:
     label: Other comments
-    description: If there is something else you would like to mention, feel free to add it here.
+    description: If there is something else you would like to mention, feel free to add it here. If you received some error messages, feel free to add them here.
     render: shell
 - type: checkboxes
   id: further_communication
