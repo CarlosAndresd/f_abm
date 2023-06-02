@@ -406,7 +406,7 @@ def read_user_input():
 	simulation_data['num_ts'] = read_positive_integer(message, default_input)
 
 	print('\n'*5)
-	print(simulation_data)
+	# print(simulation_data)
 
 	return simulation_data
 

@@ -79,11 +79,15 @@ To activate the venv virtual environment type `source ./f_abm_env/bin/activate`,
 conda activate f_abm_env
 ```
 
+to deactivate the Conda environment you can type `conda deactivate`
+
 If the installation was done using `venv` type:
 
 ```
 source ./f_abm_env/bin/activate
 ```
+
+to deactivate the virtual environment you can type `deactiate`
 
 3. To start the program type 
 
@@ -91,6 +95,12 @@ source ./f_abm_env/bin/activate
 ```
 python start.py
 ```
+
+and follow the instructions, all the options have default parameters, so feel free to press enter to all the questions.
+
+4. If there were no mistakes, you can go to the directory `./f_abm/simulation_results`, there you should find a directory with the name `Simulation-YYYYMMDDHHMMSS` that contains three images, resulting from the simulation.
+
+
 
 
 
