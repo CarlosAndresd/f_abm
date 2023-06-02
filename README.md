@@ -6,7 +6,7 @@ by Carlos Andres Devia
 [This is work in progress]
 
 If you want to install and get started please go to 
-[Getting Started](https://github.com/CarlosAndresd/f_abm/blob/main/docs/Getting_Started.md)
+[Getting Started](https://f-abm.readthedocs.io/en/latest/Getting_Started.html)
 
 If you are very impatient you can get started in two ways:
 
