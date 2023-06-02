@@ -75,6 +75,7 @@ There are many (four) things you can do:
    :caption: About this project:
 
    README.md
+   Getting_Started.md
    CONTRIBUTING.rst
    CODE_OF_CONDUCT.md
 
