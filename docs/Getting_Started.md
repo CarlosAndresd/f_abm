@@ -1,7 +1,3 @@
-### Computational Environment:
-
-- Programming language: Python
-- Packages and libraries: see the `requirements.txt` file or the `environment.yml` file
 
 ## How to use this code repository
 
@@ -9,6 +5,11 @@ To get started, you can follow two steps:
 
 1. Install the package, there are two options: with Conda (recommended), and with pip and venv.
 2. Execute the program
+
+### Computational Environment:
+
+- Programming language: Python
+- Packages and libraries: see the `requirements.txt` file or the `environment.yml` file
 
 ### Installation instructions with Conda (recommended)
 
