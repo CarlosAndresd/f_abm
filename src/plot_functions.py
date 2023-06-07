@@ -79,7 +79,8 @@ def plot_digraph(digraph=None, file_name=None, visual_style=None, close_figure=F
 
 
 def plot_opinions(opinion_evolution, agent_parameters, opinion_model, axes=None, file_name=None, close_figure=False,
-                  figure_size=(10, 7), figure_title='Opinion evolution'):
+                  figure_size=(10, 7), figure_title='Opinion evolution', figure_x_label='Time steps',
+                  figure_y_label='Opinions'):
     """
 
     Function to plot the opinion evolution
@@ -94,6 +95,9 @@ def plot_opinions(opinion_evolution, agent_parameters, opinion_model, axes=None,
     close_figure: boolean determining if the figure must be closed
     figure_size: size of the figure to be produced
     figure_title: title of the plot
+    figure_x_label: x label of the figure
+    figure_y_label: y label of the figure
+
 
     Returns
     -------
@@ -114,6 +118,8 @@ def plot_opinions(opinion_evolution, agent_parameters, opinion_model, axes=None,
     ax.set_xlim([0, num_steps])
     ax.set_ylim([-1.1, 1.1])
     ax.set_title(figure_title)
+    ax.set_xlabel(figure_x_label, fontsize=15)
+    ax.set_ylabel(figure_y_label, fontsize=15)
 
     if axes is None:
         plt.grid()
@@ -130,7 +136,7 @@ def plot_opinions(opinion_evolution, agent_parameters, opinion_model, axes=None,
 
 
 def plot_histogram(ax, opinions, num_bins=10, histogram_title='Histogram of the opinions', file_name=None,
-                   close_figure=False, figure_size=(10, 7)):
+                   close_figure=False, figure_size=(10, 7), figure_x_label='Opinions', figure_y_label='Count'):
     """
 
     This function creates and plots the histogram for a set of opinions
@@ -144,7 +150,8 @@ def plot_histogram(ax, opinions, num_bins=10, histogram_title='Histogram of the 
     file_name: string that is the name of the file to be plotted
     close_figure: boolean determining if the figure must be closed
     figure_size: size of the figure to be produced
-    figure_title: title of the plot
+    figure_x_label: x label of the figure
+    figure_y_label: y label of the figure
 
     Returns
     -------
@@ -161,6 +168,8 @@ def plot_histogram(ax, opinions, num_bins=10, histogram_title='Histogram of the 
     ax.set_xlim([-1.1, 1.1])
     ax.set_ylim([0, opinions.shape[0]])
     ax.set_title(histogram_title)
+    ax.set_xlabel(figure_x_label, fontsize=15)
+    ax.set_ylabel(figure_y_label, fontsize=15)
     ax.set_axisbelow(True)
 
     if file_name is not None:
@@ -170,7 +179,8 @@ def plot_histogram(ax, opinions, num_bins=10, histogram_title='Histogram of the 
         plt.close(fig)
 
 
-def plot_inner_traits(file_name='standard_inner_traits.npy', figure_size=(10, 7), figure_title='Inner Traits'):
+def plot_inner_traits(file_name='standard_inner_traits.npy', figure_size=(10, 7), figure_title='Inner Traits',
+                      figure_x_label='Average conformist parameter', figure_y_label='Average radical parameter'):
     """
 
     Function to plot the inner traits for the Classification-based model
@@ -180,6 +190,8 @@ def plot_inner_traits(file_name='standard_inner_traits.npy', figure_size=(10, 7)
     file_name: name of the file that contains the inner traits
     figure_size: size of the figure to be produced
     figure_title: title of the plot
+    figure_x_label: x label of the figure
+    figure_y_label: y label of the figure
 
     Returns
     -------
@@ -202,13 +214,18 @@ def plot_inner_traits(file_name='standard_inner_traits.npy', figure_size=(10, 7)
     ax.set_ylim([-0.1, 1.1])
     # ax.set_title('All Inner Traits')
     ax.set_title(figure_title)
+
+    ax.set_xlabel(figure_x_label, fontsize=15)
+    ax.set_ylabel(figure_y_label, fontsize=15)
+
     plt.grid()
     # display the plot
     plt.show()
 
 
 def plot_all_opinions(file_name='standard_initial_opinions.npy', color_by_type=False, figure_size=(10, 7),
-                      figure_title='Agreement Plot of all Opinions'):
+                      figure_title='Agreement Plot of all Opinions', figure_x_label='mean(abs(opinions))',
+                      figure_y_label='mean(opinions)'):
     """
 
     Function to plot a set of opinion distributions in the Agreement Plot
@@ -219,6 +236,8 @@ def plot_all_opinions(file_name='standard_initial_opinions.npy', color_by_type=F
     color_by_type: boolean specifying how to color the plot
     figure_size: size of the figure to be produced
     figure_title: title of the plot
+    figure_x_label: x label of the figure
+    figure_y_label: y label of the figure
 
     Returns
     -------
@@ -252,6 +271,9 @@ def plot_all_opinions(file_name='standard_initial_opinions.npy', color_by_type=F
     ax.grid()
     plt.show()
     ax.set_title(figure_title)
+
+    ax.set_xlabel(figure_x_label, fontsize=15)
+    ax.set_ylabel(figure_y_label, fontsize=15)
 
     print(f'number PC = {counters[0]}')
     print(f'number Co = {counters[1]}')
