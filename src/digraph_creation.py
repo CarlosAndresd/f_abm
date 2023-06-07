@@ -72,7 +72,7 @@ def default_digraph(default_type=0, num_agents=10):
         return digraph
 
 
-def complete_digraph(num_agents=100, row_stochastic=False, positive_edge_ratio=1.0):
+def complete_digraph(num_agents=100, row_stochastic=False, positive_edge_ratio=1.0, print_text=False):
     """
 
     This is a function that returns a complete digraph
@@ -84,12 +84,16 @@ def complete_digraph(num_agents=100, row_stochastic=False, positive_edge_ratio=1
     this is False
     positive_edge_ratio: A floating number between 0 and 1 that determines the ratio of positive edges in the digraph.
     By default, it is 1
+    print_text: boolean to control whether the creation text information is shown
 
     Returns
     -------
     The adjacency matrix of the corresponding generalised ring digraph
 
     """
+
+    if print_text:
+        print(f'\tCreating a Complete Digraph with {num_agents} agents, {positive_edge_ratio} positive edge ratio')
 
     # First, create the topology
     # Initialise an array of zeros
@@ -107,7 +111,7 @@ def complete_digraph(num_agents=100, row_stochastic=False, positive_edge_ratio=1
 
 
 def ring_digraph(num_agents=100, topology_signature=None, row_stochastic=False, positive_edge_ratio=1.0,
-                 num_random_edges_it=0):
+                 num_random_edges_it=0, print_text=False):
     """
 
     This is a function that returns a ring digraph
@@ -122,12 +126,16 @@ def ring_digraph(num_agents=100, topology_signature=None, row_stochastic=False, 
     positive_edge_ratio: A floating number between 0 and 1 that determines the ratio of positive edges in the digraph.
     By default, it is 1
     num_random_edges_it: number of iterations to add random edges
+    print_text: boolean to control whether the creation text information is shown
 
     Returns
     -------
     The adjacency matrix of the corresponding generalised ring digraph
 
     """
+
+    if print_text:
+        print(f'\tCreating a Ring Digraph with {num_agents} agents, {positive_edge_ratio} positive edge ratio')
 
     # First, create the topology
     # Initialise an array of zeros
@@ -169,7 +177,7 @@ def ring_digraph(num_agents=100, topology_signature=None, row_stochastic=False, 
 
 def small_world_digraph(num_agents=100, topology_signature=None, row_stochastic=False, positive_edge_ratio=1.0,
                         change_probability=0.0, reverse_probability=0.0, bidirectional_probability=0.0,
-                        num_random_edges_it=0):
+                        num_random_edges_it=0, print_text=False):
     """
 
     This is a function that creates a digraph with small-world topology
@@ -190,12 +198,16 @@ def small_world_digraph(num_agents=100, topology_signature=None, row_stochastic=
     1.0 or a list of 'num_agents' numbers between 0.0 and 1.0. Each element in the list corresponds to the
     probability of the corresponding vertex being bidirectional
     num_random_edges_it: number of iterations to add random edges
+    print_text: boolean to control whether the creation text information is shown
 
     Returns
     -------
     The adjacency matrix associated with the corresponding small-world digraph
 
     """
+
+    if print_text:
+        print(f'\tCreating a Small-World Digraph with {num_agents} agents, {positive_edge_ratio} positive edge ratio')
 
     # Preparation:
     # If the 'change_probability', 'reverse_probability', or 'bidirectional_probability' parameters are single numbers,
@@ -285,7 +297,8 @@ def small_world_digraph(num_agents=100, topology_signature=None, row_stochastic=
     return adjacency_matrix
 
 
-def random_digraph(num_agents=100, row_stochastic=False, positive_edge_ratio=1.0, edge_probability=0.5):
+def random_digraph(num_agents=100, row_stochastic=False, positive_edge_ratio=1.0, edge_probability=0.5,
+                   print_text=False):
     """
 
     This function creates a digraph with random topology. Note that not all the edges are random. The resulting
@@ -297,12 +310,16 @@ def random_digraph(num_agents=100, row_stochastic=False, positive_edge_ratio=1.0
     row_stochastic: boolean indicating if the adjacency matrix is row-stochastic
     positive_edge_ratio: the positive edge ratio
     edge_probability: the probability that an edge will exist
+    print_text: boolean to control whether the creation text information is shown
 
     Returns
     -------
     the adjacency matrix
 
     """
+
+    if print_text:
+        print(f'\tCreating a Random Digraph with {num_agents} agents, {positive_edge_ratio} positive edge ratio')
 
     # First, create the topology
     # Initialise an identity matrix
