@@ -235,24 +235,26 @@ def create_new_simulations():
 	dig_prt = simulation_parameters['dig_prt']
 
 	if dig_lab == 'cd':  # Complete digraph
-		adjacency_matrix = complete_digraph(num_agents=num_agents, row_stochastic=dig_res, positive_edge_ratio=dig_per)
+		adjacency_matrix = complete_digraph(num_agents=num_agents, row_stochastic=dig_res, positive_edge_ratio=dig_per,
+											print_text=True)
 
 	elif dig_lab == 'gr':  # Generalised ring
 		adjacency_matrix = ring_digraph(num_agents=num_agents, topology_signature=dig_tsi, row_stochastic=dig_res,
-					 positive_edge_ratio=dig_per, num_random_edges_it=dig_rei)
+					 positive_edge_ratio=dig_per, num_random_edges_it=dig_rei, print_text=True)
 
 	elif dig_lab == 'sw':  # Small-world
 		adjacency_matrix = small_world_digraph(num_agents=num_agents, topology_signature=dig_tsi, row_stochastic=dig_res,
 							positive_edge_ratio=dig_per, change_probability=dig_cpr, reverse_probability=dig_rpr,
-							bidirectional_probability=dig_bpr, num_random_edges_it=dig_rei)
+							bidirectional_probability=dig_bpr, num_random_edges_it=dig_rei, print_text=True)
 
 	elif dig_lab == 'rd':  # Random digraph
 		adjacency_matrix = random_digraph(num_agents=num_agents, row_stochastic=dig_res, positive_edge_ratio=dig_per,
-										  edge_probability=dig_epr)
+										  edge_probability=dig_epr, print_text=True)
 
 	else:
 		print("The selected digraph topology does not exits")
-		adjacency_matrix = complete_digraph(num_agents=num_agents, row_stochastic=dig_res, positive_edge_ratio=dig_per)
+		adjacency_matrix = complete_digraph(num_agents=num_agents, row_stochastic=dig_res, positive_edge_ratio=dig_per,
+											print_text=True)
 
 	if dig_prt:
 		plot_digraph(digraph=matrix2digraph(adjacency_matrix), file_name=complete_name + "_digraph.png",
