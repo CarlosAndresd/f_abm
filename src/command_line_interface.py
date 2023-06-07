@@ -12,7 +12,11 @@ Description
 Functions
 ---------
 
+    - read_positive_integer
+    - get_parameter_value
+    - none_2_default
     - create_new_simulations
+    - read_user_input
 
 
 """
@@ -121,6 +125,21 @@ def get_parameter_value(all_parameters, parameter_name):
 
 
 def none_2_default(variable, default_value):
+	"""
+
+	This is an auxiliary function, it takes a variable and a default value, if the value of the variable is None, then
+	it returns the default value
+
+	Parameters
+	----------
+	variable: the value of the input variable
+	default_value: the default value
+
+	Returns
+	-------
+	The default value if the initial value is None, otherwise, it does not change anything
+
+	"""
 	if variable is None:
 		return default_value
 	else:
@@ -128,6 +147,15 @@ def none_2_default(variable, default_value):
 
 
 def create_new_simulations():
+	"""
+
+	This is the function in charge of creating new simulations using user inputs from the command line interface
+
+	Returns
+	-------
+	Nothing
+
+	"""
 	simulation_parameters = read_user_input()
 
 	file_name = simulation_parameters['file_name']
