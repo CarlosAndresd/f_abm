@@ -30,7 +30,7 @@ from .digraph_creation import default_digraph
 
 
 def plot_digraph(digraph=None, file_name=None, visual_style=None, close_figure=False, figure_size=(10, 7),
-                 figure_title='Underlying Digraph'):
+                 figure_title='Underlying Digraph', title_font_size=20):
     """
 
     Function to plot the digraph
@@ -43,6 +43,7 @@ def plot_digraph(digraph=None, file_name=None, visual_style=None, close_figure=F
     close_figure: boolean determining if the figure must be closed
     figure_size: size of the figure to be produced
     figure_title: title of the plot
+    title_font_size: size of the title
 
     Returns
     -------
@@ -63,7 +64,7 @@ def plot_digraph(digraph=None, file_name=None, visual_style=None, close_figure=F
         fig = plt.figure(figsize=figure_size)
         ax = fig.add_subplot(111)
         ig.plot(digraph, target=ax, **visual_style, layout="circle")
-        ax.set_title(figure_title)
+        ax.set_title(figure_title, fontsize=title_font_size)
         plt.savefig(fname=file_name, format='png')
         # ig.plot(digraph, target=file_name + ".png", **visual_style, layout="circle")
         # digraph_plot = ig.plot(digraph, **visual_style, layout="circle")
@@ -80,7 +81,7 @@ def plot_digraph(digraph=None, file_name=None, visual_style=None, close_figure=F
 
 def plot_opinions(opinion_evolution, agent_parameters, opinion_model, axes=None, file_name=None, close_figure=False,
                   figure_size=(10, 7), figure_title='Opinion evolution', figure_x_label='Time steps',
-                  figure_y_label='Opinions'):
+                  figure_y_label='Opinions', title_font_size=20, x_label_font_size=15, y_label_font_size=15):
     """
 
     Function to plot the opinion evolution
@@ -97,6 +98,9 @@ def plot_opinions(opinion_evolution, agent_parameters, opinion_model, axes=None,
     figure_title: title of the plot
     figure_x_label: x label of the figure
     figure_y_label: y label of the figure
+    title_font_size: size of the title
+    x_label_font_size: x label text size
+    y_label_font_size: y label text size
 
 
     Returns
@@ -117,9 +121,9 @@ def plot_opinions(opinion_evolution, agent_parameters, opinion_model, axes=None,
         ax.plot(opinion_evolution[id_agent], color=opinion2color(opinion_model, agent_parameters[id_agent]))
     ax.set_xlim([0, num_steps])
     ax.set_ylim([-1.1, 1.1])
-    ax.set_title(figure_title)
-    ax.set_xlabel(figure_x_label, fontsize=15)
-    ax.set_ylabel(figure_y_label, fontsize=15)
+    ax.set_title(figure_title, fontsize=title_font_size)
+    ax.set_xlabel(figure_x_label, fontsize=x_label_font_size)
+    ax.set_ylabel(figure_y_label, fontsize=y_label_font_size)
 
     if axes is None:
         plt.grid()
@@ -136,7 +140,8 @@ def plot_opinions(opinion_evolution, agent_parameters, opinion_model, axes=None,
 
 
 def plot_histogram(ax, opinions, num_bins=10, histogram_title='Histogram of the opinions', file_name=None,
-                   close_figure=False, figure_size=(10, 7), figure_x_label='Opinions', figure_y_label='Count'):
+                   close_figure=False, figure_size=(10, 7), figure_x_label='Opinions', figure_y_label='Count',
+                   title_font_size=20, x_label_font_size=15, y_label_font_size=15):
     """
 
     This function creates and plots the histogram for a set of opinions
@@ -152,6 +157,9 @@ def plot_histogram(ax, opinions, num_bins=10, histogram_title='Histogram of the 
     figure_size: size of the figure to be produced
     figure_x_label: x label of the figure
     figure_y_label: y label of the figure
+    title_font_size: size of the title
+    x_label_font_size: x label text size
+    y_label_font_size: y label text size
 
     Returns
     -------
@@ -167,9 +175,10 @@ def plot_histogram(ax, opinions, num_bins=10, histogram_title='Histogram of the 
     ax.hist(opinions, bins=np.linspace(-1.0, 1.0, num_bins+1), edgecolor='black')
     ax.set_xlim([-1.1, 1.1])
     ax.set_ylim([0, opinions.shape[0]])
-    ax.set_title(histogram_title)
-    ax.set_xlabel(figure_x_label, fontsize=15)
-    ax.set_ylabel(figure_y_label, fontsize=15)
+    ax.set_title(histogram_title, fontsize=title_font_size)
+
+    ax.set_xlabel(figure_x_label, fontsize=x_label_font_size)
+    ax.set_ylabel(figure_y_label, fontsize=y_label_font_size)
     ax.set_axisbelow(True)
 
     if file_name is not None:
@@ -180,7 +189,8 @@ def plot_histogram(ax, opinions, num_bins=10, histogram_title='Histogram of the 
 
 
 def plot_inner_traits(file_name='standard_inner_traits.npy', figure_size=(10, 7), figure_title='Inner Traits',
-                      figure_x_label='Average conformist parameter', figure_y_label='Average radical parameter'):
+                      figure_x_label='Average conformist parameter', figure_y_label='Average radical parameter',
+                      title_font_size = 20, x_label_font_size=15, y_label_font_size=15):
     """
 
     Function to plot the inner traits for the Classification-based model
@@ -192,6 +202,9 @@ def plot_inner_traits(file_name='standard_inner_traits.npy', figure_size=(10, 7)
     figure_title: title of the plot
     figure_x_label: x label of the figure
     figure_y_label: y label of the figure
+    title_font_size: size of the title
+    x_label_font_size: x label text size
+    y_label_font_size: y label text size
 
     Returns
     -------
@@ -213,10 +226,10 @@ def plot_inner_traits(file_name='standard_inner_traits.npy', figure_size=(10, 7)
     ax.set_xlim([-0.1, 1.1])
     ax.set_ylim([-0.1, 1.1])
     # ax.set_title('All Inner Traits')
-    ax.set_title(figure_title)
+    ax.set_title(figure_title, fontsize=title_font_size)
 
-    ax.set_xlabel(figure_x_label, fontsize=15)
-    ax.set_ylabel(figure_y_label, fontsize=15)
+    ax.set_xlabel(figure_x_label, fontsize=x_label_font_size)
+    ax.set_ylabel(figure_y_label, fontsize=y_label_font_size)
 
     plt.grid()
     # display the plot
@@ -225,7 +238,8 @@ def plot_inner_traits(file_name='standard_inner_traits.npy', figure_size=(10, 7)
 
 def plot_all_opinions(file_name='standard_initial_opinions.npy', color_by_type=False, figure_size=(10, 7),
                       figure_title='Agreement Plot of all Opinions', figure_x_label='mean(abs(opinions))',
-                      figure_y_label='mean(opinions)'):
+                      figure_y_label='mean(opinions)', title_font_size = 20, x_label_font_size=15,
+                      y_label_font_size=15):
     """
 
     Function to plot a set of opinion distributions in the Agreement Plot
@@ -238,6 +252,9 @@ def plot_all_opinions(file_name='standard_initial_opinions.npy', color_by_type=F
     figure_title: title of the plot
     figure_x_label: x label of the figure
     figure_y_label: y label of the figure
+    title_font_size: size of the title
+    x_label_font_size: x label text size
+    y_label_font_size: y label text size
 
     Returns
     -------
@@ -270,10 +287,10 @@ def plot_all_opinions(file_name='standard_initial_opinions.npy', color_by_type=F
                 markersize=3, color=point_colors[classification])
     ax.grid()
     plt.show()
-    ax.set_title(figure_title)
+    ax.set_title(figure_title, fontsize=title_font_size)
 
-    ax.set_xlabel(figure_x_label, fontsize=15)
-    ax.set_ylabel(figure_y_label, fontsize=15)
+    ax.set_xlabel(figure_x_label, fontsize=x_label_font_size)
+    ax.set_ylabel(figure_y_label, fontsize=y_label_font_size)
 
     print(f'number PC = {counters[0]}')
     print(f'number Co = {counters[1]}')
