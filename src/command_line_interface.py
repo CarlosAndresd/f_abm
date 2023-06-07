@@ -206,8 +206,8 @@ def create_new_simulations():
 														des_abs_mean=abs_mean_op, epsilon=io_tolerance)
 
 	if io_print:
-		plot_histogram(ax=None, opinions=initial_opinions, num_bins=10, histogram_title='Opinions', close_figure=True,
-					   file_name=complete_name + "_histogram.png")
+		plot_histogram(ax=None, opinions=initial_opinions, num_bins=10, histogram_title='Initial Opinions',
+					   close_figure=True, file_name=complete_name + "_io_histogram.png")
 
 	print('\tInitial opinions created')
 	# 2. Create the adjacency matrix
@@ -309,6 +309,9 @@ def create_new_simulations():
 
 	plot_opinions(opinion_evolution, inner_traits, mod_lab, axes=None, close_figure=True,
 				  file_name=complete_name + "_opinion_evolution.png")
+
+	plot_histogram(ax=None, opinions=opinion_evolution[:, -1], num_bins=10, histogram_title='Final Opinions',
+				   close_figure=True, file_name=complete_name + "_fo_histogram.png")
 
 	print('\tSimulation complete')
 	print('\n' * 5)
