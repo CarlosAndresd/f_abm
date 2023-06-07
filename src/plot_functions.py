@@ -29,7 +29,8 @@ from .auxiliary_functions import (matrix2digraph, opinion2color, histogram_class
 from .digraph_creation import default_digraph
 
 
-def plot_digraph(digraph=None, file_name=None, visual_style=None, close_figure=False, figure_size=(10, 7)):
+def plot_digraph(digraph=None, file_name=None, visual_style=None, close_figure=False, figure_size=(10, 7),
+                 figure_title='Underlying Digraph'):
     """
 
     Function to plot the digraph
@@ -41,6 +42,7 @@ def plot_digraph(digraph=None, file_name=None, visual_style=None, close_figure=F
     visual_style: optional visual style
     close_figure: boolean determining if the figure must be closed
     figure_size: size of the figure to be produced
+    figure_title: title of the plot
 
     Returns
     -------
@@ -61,6 +63,7 @@ def plot_digraph(digraph=None, file_name=None, visual_style=None, close_figure=F
         fig = plt.figure(figsize=figure_size)
         ax = fig.add_subplot(111)
         ig.plot(digraph, target=ax, **visual_style, layout="circle")
+        ax.set_title(figure_title)
         plt.savefig(fname=file_name, format='png')
         # ig.plot(digraph, target=file_name + ".png", **visual_style, layout="circle")
         # digraph_plot = ig.plot(digraph, **visual_style, layout="circle")
@@ -76,7 +79,7 @@ def plot_digraph(digraph=None, file_name=None, visual_style=None, close_figure=F
 
 
 def plot_opinions(opinion_evolution, agent_parameters, opinion_model, axes=None, file_name=None, close_figure=False,
-                  figure_size=(10, 7)):
+                  figure_size=(10, 7), figure_title='Opinion evolution'):
     """
 
     Function to plot the opinion evolution
@@ -90,6 +93,7 @@ def plot_opinions(opinion_evolution, agent_parameters, opinion_model, axes=None,
     file_name: string that is the name of the file to be plotted
     close_figure: boolean determining if the figure must be closed
     figure_size: size of the figure to be produced
+    figure_title: title of the plot
 
     Returns
     -------
@@ -109,7 +113,7 @@ def plot_opinions(opinion_evolution, agent_parameters, opinion_model, axes=None,
         ax.plot(opinion_evolution[id_agent], color=opinion2color(opinion_model, agent_parameters[id_agent]))
     ax.set_xlim([0, num_steps])
     ax.set_ylim([-1.1, 1.1])
-    ax.set_title('Opinion evolution')
+    ax.set_title(figure_title)
 
     if axes is None:
         plt.grid()
@@ -125,8 +129,8 @@ def plot_opinions(opinion_evolution, agent_parameters, opinion_model, axes=None,
         plt.close(fig)
 
 
-def plot_histogram(ax, opinions, num_bins=10, histogram_title='Opinions', file_name=None, close_figure=False,
-                   figure_size=(10, 7)):
+def plot_histogram(ax, opinions, num_bins=10, histogram_title='Histogram of the opinions', file_name=None,
+                   close_figure=False, figure_size=(10, 7)):
     """
 
     This function creates and plots the histogram for a set of opinions
@@ -140,6 +144,7 @@ def plot_histogram(ax, opinions, num_bins=10, histogram_title='Opinions', file_n
     file_name: string that is the name of the file to be plotted
     close_figure: boolean determining if the figure must be closed
     figure_size: size of the figure to be produced
+    figure_title: title of the plot
 
     Returns
     -------
@@ -165,7 +170,7 @@ def plot_histogram(ax, opinions, num_bins=10, histogram_title='Opinions', file_n
         plt.close(fig)
 
 
-def plot_inner_traits(file_name='standard_inner_traits.npy', figure_size=(10, 7)):
+def plot_inner_traits(file_name='standard_inner_traits.npy', figure_size=(10, 7), figure_title='Inner Traits'):
     """
 
     Function to plot the inner traits for the Classification-based model
@@ -174,6 +179,7 @@ def plot_inner_traits(file_name='standard_inner_traits.npy', figure_size=(10, 7)
     ----------
     file_name: name of the file that contains the inner traits
     figure_size: size of the figure to be produced
+    figure_title: title of the plot
 
     Returns
     -------
@@ -194,13 +200,15 @@ def plot_inner_traits(file_name='standard_inner_traits.npy', figure_size=(10, 7)
 
     ax.set_xlim([-0.1, 1.1])
     ax.set_ylim([-0.1, 1.1])
-    ax.set_title('All Inner Traits')
+    # ax.set_title('All Inner Traits')
+    ax.set_title(figure_title)
     plt.grid()
     # display the plot
     plt.show()
 
 
-def plot_all_opinions(file_name='standard_initial_opinions.npy', color_by_type=False, figure_size=(10, 7)):
+def plot_all_opinions(file_name='standard_initial_opinions.npy', color_by_type=False, figure_size=(10, 7),
+                      figure_title='Agreement Plot of all Opinions'):
     """
 
     Function to plot a set of opinion distributions in the Agreement Plot
@@ -210,6 +218,7 @@ def plot_all_opinions(file_name='standard_initial_opinions.npy', color_by_type=F
     file_name: name of the file that contains all the initial opinion distributions
     color_by_type: boolean specifying how to color the plot
     figure_size: size of the figure to be produced
+    figure_title: title of the plot
 
     Returns
     -------
@@ -242,6 +251,7 @@ def plot_all_opinions(file_name='standard_initial_opinions.npy', color_by_type=F
                 markersize=3, color=point_colors[classification])
     ax.grid()
     plt.show()
+    ax.set_title(figure_title)
 
     print(f'number PC = {counters[0]}')
     print(f'number Co = {counters[1]}')
