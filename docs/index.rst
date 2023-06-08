@@ -72,10 +72,17 @@ There are many (four) things you can do:
 
 .. toctree::
    :maxdepth: 2
+   :caption: Use of the program:
+
+   Getting_Started.md
+   Command_Line_Interface.md
+   Model_Addition.md
+
+.. toctree::
+   :maxdepth: 2
    :caption: About this project:
 
    README.md
-   Getting_Started.md
    CONTRIBUTING.rst
    CODE_OF_CONDUCT.md
 
