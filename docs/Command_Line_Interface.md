@@ -48,6 +48,34 @@ So feel free to press `ENTER` 8 times. You will see something like this:
 After this, a directory called `Simulation-20230608133600` should have appeared in the `simulation_results` directory, 
 and it should contain four `.png` images. The four images are:
 
+```{figure} Simulation-20230608133600_digraph.png
+:alt: Digraph
+:width: 100%
+
+Randomly generated underlying digraph
+```
+
+```{figure} Simulation-20230608133600_io_histogram.png
+:alt: Initial Opinions
+:width: 100%
+
+Initial opinion histogram
+```
+
+```{figure} Simulation-20230608133600_opinion_evolution.png
+:alt: Opinion Evolution
+:width: 100%
+
+Opinion evolution
+```
+
+```{figure} Simulation-20230608133600_fo_histogram.png
+:alt: Final Opinions
+:width: 100%
+
+Final opinion histogram
+```
+
 ![](https://github.com/CarlosAndresd/f_abm/blob/main/docs/Simulation-20230608133600_digraph.png "Randomly generated underlying digraph")
 ![](https://github.com/CarlosAndresd/f_abm/blob/main/docs/Simulation-20230608133600_io_histogram.png "Initial opinion histogram")
 ![](https://github.com/CarlosAndresd/f_abm/blob/main/docs/Simulation-20230608133600_opinion_evolution.png "Opinion evolution")
