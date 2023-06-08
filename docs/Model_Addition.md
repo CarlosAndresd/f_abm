@@ -1,6 +1,6 @@
 
 
-## Model Addition
+# Model Addition
 
 One of the great advantages of this program is its flexibility and modularity. It was designed to be able to incorporate
 new agent based models easily. This guide will explain how to add new models to the program.

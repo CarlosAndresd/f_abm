@@ -71,7 +71,7 @@ There are many (four) things you can do:
    docs_theory.rst
 
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 1
    :caption: Use of the program:
 
    Getting_Started.md

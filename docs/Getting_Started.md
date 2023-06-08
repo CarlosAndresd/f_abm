@@ -1,5 +1,5 @@
 
-## Getting started
+# Getting started
 
 To get started, you can follow two steps:
 

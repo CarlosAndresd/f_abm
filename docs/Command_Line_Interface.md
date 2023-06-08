@@ -1,5 +1,5 @@
 
-## Use of the Command Line Interface
+# Use of the Command Line Interface
 
 After executing the `start.py` Python script you will enter a Command Line Interface, from there you will be able to 
 configure and run different simulations. This is useful because you can not only configure multiple simulations at once
@@ -16,7 +16,7 @@ which we will use in this first part. Some of the defaut options can be seen in 
 
 So feel free to press `ENTER` 8 times. You will see something like this:
 
-``
+
  
     1. Enter name of the new simulation [Simulation-20230608133600]: (Press Enter)
     2. Enter directory where results are saved [simulation_results]:  (Press Enter)
@@ -45,7 +45,7 @@ So feel free to press `ENTER` 8 times. You will see something like this:
 
 	Running the model
 	Simulation complete
-``
+
 
 After this, a directory called `Simulation-20230608133600` should have appeared in the `simulation_results` directory, 
 and it should contain four `.png` images.
@@ -86,6 +86,28 @@ introduced this filed accepts 5 possible parameters: (we will see the syntax for
    + `dig_epr`: edge_probability
    + `dig_prt`: Boolean determining whether the underlying digraph plot is printed or not.
 8. `Enter number of time-step`: positive integer determining the number of time steps.
+
+**How to add model parameters**
+
+The addition of model parameters follows the next rules:
+
+1. write the name of the parameter, followed by an equal sign `=` and then the value of the parameter. Depending on the
+parameter, the value may be an integer, a floating number, a tuple, a string, or a boolean;
+2. separate parameters by semicolons
+3. if a parameter name is repeated, only the first value is used
+
+Example: The input 
+
+``
+'dig_lab="sw"; dig_tsi=[0, 1, 1, 1]; dig_cpr=0.5; dig_cpr=0.2; dig_prt=True'
+``
+
+passes the following values to the program:
+
++ the string `sw` to the parameter `dig_lab`
++ the list `[0, 1, 1, 1]` to the parameter `dig_tsi`
++ the float `0.5` to the parameter `dig_cpr`
++ the boolean `True` to the parameter `dig_prt`
 
 ## Part 2: Basic modifications: name, directory, number of agents, number of time steps
 
