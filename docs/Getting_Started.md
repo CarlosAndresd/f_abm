@@ -1,10 +1,13 @@
 
-## How to use this code repository
+## Getting started
 
 To get started, you can follow two steps:
 
 1. Install the package, there are two options: with Conda (recommended), and with pip and venv.
-2. Execute the program
+2. Execute the program, this will launch the Command Line Interface from which you will be able to run simulations. For more information 
+about how to use the Command Line Interface see 
+
+For a more advance use, you can add your own models, to do that follow these instructions
 
 ### Computational Environment:
 

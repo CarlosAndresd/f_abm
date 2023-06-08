@@ -343,7 +343,7 @@ def read_user_input():
 
 	# File name
 	default_input = datetime.today().strftime('Simulation-%Y%m%d%H%M%S')
-	file_name = input('Enter name of the new simulation [' + default_input + ']: ')
+	file_name = input('1. Enter name of the new simulation [' + default_input + ']: ')
 	while not file_name:
 		file_name = default_input
 
@@ -351,7 +351,7 @@ def read_user_input():
 
 	# Directory name
 	default_input = 'simulation_results'
-	directory_name = input('Enter directory where results are saved [' + default_input + ']: ')
+	directory_name = input('2. Enter directory where results are saved [' + default_input + ']: ')
 	while not directory_name:
 		directory_name = default_input
 
@@ -361,7 +361,7 @@ def read_user_input():
 	# Options:
 	# - number of agents (num_ag)
 	default_input = '100'
-	message = 'Enter number of agents'
+	message = '3. Enter number of agents'
 	simulation_data['num_ag'] = read_positive_integer(message, default_input)
 
 	# Initial opinion characterisation
@@ -374,7 +374,7 @@ def read_user_input():
 
 	# default_input = 'io_loc=(0.5, 0.1); io_dis=[[0, -1.0, 1.0, 1]]; io_prt=True'
 	default_input = 'io_loc=(0.5, 0.1); io_prt=True'
-	initial_opinion_char = input('Enter initial opinion characterisation [' + default_input + ']: ')
+	initial_opinion_char = input('4. Enter initial opinion characterisation [' + default_input + ']: ')
 	initial_opinion_char = initial_opinion_char + '; ' + default_input
 
 	simulation_data['io_loc'] = get_parameter_value(initial_opinion_char, 'io_loc')
@@ -388,7 +388,7 @@ def read_user_input():
 	# - model label (mod_lab)
 	# - model parameters (mod_par) [optional]
 	default_input = 'mod_lab="CB"'
-	model_id = input('Enter model [' + default_input + ']: ')
+	model_id = input('5. Enter model [' + default_input + ']: ')
 	model_id = model_id + '; ' + default_input
 
 	simulation_data['mod_lab'] = get_parameter_value(model_id, 'mod_lab')
@@ -401,7 +401,7 @@ def read_user_input():
 	# - initial distribution (par_dis) [optional]
 	# - print histogram or alternative representation (par_prt) [optional]
 	default_input = 'par_rep=(0.2, 0.3, 0.5); par_prt=True'
-	agent_parameter_char = input('Enter agent parameter characterisation [' + default_input + ']: ')
+	agent_parameter_char = input('6. Enter agent parameter characterisation [' + default_input + ']: ')
 	agent_parameter_char = agent_parameter_char + '; ' + default_input
 
 	simulation_data['par_rep'] = get_parameter_value(agent_parameter_char, 'par_rep')
@@ -415,7 +415,7 @@ def read_user_input():
 	# - digraph parameters (depending on the type) (dig_par) [optional]
 	# - print digraph representation (dig_prt) [optional]
 	default_input = 'dig_lab="sw"; dig_tsi=[0, 1, 1, 1]; dig_cpr=0.5; dig_prt=True'
-	underlying_digraph_char = input('Enter underlying digraph characterisation [' + default_input + '] ')
+	underlying_digraph_char = input('7. Enter underlying digraph characterisation [' + default_input + ']: ')
 	underlying_digraph_char = underlying_digraph_char + '; ' + default_input
 
 	simulation_data['dig_lab'] = get_parameter_value(underlying_digraph_char, 'dig_lab')
@@ -436,7 +436,7 @@ def read_user_input():
 	# Options:
 	# - number of time steps (num_ts)
 	default_input = '50'
-	message = 'Enter number of time-step'
+	message = '8. Enter number of time-step'
 	simulation_data['num_ts'] = read_positive_integer(message, default_input)
 
 	print('\n'*5)
