@@ -12,7 +12,7 @@ the expected results.
 ## Part 1: First simulation using the default values
 
 After executing the Python program `start.py` you will be asked to enter 8 simulation parameters. All these options have default values
-which we will use in this first part. Some of the defaut options can be seen in the square brackets.
+which we will use in this first part. Some of the default options can be seen in the square brackets.
 
 So feel free to press `ENTER` 8 times. You will see something like this:
 
@@ -95,6 +95,7 @@ The addition of model parameters follows the next rules:
 parameter, the value may be an integer, a floating number, a tuple, a string, or a boolean;
 2. separate parameters by semicolons
 3. if a parameter name is repeated, only the first value is used
+4. New inputs overwrite the default values
 
 Example: The input 
 
@@ -106,8 +107,11 @@ passes the following values to the program:
 
 + the string `sw` to the parameter `dig_lab`
 + the list `[0, 1, 1, 1]` to the parameter `dig_tsi`
-+ the float `0.5` to the parameter `dig_cpr`
++ the float `0.5` to the parameter `dig_cpr` because it was the first value that was passed
 + the boolean `True` to the parameter `dig_prt`
+
+You can always type `help` to receive an explanation of the corresponding parameter and the options
+
 
 ## Part 2: Basic modifications: name, directory, number of agents, number of time steps
 
