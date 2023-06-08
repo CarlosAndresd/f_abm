@@ -24,12 +24,8 @@ So feel free to press `ENTER` 8 times. You will see something like this:
     4. Enter initial opinion characterisation [io_loc=(0.5, 0.1); io_prt=True]: (Press Enter) 
     5. Enter model [mod_lab="CB"]:  (Press Enter)
     6. Enter agent parameter characterisation [par_rep=(0.2, 0.3, 0.5); par_prt=True]: (Press Enter) 
-    7. Enter underlying digraph characterisation [dig_lab="sw"; dig_tsi=[0, 1, 1, 1]; dig_cpr=0.5; dig_prt=True]: 
-    8. Enter number of time-step [50]: 
-
-
-
-
+    7. Enter underlying digraph characterisation [dig_lab="sw"; dig_tsi=[0, 1, 1, 1]; dig_cpr=0.5; dig_prt=True]: (Press Enter) 
+    8. Enter number of time-step [50]: (Press Enter)
 
 
 
@@ -51,6 +47,45 @@ So feel free to press `ENTER` 8 times. You will see something like this:
 	Simulation complete
 ``
 
+After this, a directory called `Simulation-20230608133600` should have appeared in the `simulation_results` directory, 
+and it should contain four `.png` images.
+
+So what just happened, and what does all this mean? Let's go step by step:
+
+1. `Enter name of the new simulation`: here you enter the name of the simulation, it can be anything. By default the 
+name is `Simulation-YYYYMMDDHHMMSS`, where `YYYYMMDDHHMMSS` are the numbers of year, month, day, hour, minute, and second.
+This is done so that the names are different and there is no overwritting.
+2. `Enter directory where results are saved`: it is hte name of the directory where the results are saved, by default
+it is the `simulation_results` directory, but it can be changed. If that directory does not exist, it is created.
+3. `Enter number of agents`: it should be a positive integer, representing the number of agents in the simulation. By
+default it is 100.
+4. `Enter initial opinion characterisation`: here the parameters for the generation of the initial opinions are
+introduced this filed accepts 5 possible parameters: (we will see the syntax for introducing new parameters later)
+   + `io_loc`: Location of the initial opinions in the Agreement Plot
+   + `io_tol`: Tolerance for the transformation of the opinions.
+   + `io_met`: Method of opinion transformation.
+   + `io_dis`: Initial distribution
+   + `io_prt`: Boolean determining if the histogram is printed or not.
+5. `Enter model`: here the parameters of the simulation model are introduced
+   + `mod_lab`: Label of the model
+   + `mod_par`: Additional model-specific parameters
+6. `Enter agent parameter characterisation`: here the agent parameter models are introduced
+   + `par_rep`: Representation of the parameters
+   + `par_tol`: Tolerance for the transformation of the parameters
+   + `par_dis`: Initial distribution
+   + `par_prt`: Boolean determining whether the agent parameter representation is printed or not.
+7. `Enter underlying digraph characterisation`: underlying digraph parameters
+   + `dig_lab`: Label of the digraph topology
+   + `dig_res`: row_stochastic
+   + `dig_per`: positive_edge_ratio
+   + `dig_tsi`: topology_signature
+   + `dig_cpr`: change_probability
+   + `dig_rpr`: reverse_probability
+   + `dig_bpr`: bidirectional_probability
+   + `dig_rei`: num_random_edges_it
+   + `dig_epr`: edge_probability
+   + `dig_prt`: Boolean determining whether the underlying digraph plot is printed or not.
+8. `Enter number of time-step`: positive integer determining the number of time steps.
 
 ## Part 2: Basic modifications: name, directory, number of agents, number of time steps
 
