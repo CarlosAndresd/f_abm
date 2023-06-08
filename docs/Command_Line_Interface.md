@@ -28,8 +28,6 @@ So feel free to press `ENTER` 8 times. You will see something like this:
     8. Enter number of time-step [50]: (Press Enter)
 
 
-
-
 	Creating initial opinions
 	Initial opinions created
 
@@ -48,7 +46,14 @@ So feel free to press `ENTER` 8 times. You will see something like this:
 
 
 After this, a directory called `Simulation-20230608133600` should have appeared in the `simulation_results` directory, 
-and it should contain four `.png` images.
+and it should contain four `.png` images. The four images are:
+
+![](https://github.com/CarlosAndresd/f_abm/blob/main/docs/Simulation-20230608133600_digraph.png "Randomly generated underlying digraph")
+![](https://github.com/CarlosAndresd/f_abm/blob/main/docs/Simulation-20230608133600_io_histogram.png "Initial opinion histogram")
+![](https://github.com/CarlosAndresd/f_abm/blob/main/docs/Simulation-20230608133600_opinion_evolution.png "Opinion evolution")
+![](https://github.com/CarlosAndresd/f_abm/blob/main/docs/Simulation-20230608133600_fo_histogram.png "Final opinion histogram")
+
+The resulting directory and images in your case will be different, this is beacuse: (i) the name of the directory uses the current date and time, and (ii) the initial opinions, and underlying digraph are created randomly.
 
 So what just happened, and what does all this mean? Let's go step by step:
 
